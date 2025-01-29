@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const StudentSchema = new mongoose.Schema({
@@ -14,6 +14,7 @@ const StudentSchema = new mongoose.Schema({
     semesterType: { type: String, required: true },
     classSubgroup: { type: String, required: true },
     phoneNumber: { type: String, required: true, match: /^[0-9]{10}$/ },
+    branch: { type: String, required: true },
 
     // Optional fields
     trainingArrangedBy: { type: String, default: null },
@@ -26,8 +27,11 @@ const StudentSchema = new mongoose.Schema({
         landmark: { type: String, default: null },
     },
 
-    password: { type: String, default: null }, // Can be null initially
-
+    password:{
+        type:String,
+        required:true,
+        select : false,//user lai retrieve garda password dekhaudaina
+    },
     mentorName: { type: String, default: null },
     mentorEmail: {
         type: String,
