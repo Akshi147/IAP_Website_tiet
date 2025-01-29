@@ -2,6 +2,11 @@ const studentModel = require('../models/student.model');
 const blacklistModel = require('../models/blacklist.model');
 const jwt = require('jsonwebtoken');
 module.exports.authStudent = async (req, res, next) => {
+    try {
+        const token = req.cookies.token || req.headers.authorization.split(' ')[1];
+    } catch (error) {
+        res.status(400).json({message:'Token Not Received'});
+    }
     const token = req.cookies.token || req.headers.authorization.split(' ')[1];
     console.log(token);
     if(!token){

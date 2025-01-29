@@ -89,3 +89,12 @@ module.exports.uploadFile = async (req,res)=>{
     await student.save();
     res.status(200).json({message:'File uploaded successfully'});
 };
+
+
+module.exports.downloadTrainingLetter = async (req,res)=>{
+    const student = req.student;
+    if(!student.trainingLetter){
+        return res.status(404).json({message:'File not found'});
+    }
+    res.download(`../backend/public/images/uploads/${student.trainingLetter}`);
+};

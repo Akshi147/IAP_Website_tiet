@@ -22,6 +22,7 @@ router.post('/login',[
 router.get('/logout',authStudent,studentController.logoutStudent);
 router.get('/profile',authStudent,studentController.getStudentProfile);
 router.post('/uploadfile',authStudent,upload.single('file'),studentController.uploadFile);
+router.get('/downloadfile/trainingletter',authStudent,studentController.downloadTrainingLetter);
 
 
 

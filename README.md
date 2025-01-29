@@ -36,3 +36,4 @@
 - To get profile, go to: `/students/profile`
 - To logout, go to: `/students/logout`
 - To upload a document, go to: `/students/uploadfile` and upload the file as `file`
+- To download the training letter , goto : `students/downloadfile/trainingletter`
