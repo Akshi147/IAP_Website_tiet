@@ -4,7 +4,7 @@
 
 ```json
 {
-<<<<<<<<< Temporary merge branch 1
+
 
 
     "email":"somename@thapar.edu",
@@ -19,20 +19,6 @@
     "companyName":"Some Name",
     "companyCity":"Some Name"
 
-    
-=========
-    "email": "somename@thapar.edu",
-    "name": "Some Poudel",
-    "phoneNumber": "9812334466",
-    "rollNo": "102317651",
-    "semesterType": "Project Semester",
-    "classSubgroup": "2q12",
-    "password": "passwordokkk",
-    "branch": "COPC",
-    "trainingArrangedBy": "Some name",
-    "companyName": "Some Name",
-    "companyCity": "Some Name"
->>>>>>>>> Temporary merge branch 2
 }
 ```
 
