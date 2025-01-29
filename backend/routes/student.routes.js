@@ -3,6 +3,7 @@ const router = express.Router();
 const {body} = require('express-validator');
 const studentController = require('../controllers/student.controller');
 const {authStudent}=require('../middlewares/auth.middleware');
+const upload = require('../libs/multer');
 
 router.post('/register',[
     body('email').isEmail().withMessage('Please enter a valid email'),
@@ -20,6 +21,7 @@ router.post('/login',[
 ],studentController.loginStudent);
 router.get('/logout',authStudent,studentController.logoutStudent);
 router.get('/profile',authStudent,studentController.getStudentProfile);
+router.post('/uploadfile',authStudent,upload.single('file'),studentController.uploadFile);
 
 
 

@@ -3,6 +3,7 @@ const blacklistModel = require('../models/blacklist.model');
 const jwt = require('jsonwebtoken');
 module.exports.authStudent = async (req, res, next) => {
     const token = req.cookies.token || req.headers.authorization.split(' ')[1];
+    console.log(token);
     if(!token){
         return res.status(401).json({message:'Unauthorized'});
     }
@@ -12,7 +13,7 @@ module.exports.authStudent = async (req, res, next) => {
     }
     try {
         const decoded = jwt.verify(token,process.env.JWT_SECRET);
-        const student = await userModel.findById(decoded._id);
+        const student = await studentModel.findById(decoded._id);
         req.student = student;
         return next();
     } catch (error) {

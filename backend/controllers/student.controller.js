@@ -78,3 +78,14 @@ module.exports.logoutStudent = async (req,res)=>{
 
     res.status(200).json({message:'Logged out successfully'});
 }
+
+module.exports.uploadFile = async (req,res)=>{
+    if (!req.file) {
+        return res.status(400).send("No files were uploaded");
+      }
+
+    const student = req.student;
+    student.trainingLetter=req.file.filename;
+    await student.save();
+    res.status(200).json({message:'File uploaded successfully'});
+};

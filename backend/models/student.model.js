@@ -44,6 +44,7 @@ const StudentSchema = new mongoose.Schema({
     trainingEndDate: { type: Date, default: null },
 
     stipend: { type: Number, default: 0 },
+    trainingLetter: { type: String, default: null },
 
     createdAt: { type: Date, default: Date.now }
 });
