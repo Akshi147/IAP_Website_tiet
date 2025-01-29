@@ -1,6 +1,8 @@
 # IAP_Website_tiet
 register payload:
 {
+
+
     "email":"somename@thapar.edu",
     "name":"Some Poudel",
     "phoneNumber":"9812334466",
@@ -12,6 +14,8 @@ register payload:
     "trainingArrangedBy":"Some name",
     "companyName":"Some Name",
     "companyCity":"Some Name"
+
+    
 }
 
 login payload:
