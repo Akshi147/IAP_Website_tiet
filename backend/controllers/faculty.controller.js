@@ -1,3 +1,4 @@
+const blacklistModel = require("../models/blacklist.model");
 const facultyModel = require("../models/faculty.model");
 const { validationResult } = require("express-validator");
 
@@ -106,4 +107,17 @@ module.exports.loginFaculty = async (req, res) => {
             error: err.message
         })
     }
+}
+
+
+module.exports.logoutFaculty = async (req, res) => {
+    res.clearCookie("token");
+
+    const token = req.cookies.token || req.headers.authorization.split(" ")[1];
+    await blacklistModel.create({token});
+
+    res.status(200).json({
+        success: true,
+        message: "Succcessfully logged out"
+    })
 }

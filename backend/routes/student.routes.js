@@ -15,10 +15,15 @@ router.post('/register',[
     body('password').isLength({min:3}).withMessage('Password must be atleast 3 characters long')
 ],studentController.registerStudent);
 
+
+router.get('/verifyStudent/:param',studentController.verifyStudent)
+
+
 router.post('/login',[
     body('rollNo').isLength({min:8,max:15}).withMessage('Please enter a valid roll number'),
     body('password').isLength({min:3}).withMessage('Password must be atleast 3 characters long')
 ],studentController.loginStudent);
+
 router.get('/logout',authStudent,studentController.logoutStudent);
 router.get('/profile',authStudent,studentController.getStudentProfile);
 router.post('/uploadfile',authStudent,upload.single('file'),studentController.uploadFile);

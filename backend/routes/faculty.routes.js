@@ -4,6 +4,7 @@ const router = express.Router();
 const { body } = require("express-validator");
 
 const facultyController = require("../controllers/faculty.controller");
+const {authFaculty} = require("../middlewares/auth.middleware");
 
 router.post("/register", [
     body("initial")
@@ -30,6 +31,11 @@ router.post("/login", [
     body("password")
     .isLength({min:3}).withMessage("Password must be atleast 3 characters long")
 ], facultyController.loginFaculty);
+
+
+
+router.get('/logout', authFaculty, facultyController.logoutFaculty);
+
 
 
 module.exports = router;

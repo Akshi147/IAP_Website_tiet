@@ -37,3 +37,33 @@
 - To logout, go to: `/students/logout`
 - To upload a document, go to: `/students/uploadfile` and upload the file as `file`
 - To download the training letter , goto : `students/downloadfile/trainingletter`
+
+
+
+
+## Faculty Resistration
+```json
+{
+    "intial": "Mr",
+    "name": "John Doe",
+    "designation": "Professor",
+    "department": "Computer Engineering",
+    "contactNo": "9106781890",
+    "email": "someemail@thapar.edu",
+    "password": "password"
+}
+```
+
+## Faculty Login
+```json
+{
+    "email": "someemail@thapar.edu",
+    "password": "password"
+}
+```
+
+
+## Faculty Endpoints
+- To register, go to: `/faculty/register`
+- To login, go to: `/faculty/login`
+- To logout, go to: `/faculty/logout`
