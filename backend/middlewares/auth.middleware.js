@@ -76,3 +76,4 @@ module.exports.authFaculty = async (req, res, next) => {
         });
     }
 }
+
