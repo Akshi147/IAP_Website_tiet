@@ -1,0 +1,15 @@
+.container{
+    display: flex;
+    width: 90%;
+    justify-content: center;
+    margin: 1.2rem auto;
+    flex-direction: column;
+
+}
+
+.cards{
+    display: flex;
+    width: 90%;
+    margin: 0 auto;
+    justify-content: space-between;
+}

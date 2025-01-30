@@ -1,0 +1,117 @@
+.card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    padding: 20px;
+    width: 27%;
+    text-align: center;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .cardHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .iconContainer {
+    width: 60px;
+    height: 60px;
+    background-color: #e9d5ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .card:hover .iconContainer {
+    background-color: #d8b4fe;
+  }
+  
+  .icon {
+    width: 30px;
+    height: 30px;
+    color: #9333ea;
+  }
+  
+  .textContainer {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .badge {
+    font-size: 12px;
+    width: 50%;
+    border-radius: 6px;
+  }
+  
+  .title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .description {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+  }
+  
+  .cardContent {
+    margin-top: 15px;
+  }
+  
+  .features {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .featureItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+  }
+  
+  .featureIcon {
+    width: 20px;
+    height: 20px;
+    color: #9333ea;
+  }
+  
+  .button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: #9333ea;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #7e22ce;
+  }
+  
+  .arrowIcon {
+    margin-left: 8px;
+    width: 18px;
+    height: 18px;
+  }
+  
