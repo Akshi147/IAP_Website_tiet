@@ -11,6 +11,12 @@ const StudentSchema = new mongoose.Schema({
         unique: true,
         match: /^[a-zA-Z0-9._%+-]+@thapar\.edu$/  // Only @thapar.edu emails allowed
     },
+    password:{
+        type:String,
+        required:true,
+        select : false,//user lai retrieve garda password dekhaudaina
+    },
+    verified: { type: Boolean, default: false },
     semesterType: { type: String, required: true },
     classSubgroup: { type: String, required: true },
     phoneNumber: { type: String, required: true, match: /^[0-9]{10}$/ },
@@ -27,11 +33,7 @@ const StudentSchema = new mongoose.Schema({
         landmark: { type: String, default: null },
     },
 
-    password:{
-        type:String,
-        required:true,
-        select : false,//user lai retrieve garda password dekhaudaina
-    },
+    
     mentorName: { type: String, default: null },
     mentorEmail: {
         type: String,
