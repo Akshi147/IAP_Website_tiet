@@ -26,7 +26,9 @@ router.post('/login',[
 
 router.get('/logout',authStudent,studentController.logoutStudent);
 router.get('/profile',authStudent,studentController.getStudentProfile);
-router.post('/uploadfile',authStudent,upload.single('file'),studentController.uploadFile);
+router.post('/uploadfile',authStudent,upload.single('trainingLetter'),studentController.uploadFile);
+router.post('/uploadfiles',authStudent,upload.single('feeReceipt'),studentController.uploadFiles);
+
 router.get('/downloadfile/trainingletter',authStudent,studentController.downloadTrainingLetter);
 
 

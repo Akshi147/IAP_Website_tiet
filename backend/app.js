@@ -10,7 +10,7 @@ const cors = require('cors');
 const studentRoutes = require('./routes/student.routes');
 const facultyRoutes = require('./routes/faculty.routes');
 const mentorRoutes = require('./routes/mentor.routes');
-app.use(cors());
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 app.use(logger('dev'));
 app.use(express.urlencoded({extended:true}));

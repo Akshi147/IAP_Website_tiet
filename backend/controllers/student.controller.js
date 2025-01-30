@@ -226,3 +226,14 @@ module.exports.downloadTrainingLetter = async (req,res)=>{
     }
     res.download(`../backend/public/images/uploads/${student.trainingLetter}`);
 };
+
+module.exports.uploadFiles = async (req,res)=>{
+    if (!req.file) {
+        return res.status(400).send("No files were uploaded");
+      }
+
+    const student = req.student;
+    student.feeReceipt=req.file.filename;
+    await student.save();
+    res.status(200).json({message:'File uploaded successfully'});
+};
