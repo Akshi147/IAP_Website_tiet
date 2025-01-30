@@ -1,6 +1,4 @@
 const facultyModel = require("../models/faculty.model");
-const studentModel = require("../models/student.model");
-const FacultyModel = require("../models/student.model");
 const { validationResult } = require("express-validator");
 
 
