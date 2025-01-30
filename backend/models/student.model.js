@@ -9,7 +9,7 @@ const StudentSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        match: /^[a-zA-Z0-9._%+-]+@thapar\.edu$/  // Only @thapar.edu emails allowed
+        match: [/^[a-zA-Z0-9._%+-]+@thapar\.edu$/, 'Only @thapar.edu emails are allowed']
     },
     password:{
         type:String,
