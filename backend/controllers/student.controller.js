@@ -237,3 +237,36 @@ module.exports.uploadFiles = async (req,res)=>{
     await student.save();
     res.status(200).json({message:'File uploaded successfully'});
 };
+
+module.exports.verifyStudentDocument = async (req, res) => {
+    try {
+        const rollNo = req.params.rollNo;
+
+        if (!rollNo) {
+            return res.status(400).json({ message: "Roll number is required." });
+        }
+
+        const student = await studentModel.findOne({ rollNo });
+
+        if (!student) {
+            return res.status(404).json({ message: "Student not found" });
+        }
+
+        if (!student.verified) {
+            return res.status(400).json({ message: "Student email has not been verified." });
+        }
+
+        if (!student.feeReceipt) {
+            return res.status(400).json({ message: "Fee receipt has not been uploaded by the student." });
+        }
+
+        if (!student.trainingLetter) {
+            return res.status(400).json({ message: "Training letter has not been uploaded by the student." });
+        }
+
+        res.status(200).json({ student });
+    } catch (error) {
+        console.error("Server Error:", error.message);
+        res.status(500).json({ error: "Internal server error. Please try again later." });
+    }
+};

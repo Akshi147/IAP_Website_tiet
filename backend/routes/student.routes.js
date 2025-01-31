@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {body} = require('express-validator');
 const studentController = require('../controllers/student.controller');
-const {authStudent}=require('../middlewares/auth.middleware');
+const {authStudent,authFaculty}=require('../middlewares/auth.middleware');
 const upload = require('../libs/multer');
 
 router.post('/register',[
@@ -30,6 +30,7 @@ router.post('/uploadfile',authStudent,upload.single('trainingLetter'),studentCon
 router.post('/uploadfiles',authStudent,upload.single('feeReceipt'),studentController.uploadFiles);
 
 router.get('/downloadfile/trainingletter',authStudent,studentController.downloadTrainingLetter);
+router.get('/verifyStudentDocument/:rollNo',authFaculty,studentController.verifyStudentDocument);
 
 
 

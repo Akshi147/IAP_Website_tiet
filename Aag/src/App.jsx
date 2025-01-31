@@ -6,11 +6,15 @@ import { LoginForm } from './components/LoginForm';
 import { RegisterForm } from './components/RegisterForm';
 import StudentProtectedRoute from './pages/StudentProtectedRoute';
 import FacultyProtectedRoute from './pages/FacultyProtectedRoute';
+import AdminProtectedRoute from './pages/AdminProtected';
 import StudentLogout from './components/StudentLogout';
 import { LoginFormFaculty } from './components/LoginFaculty';
 import FacultyLogout from './components/FacultyLogout';
-import {FacultyRegister} from './components/RegisterFaculty';
+import { FacultyRegister } from './components/RegisterFaculty';
 import FacultyPanel from './pages/FacultyPanel';
+import StudentVerification from './components/VerifyDocument';
+import { AdminLogin } from './components/AdminLogin';
+import AdminPanel from './pages/AdminPanel';
 
 const App = () => {
   return (
@@ -42,6 +46,20 @@ const App = () => {
             <FacultyPanel />
           </FacultyProtectedRoute>
         } />
+        <Route path="/admin/verifyStudentDocument/:rollNumber" element={
+          <AdminProtectedRoute>
+            <StudentVerification />
+          </AdminProtectedRoute>
+
+
+        } />
+        <Route path="/adminlogin" element={<AdminLogin />} />
+        <Route path="/admin" element={
+          <AdminProtectedRoute>
+            <AdminPanel />
+          </AdminProtectedRoute>
+        } />
+
 
 
 

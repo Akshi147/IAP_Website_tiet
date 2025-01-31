@@ -1,5 +1,6 @@
 const studentModel = require('../models/student.model');
 const facultyModel = require("../models/faculty.model");
+const AdminModel = require('../models/admin.model');
 const blacklistModel = require('../models/blacklist.model');
 const jwt = require('jsonwebtoken');
 
@@ -76,4 +77,50 @@ module.exports.authFaculty = async (req, res, next) => {
         });
     }
 }
+
+
+//admin auth
+module.exports.authAdmin = async (req, res, next) => {
+    try {
+        let token = req.cookies.token || (req.headers.authorization ? req.headers.authorization.split(' ')[1] : null);
+
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized: No token provided'
+            });
+        }
+
+        // Checking if the token is blacklisted
+        const isBlacklisted = await blacklistModel.findOne({ token });
+
+        if (isBlacklisted) {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized: Token is blacklisted'
+            });
+        }
+
+        // Decoding the token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const admin = await AdminModel.findById(decoded._id);
+
+        if (!admin) {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized: Admin not found'
+            });
+        }
+
+        req.admin = admin;
+        next();
+    } catch (error) {
+        console.error('Auth Error:', error);
+        return res.status(401).json({
+            success: false,
+            message: 'Unauthorized: Invalid or expired token',
+            error: error.message
+        });
+    }
+};
 
