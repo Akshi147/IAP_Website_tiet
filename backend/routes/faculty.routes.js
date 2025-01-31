@@ -36,6 +36,9 @@ router.post("/login", [
 
 router.get('/logout', authFaculty, facultyController.logoutFaculty);
 
+router.get('/profile', authFaculty, facultyController.getFacultyProfile);
+router.get('/verifyFaculty/:param', facultyController.verifyFaculty);
+
 
 
 module.exports = router;
