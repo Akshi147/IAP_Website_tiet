@@ -35,6 +35,8 @@ const FacultySchema = new mongoose.Schema({
         required: true,
         select: false, 
     },
+    emailverified: { type: Boolean, default: false },
+    facultyverified: { type: Boolean, default: false },
     createdAt: { 
         type: Date, 
         default: Date.now 

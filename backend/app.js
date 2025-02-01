@@ -10,7 +10,8 @@ const cors = require('cors');
 const studentRoutes = require('./routes/student.routes');
 const facultyRoutes = require('./routes/faculty.routes');
 const mentorRoutes = require('./routes/mentor.routes');
-app.use(cors());
+const adminRoutes = require('./routes/admin.routes');
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 app.use(logger('dev'));
 app.use(express.urlencoded({extended:true}));
@@ -18,6 +19,7 @@ app.use(cookieParser());
 app.use('/students',studentRoutes);
 app.use('/faculty',facultyRoutes);
 app.use('/mentors',mentorRoutes);
+app.use('/admin',adminRoutes);
 
 
 

@@ -41,12 +41,14 @@ const StudentSchema = new mongoose.Schema({
         default: null
     },
     mentorContact: { type: String, match: /^[0-9]{10}$/, default: null },
+    mentorverified: { type: Boolean, default: false },
 
     trainingStartDate: { type: Date, default: null },
     trainingEndDate: { type: Date, default: null },
 
     stipend: { type: Number, default: 0 },
     trainingLetter: { type: String, default: null },
+    feeReceipt: { type: String, default: null },
 
     createdAt: { type: Date, default: Date.now }
 });
