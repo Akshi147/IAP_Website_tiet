@@ -1,0 +1,108 @@
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  
+  .card {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(to right, #9333ea, #2563eb);
+  }
+  
+  .cardContent {
+    padding: 1.5rem;
+  }
+  
+  .panelHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .iconContainer {
+    width: 4rem;
+    height: 4rem;
+    background-color: white;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .panelIcon {
+    width: 2rem;
+    height: 2rem;
+    color: #9333ea;
+  }
+  
+  .panelTitle {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 0.25rem;
+  }
+  
+  .panelSubtitle {
+    color: #e5e7eb;
+    margin-bottom: 1rem;
+  }
+  
+  .panelDescription {
+    color: #d1d5db;
+  }
+  
+  .featuresContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .featureItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .featureIcon {
+    width: 2rem;
+    height: 2rem;
+    color: #93c5fd;
+  }
+  
+  .featureText {
+    color: #e5e7eb;
+  }
+  
+  .panelButton {
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: white;
+    color: #9333ea;
+    border-radius: 0.5rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .panelButton:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+    transform: translateY(-0.25rem);
+  }
+  
+  .backgroundAccent {
+    position: absolute;
+    top: -4rem;
+    right: -1rem;
+    width: 3rem;
+    height: 3rem;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    opacity: 0.3;
+    transform: rotate(-45deg);
+  }
+  

@@ -1,39 +1,82 @@
-import styles from "./PanelCard.module.css";
-import { Badge } from "@mui/material"; 
-import { Link } from "react-router-dom";
+import * as React from "react";
+import styles from "./panelCard.module.css"; // Import the CSS module
+import PropTypes from 'prop-types'; // Import PropTypes for prop validation
 
-const PanelCard = (prop) => {
-    const { icon: Icon, badge, title, description, features, href } = prop;
-  return (
-    <div className={`${styles.card} group`}>
-      <div className={styles.cardHeader}>
-        <div className={styles.iconContainer}>
-          <Icon className={styles.icon} />
-        </div>
-        <div className={styles.textContainer}>
-          <Badge className={styles.badge} color="secondary" variant="outlined" badgeContent={badge} />
-          <h3 className={styles.title}>{title}</h3>
-          <p className={styles.description}>{description}</p>
-        </div>
-      </div>
-      <div className={styles.cardContent}>
-        <div className={styles.features}>
-          {features.map(({ icon: FeatureIcon, text }) => (
-            <div key={text} className={styles.featureItem}>
-              <FeatureIcon className={styles.featureIcon} />
-              <span>{text}</span>
-            </div>
-          ))}
-        </div>
-        <Link to={href} className={styles.button}>
-          Access Panel
-          <svg className={styles.arrowIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </Link>
-      </div>
-    </div>
-  );
+const Card = React.forwardRef(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={`${styles.card} ${className}`}  // Use the module's class
+    {...props}
+  />
+));
+Card.displayName = "Card";
+
+const CardHeader = React.forwardRef(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={`${styles.cardHeader} ${className}`} // Use the module's class
+    {...props}
+  />
+));
+CardHeader.displayName = "CardHeader";
+
+const CardTitle = React.forwardRef(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={`${styles.cardTitle} ${className}`}  // Use the module's class
+    {...props}
+  />
+));
+CardTitle.displayName = "CardTitle";
+
+const CardDescription = React.forwardRef(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={`${styles.cardDescription} ${className}`}  // Use the module's class
+    {...props}
+  />
+));
+CardDescription.displayName = "CardDescription";
+
+const CardContent = React.forwardRef(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={`${styles.cardContent} ${className}`} // Use the module's class
+    {...props}
+  />
+));
+CardContent.displayName = "CardContent";
+
+const CardFooter = React.forwardRef(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={`${styles.cardFooter} ${className}`}  // Use the module's class
+    {...props}
+  />
+));
+CardFooter.displayName = "CardFooter";
+Card.propTypes = {
+  className: PropTypes.string,
 };
 
-export default PanelCard;
+CardHeader.propTypes = {
+  className: PropTypes.string,
+};
+
+CardTitle.propTypes = {
+  className: PropTypes.string,
+};
+
+CardDescription.propTypes = {
+  className: PropTypes.string,
+};
+
+CardContent.propTypes = {
+  className: PropTypes.string,
+};
+
+CardFooter.propTypes = {
+  className: PropTypes.string,
+};
+
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent };
