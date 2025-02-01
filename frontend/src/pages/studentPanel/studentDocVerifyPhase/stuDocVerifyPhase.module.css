@@ -1,0 +1,22 @@
+.container {
+    background: linear-gradient(to bottom right, #f3e8ff, white);
+  }
+  
+  .card {
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+  
+  .title {
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 2rem;
+  }
+  
+  .assistanceCard {
+    background-color: #f9fafb;
+    padding: 1rem;
+    border-radius: 0.5rem;
+  }
+  

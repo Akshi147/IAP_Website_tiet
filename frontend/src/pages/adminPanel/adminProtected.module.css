@@ -1,0 +1,13 @@
+/* adminProtected.module.css */
+.loaderWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .loaderText {
+    font-size: 1.125rem; /* 18px */
+    font-weight: 600;
+  }
+  

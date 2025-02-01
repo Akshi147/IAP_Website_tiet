@@ -1,47 +1,48 @@
-/* Register.module.css */
+/* Alert styles */
+.alert {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
 
-.registerContainer {
-    max-width: 500px;
-    margin: auto;
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  
-  .title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    color: #2b2b2b;
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  
-  .formGroup {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-  }
-  
-  .formGroup label {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .formGroup input,
-  .formGroup select {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .submitButton {
-    background: #007bff;
-  }  
+.error {
+  background-color: #fef2f2;
+  color: #e53e3e;
+  border: 1px solid #fbd5d5;
+}
+
+.success {
+  background-color: #f0fdf4;
+  color: #38a169;
+  border: 1px solid #c6f6d5;
+}
+
+/* Input styles */
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease-in-out;
+}
+
+.input:focus {
+  border-color: #9b4de3;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(156, 98, 252, 0.4);
+}
+
+/* Submit button */
+.submitButton {
+  width: 100%;
+  background-color: #6b46c1;
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.submitButton:hover {
+  background-color: #553c9a;
+}

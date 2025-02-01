@@ -1,0 +1,12 @@
+.flexCenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .text {
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 600;    /* font-semibold */
+  }
+  

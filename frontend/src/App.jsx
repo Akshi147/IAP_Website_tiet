@@ -1,49 +1,81 @@
 import { Fragment } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import './App.css';
-import Home from './pages/home/home';
-
-import Student from './pages/studentPanel/student';
-import StudentRegister from './pages/studentPanel/studentRegister/stuRegister';
-import StudentForgotPassword from './pages/studentPanel/studentForgotPassword/stuForgot';
-
-import Faculty from './pages/facultyPanel/faculty';
-import FacultyRegister from './pages/facultyPanel/facultyRegister/facultyRegister';
-import FacultyForgotPassword from './pages/facultyPanel/facultyForgotPassword/facultyForgot';
-
-import Mentor from './pages/mentorPanel/mentor';
-import MentorRegister from './pages/mentorPanel/mentorRegister/mentorRegister';
-import MentorForgotPassword from './pages/mentorPanel/mentorForgotPassword/mentorForgot';
-
-import Admin from './pages/adminPanel/admin';
-
-import Navbar from './components/navbar/navbar';
 import Footer from './components/footer/footer';
 
+import Home from './pages/home/home';
 
-function App() {
+import StudentPanel from './pages/studentPanel/studentPanel'
+import StudentLoginForm from './pages/studentPanel/studentLogin/stuLogin';
+import StudentRegisterForm from './pages/studentPanel/studentRegister/stuRegister';
+import StudentProtectedRoute from './pages/studentPanel/studentProtetedRoute';
+import StudentLogout from './pages/studentPanel/studentLogout/studentLogout';
+import StudentForgotPassword from './pages/studentPanel/studentForgotPassword/stuForgot';
+
+// import FacultyProtectedRoute from './pages/Faculty/FacultyProtectedRoute';
+// import { LoginFormFaculty } from './pages/Faculty/component/LoginFaculty';
+// import FacultyLogout from './pages/Faculty/component/FacultyLogout';
+// import { FacultyRegister } from './pages/Faculty/component/RegisterFaculty';
+// import FacultyPanel from './pages/Faculty/FacultyPanel';
+
+import AdminProtectedRoute from './pages/adminPanel/adminProtected';
+import AdminLogout from './pages/adminPanel/component/adminLogout';
+import AdminStudentVerification from './pages/adminPanel/component/adminVerifyDoc';
+import  AdminLogin  from './pages/adminPanel/component/adminLogin';
+import AdminPanel from './pages/adminPanel/adminPanel';
+
+const App = () => {
   return (
     <Fragment>
-      <Navbar />
       <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route path="/student" element={<Student />} />
-        <Route path="/student/register" element={<StudentRegister />} />
-        <Route path="/student/forgot-password" element={<StudentForgotPassword />} />
+        <Route path="/" element={<Home />} />
 
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/student" element={
+          <StudentProtectedRoute>
+            <StudentPanel />
+          </StudentProtectedRoute>
+        } />
+        <Route path="/student/logout" element={
+          <StudentProtectedRoute>
+            <StudentLogout />
+          </StudentProtectedRoute>
+        } />
+        <Route path="/forgot-password" element={<StudentForgotPassword />} />
+        <Route path="/login" element={<StudentLoginForm />} />
+        <Route path="/register" element={<StudentRegisterForm />} />
 
-        <Route path="/faculty" element={<Faculty />} />
-        <Route path="/faculty/register" element={<FacultyRegister />} />
-        <Route path="/faculty/forgot-password" element={<FacultyForgotPassword />} />
+        {/* <Route path="/faculty/logout" element={
+          <FacultyProtectedRoute>
+            <FacultyLogout />
+          </FacultyProtectedRoute>
+        } />
+        <Route path="/facultylogin" element={<LoginFormFaculty />} />
+        <Route path="/facultyregister" element={<FacultyRegister />} />
+        <Route path="/faculty" element={
+          <FacultyProtectedRoute>
+            <FacultyPanel />
+          </FacultyProtectedRoute>
+        } /> */}
 
-        <Route path="/mentor" element={<Mentor />} />
-        <Route path="/mentor/register" element={<MentorRegister />} />
-        <Route path="/mentor/forgot-password" element={<MentorForgotPassword />} />
+        <Route path="/admin/verifyStudentDocument/:rollNumber" element={
+          <AdminProtectedRoute>
+            <AdminStudentVerification />
+          </AdminProtectedRoute>
+        } />
+        <Route path="/adminlogin" element={<AdminLogin />} />
+        <Route path="/admin" element={
+          <AdminProtectedRoute>
+            <AdminPanel />
+          </AdminProtectedRoute>
+        } />
+        <Route path="/adminlogout" element={
+          <AdminProtectedRoute>
+            <AdminLogout />
+          </AdminProtectedRoute>
+        } />
       </Routes>
       <Footer />
     </Fragment>
   );
-}
+};
 
 export default App;

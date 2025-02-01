@@ -1,9 +1,12 @@
 import  Hero  from "../../components/hero/hero"
 import Panels from "./components/panel"
 import styles from "./home.module.css"
+import Navbar from "../../components/navbar/navbar"
 
 const Home = () => {
   return (
+    <>
+      <Navbar />
     <div className={styles.home}>
       <Hero />
       <main className={styles.main}>
@@ -12,6 +15,7 @@ const Home = () => {
         <Panels />
       </main>
     </div>
+    </>
   )
 }
 

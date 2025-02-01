@@ -1,0 +1,147 @@
+.uploadSection {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    flex: 1;
+  }
+  
+  .title {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #1f2937;
+    margin-bottom: 1rem;
+  }
+  
+  .uploadedText {
+    color: #10b981;
+    font-weight: 600;
+  }
+  
+  .uploadArea {
+    margin-top: 0.25rem;
+    display: flex;
+    justify-content: center;
+    padding: 1.25rem 1.5rem;
+    border: 2px dashed #d1d5db;
+    border-radius: 0.375rem;
+  }
+  
+  .textCenter {
+    text-align: center;
+  }
+  
+  .icon {
+    margin-left: auto;
+    margin-right: auto;
+    height: 3rem;
+    width: 3rem;
+    color: #9ca3af;
+  }
+  
+  .fileUploadArea {
+    text-align: center;
+  }
+  
+  .uploadButton {
+    cursor: pointer;
+    background-color: white;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    color: #7c3aed;
+    &:hover {
+      color: #6b21a8;
+    }
+  }
+  
+  .dragText {
+    padding-left: 0.25rem;
+  }
+  
+  .fileSizeText {
+    font-size: 0.75rem;
+    color: #6b7280;
+  }
+  
+  .errorText {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #f87171;
+  }
+  
+  .fileSelectedText {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #10b981;
+  }
+  
+  .successText {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #10b981;
+  }
+  
+  .progressBar {
+    margin-top: 0.5rem;
+  }
+  
+  .progressTrack {
+    width: 100%;
+    background-color: #e5e7eb;
+    border-radius: 0.375rem;
+    height: 0.5rem;
+  }
+  
+  .progressFill {
+    background-color: #7c3aed;
+    height: 0.5rem;
+    border-radius: 0.375rem;
+  }
+  
+  .progressText {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+  
+  .submitButton {
+    margin-top: 1rem;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: #7c3aed;
+    color: white;
+    font-size: 0.875rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .submitButton:hover {
+    background-color: #6b21a8;
+  }
+  
+  .container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f3f4f6;
+    padding: 2.5rem;
+  }
+  
+  .heading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+  }
+  
+  .uploadWrapper {
+    display: flex;
+    max-width: 64rem;
+    gap: 1rem;
+  }
+  
