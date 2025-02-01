@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Header } from "../components/header";
-import { Footer } from "../components/footer";
+import { Header } from "../../components/header";
+import { Footer } from "../../components/footer";
 import { useNavigate } from "react-router-dom";
-import Verify from "../components/Verify";
-import Faculty from "../components/Faculty";
-import PendingApproval from "../components/PendingApproval";
+import Verify from "./component/Verify";
+import Faculty from "./component/Faculty";
+import PendingApproval from "./component/PendingApproval";
 
 const FacultyPanel = () => {
     const navigate = useNavigate();

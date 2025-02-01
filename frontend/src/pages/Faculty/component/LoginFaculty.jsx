@@ -1,27 +1,28 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Header } from "./header";
+import { Header } from "../../../components/header";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Footer } from "../../../components/footer";
 
-export function LoginForm() {
+export function LoginFormFaculty() {
   const navigate = useNavigate();
-  const [rollNo, setRollNo] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(""); // Error message state
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const student = {
-      rollNo,
+    const user = {
+      email,
       password
     };
     try {
-      const response = await axios.post('http://localhost:4000/students/login', student);
+      const response = await axios.post('http://localhost:4000/faculty/login', user);
       if (response.status === 200) {
         const data = response.data;
-        localStorage.setItem('token', data.token);
-        navigate('/student');
+        localStorage.setItem('faculty-token', data.token);
+        navigate('/faculty');
       }
     } catch (error) {
       // Set error message
@@ -51,9 +52,9 @@ export function LoginForm() {
               <div>
                 <input
                   type="text"
-                  placeholder="Student Roll Number"
-                  value={rollNo}
-                  onChange={(e) => setRollNo(e.target.value)}
+                  placeholder="Faculty Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   required
                 />
@@ -79,7 +80,7 @@ export function LoginForm() {
             </form>
 
             <div className="mt-6 text-center space-y-2">
-              <Link to="/register" className="block text-purple-600 hover:text-purple-700">
+              <Link to="/facultyregister" className="block text-purple-600 hover:text-purple-700">
                 Register with us
               </Link>
               <Link to="/forgot-password" className="block text-purple-600 hover:text-purple-700">
@@ -89,6 +90,7 @@ export function LoginForm() {
           </div>
         </div>
       </div>
+      <Footer/>
     </>
   );
 }

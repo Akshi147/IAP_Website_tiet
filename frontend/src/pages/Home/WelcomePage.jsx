@@ -1,7 +1,7 @@
-import { Header } from "../components/header"
-import { Hero } from "../components/hero"
-import { Panels } from "../components/panels"
-import { Footer } from "../components/footer"
+import { Header } from "../../components/header"
+import { Hero } from "../../components/hero"
+import { Panels } from "../../components/panels"
+import { Footer } from "../../components/footer"
 
 export default function App() {
   return (

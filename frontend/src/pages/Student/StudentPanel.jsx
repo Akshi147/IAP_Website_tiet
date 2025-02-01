@@ -1,12 +1,12 @@
   import React, { useEffect, useState } from "react";
-  import { Header } from "../components/header";
-  import { Footer } from "../components/footer";
+  import { Header } from "../../components/header";
+  import { Footer } from "../../components/footer";
   import { useNavigate } from "react-router-dom";
   import axios from "axios";
-  import DocumentUpload from "../components/DocumentUpload";
-  import Phase3 from "../components/Phase3"; // Assuming Phase3 is the final phase component
-  import Verify from "../components/Verify"; // Assuming this is the Verify component
-  import Phase2 from "../components/Phase2";
+  import DocumentUpload from "./component/DocumentUpload";
+  import Phase3 from "./component/Phase3"; // Assuming Phase3 is the final phase component
+  import Verify from "./component/Verify"; // Assuming this is the Verify component
+  import Phase2 from "./component/Phase2";
 
   const StudentPanel = () => {
     const navigate = useNavigate();

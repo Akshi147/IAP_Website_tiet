@@ -1,21 +1,21 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import WelcomePage from './pages/WelcomePage'
-import StudentPanel from './pages/StudentPanel'
-import { LoginForm } from './components/LoginForm';
-import { RegisterForm } from './components/RegisterForm';
-import StudentProtectedRoute from './pages/StudentProtectedRoute';
-import FacultyProtectedRoute from './pages/FacultyProtectedRoute';
-import AdminProtectedRoute from './pages/AdminProtected';
-import StudentLogout from './components/StudentLogout';
-import AdminLogout from './components/AdminLogout';
-import { LoginFormFaculty } from './components/LoginFaculty';
-import FacultyLogout from './components/FacultyLogout';
-import { FacultyRegister } from './components/RegisterFaculty';
-import FacultyPanel from './pages/FacultyPanel';
-import StudentVerification from './components/VerifyDocument';
-import { AdminLogin } from './components/AdminLogin';
-import AdminPanel from './pages/AdminPanel';
+import WelcomePage from './pages/Home/WelcomePage'
+import StudentPanel from './pages/Student/StudentPanel'
+import { LoginForm } from './pages/Student/component/LoginForm';
+import { RegisterForm } from './pages/Student/component/RegisterForm';
+import StudentProtectedRoute from './pages/Student/StudentProtectedRoute';
+import FacultyProtectedRoute from './pages/Faculty/FacultyProtectedRoute';
+import AdminProtectedRoute from './pages/Admin/AdminProtected';
+import StudentLogout from './pages/Student/component/StudentLogout';
+import AdminLogout from './pages/Admin/component/AdminLogout';
+import { LoginFormFaculty } from './pages/Faculty/component/LoginFaculty';
+import FacultyLogout from './pages/Faculty/component/FacultyLogout';
+import { FacultyRegister } from './pages/Faculty/component/RegisterFaculty';
+import FacultyPanel from './pages/Faculty/FacultyPanel';
+import StudentVerification from './pages/Admin/component/VerifyDocument';
+import { AdminLogin } from './pages/Admin/component/AdminLogin';
+import AdminPanel from './pages/Admin/AdminPanel';
 
 const App = () => {
   return (

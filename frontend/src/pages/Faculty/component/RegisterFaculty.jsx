@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Header } from "./header";
+import { Header } from "../../../components/header";
 import axios from "axios";
-import { Footer } from "./footer";
+import { Footer } from "../../../components/footer";
 
 export function FacultyRegister() {
   const navigate = useNavigate();

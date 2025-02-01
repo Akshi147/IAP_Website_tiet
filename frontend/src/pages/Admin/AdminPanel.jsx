@@ -1,9 +1,9 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Header } from '../components/header'
-import { Footer } from '../components/footer'
+import { Header } from '../../components/header'
+import { Footer } from '../../components/footer'
 import axios from 'axios'
-import Admin from '../components/Admin'
+import Admin from './component/Admin'
 
 const AdminPanel = () => {
   const navigate = useNavigate()
