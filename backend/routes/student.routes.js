@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {body} = require('express-validator');
 const studentController = require('../controllers/student.controller');
-const {authStudent,authFaculty}=require('../middlewares/auth.middleware');
+const {authStudent,authFaculty,authAdmin}=require('../middlewares/auth.middleware');
 const upload = require('../libs/multer');
 
 router.post('/register',[
@@ -29,8 +29,11 @@ router.get('/profile',authStudent,studentController.getStudentProfile);
 router.post('/uploadfile',authStudent,upload.single('trainingLetter'),studentController.uploadFile);
 router.post('/uploadfiles',authStudent,upload.single('feeReceipt'),studentController.uploadFiles);
 
-router.get('/downloadfile/trainingletter',authStudent,studentController.downloadTrainingLetter);
-router.get('/verifyStudentDocument/:rollNo',authFaculty,studentController.verifyStudentDocument);
+router.get('/downloadfile/:trainingLetter',authAdmin,studentController.downloadTrainingLetter);
+router.get('/downloadfile/:feeReceipt',authAdmin,studentController.downloadFeeReceipt);
+router.get('/verifyStudentDocument/:rollNo',authAdmin,studentController.verifyStudentDocument);
+router.post("/sendEmail/:rollNumber", authAdmin, studentController.sendErrorEmail);
+router.post("/completeverify/:rollNo", authAdmin, studentController.completeVerify);
 
 
 

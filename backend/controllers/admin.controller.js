@@ -38,7 +38,6 @@ module.exports.Register = async (req, res) => {
 module.exports.Login = async (req, res) => {
     try {
         const admin = await AdminModel.findOne({ email: req.body.email })
-
         if (!admin) {
             return res.status(400).json({
                 success: false,

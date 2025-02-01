@@ -113,7 +113,7 @@ module.exports.authAdmin = async (req, res, next) => {
         }
 
         req.admin = admin;
-        next();
+        return next();
     } catch (error) {
         console.error('Auth Error:', error);
         return res.status(401).json({

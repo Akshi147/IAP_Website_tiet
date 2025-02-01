@@ -11,9 +11,9 @@ const Admin = () => {
     e.preventDefault();
     setError(""); // Clear previous errors
 
-    const token = localStorage.getItem("faculty-token");
+    const token = localStorage.getItem("admin-token");
     if (!token) {
-      navigate("/faculty/login");
+      navigate("/adminlogin");
       return;
     }
 

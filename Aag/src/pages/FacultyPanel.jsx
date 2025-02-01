@@ -91,8 +91,8 @@ const FacultyPanel = () => {
         <>
             <Header
                 navItems={[
-                    { name: "Verify Student", path: "/verifystudent" },
-                    { name: "Delete Student", path: "/deletestudent" },
+                    { name: "Upload Marks", path: "/uploadmarks" },
+                    { name: "Search Student", path: "/searchstudent" },
                     { name: "Profile", path: "/faculty/profile" },
                 ]}
                 downloadButton={{

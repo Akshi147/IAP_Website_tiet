@@ -8,6 +8,7 @@ import StudentProtectedRoute from './pages/StudentProtectedRoute';
 import FacultyProtectedRoute from './pages/FacultyProtectedRoute';
 import AdminProtectedRoute from './pages/AdminProtected';
 import StudentLogout from './components/StudentLogout';
+import AdminLogout from './components/AdminLogout';
 import { LoginFormFaculty } from './components/LoginFaculty';
 import FacultyLogout from './components/FacultyLogout';
 import { FacultyRegister } from './components/RegisterFaculty';
@@ -57,6 +58,11 @@ const App = () => {
         <Route path="/admin" element={
           <AdminProtectedRoute>
             <AdminPanel />
+          </AdminProtectedRoute>
+        } />
+        <Route path="/adminlogout" element={
+          <AdminProtectedRoute>
+            <AdminLogout />
           </AdminProtectedRoute>
         } />
 

@@ -6,16 +6,18 @@ import axios from 'axios'
 import Admin from '../components/Admin'
 
 const AdminPanel = () => {
+  const navigate = useNavigate()
   return (
    <>
     <Header
       navItems={[
-        { name: "Home", path: "/" },
-        { name: "Help", path: "/help" },
+        { name: "Verify Student", path: "/admin" },
+        { name: "Verify Faculty", path: "/verifyfaculty" },
+        { name: "Verify Mentor", path: "/mentor" },
       ]}
       downloadButton={{
         text: "Log Out",
-        onClick: () => navigate("/admin/logout"),
+        onClick: () => navigate("/adminlogout"),
       }}
     />
     <Admin />

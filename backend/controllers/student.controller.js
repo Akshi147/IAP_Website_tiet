@@ -3,6 +3,8 @@ const { validationResult } = require('express-validator');
 const blacklistModel = require('../models/blacklist.model');
 const jwt = require('jsonwebtoken')
 const sendEmail = require('../libs/nodemailer')
+const fs = require('fs');
+const path = require('path'); // To ensure correct file path handling
 
 
 module.exports.registerStudent = async (req, res) => {
@@ -220,11 +222,13 @@ module.exports.uploadFile = async (req,res)=>{
 
 
 module.exports.downloadTrainingLetter = async (req,res)=>{
-    const student = req.student;
-    if(!student.trainingLetter){
-        return res.status(404).json({message:'File not found'});
+    try {
+        const filename = req.params.trainingLetter
+        res.download(`../backend/public/images/uploads/${filename}`);
+    } catch (error) {
+        res.status(500).json({error:error.message});
     }
-    res.download(`../backend/public/images/uploads/${student.trainingLetter}`);
+   
 };
 
 module.exports.uploadFiles = async (req,res)=>{
@@ -237,6 +241,22 @@ module.exports.uploadFiles = async (req,res)=>{
     await student.save();
     res.status(200).json({message:'File uploaded successfully'});
 };
+
+module.exports.downloadFeeReceipt = async (req,res)=>{
+    try {
+        const filename = req.params.feeReceipt
+        res.download(`../backend/public/images/uploads/${filename}`);
+    } catch (error) {
+        res.status(500).json({error:error.message});
+    }
+   
+
+
+};
+
+
+
+
 
 module.exports.verifyStudentDocument = async (req, res) => {
     try {
@@ -270,3 +290,153 @@ module.exports.verifyStudentDocument = async (req, res) => {
         res.status(500).json({ error: "Internal server error. Please try again later." });
     }
 };
+const generateEmailTemplate = (student, fileType) => {
+    const fileNames = {
+        feeReceipt: "Fee Receipt",
+        trainingLetter: "Training Letter"
+    };
+
+    const reuploadLinks = {
+        feeReceipt: `/students/reuploadFeeReceipt/${student.rollNo}`,
+        trainingLetter: `/students/reuploadTrainingLetter/${student.rollNo}`
+    };
+
+    return `
+    <html>
+    <head>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f8f8f8; }
+            .container { width: 100%; text-align: center; padding: 20px; }
+            .content { background-color: white; padding: 40px; margin: 20px auto; max-width: 600px; border-radius: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); text-align: left; }
+            .title { font-size: 22px; font-weight: bold; color: #2b2b2b; text-align: center; }
+            .message { font-size: 16px; color: #4d4d4d; margin-top: 10px; }
+            .button { display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #b46dd3; color: white; text-decoration: none; font-size: 16px; border-radius: 5px; font-weight: bold; text-align: center; }
+            .footer { margin-top: 20px; font-size: 14px; color: #777; text-align: center; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #b46dd3; color: white; text-align: center;">
+                <tr><td style="padding: 20px; font-size: 24px; font-weight: bold;">IAP CELL</td></tr>
+                <tr><td style="font-size: 16px;">THAPAR INSTITUTE OF ENGINEERING AND TECHNOLOGY, PATIALA</td></tr>
+                <tr><td style="font-size: 16px;">(DEEMED TO BE UNIVERSITY)</td></tr>
+            </table>
+
+            <div class="content">
+                <div class="title">${fileNames[fileType]} Issue - Reupload Required</div>
+                <p class="message">Dear <b>${student.name}</b>,</p>
+                <p class="message">We regret to inform you that your submitted ${fileNames[fileType]} has an issue and is unverified. It has been removed from our database.</p>
+                <p class="message"><b>Reason:</b> Invalid or unclear ${fileNames[fileType]}.</p>
+                <p class="message">Please upload a valid ${fileNames[fileType]} to complete your registration process.</p>
+
+                <div style="text-align: center;">
+                    <a href="${process.env.BASE_URL}${reuploadLinks[fileType]}" class="button">Reupload ${fileNames[fileType]}</a>
+                </div>
+
+                <p class="footer">If you believe this is a mistake, please contact the administration.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    `;
+};
+
+module.exports.sendErrorEmail = async (req, res) => {
+    try {
+        const { fileType } = req.body;
+        const { rollNumber } = req.params;
+
+        if (!fileType) {
+            return res.status(400).json({ message: "File type is required" });
+        }
+
+        const student = await studentModel.findOne({ rollNo: rollNumber });
+        if (!student) {
+            return res.status(404).json({ message: "Student not found" });
+        }
+
+        let filePath = '';
+        let fileRemoved = false;
+
+        // Remove the invalid file reference and delete the file from disk if necessary
+        if (fileType === 'feeReceipt' && student.feeReceipt) {
+            filePath = path.join(__dirname, '..', 'public', 'images', 'uploads', student.feeReceipt);
+            student.feeReceipt = null;
+            fileRemoved = true;
+        } else if (fileType === 'trainingLetter' && student.trainingLetter) {
+            filePath = path.join(__dirname, '..', 'public', 'images', 'uploads', student.trainingLetter);
+            student.trainingLetter = null;
+            fileRemoved = true;
+        } else {
+            return res.status(400).json({ message: "Invalid file type or no file found to remove" });
+        }
+
+        // If file was removed and exists on disk, delete it
+        if (fileRemoved && fs.existsSync(filePath)) {
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                    console.error("Error deleting the file:", err);
+                    return res.status(500).json({ message: "Error deleting the file from disk" });
+                }
+                console.log(`${fileType} file deleted successfully`);
+            });
+        }
+
+        // Save the student document after updating the file field
+        await student.save();
+
+        if (!student.email) {
+            return res.status(400).json({ message: "Student email not found" });
+        }
+
+        // Send email
+        await sendEmail(student.email, `Your ${fileType} Has Been Rejected`, generateEmailTemplate(student, fileType));
+
+        // ✅ Send a success response for admin logs
+        res.json({
+            message: `Successfully removed ${fileType} from database and emailed ${student.name} (${student.email})`,
+            student: {
+                name: student.name,
+                rollNo: student.rollNo,
+                email: student.email,
+                removedFile: fileType,
+            }
+        });
+
+    } catch (error) {
+        console.error("Error sending email:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+module.exports.completeVerify = async (req, res) => {
+    try {
+        const rollNo = req.params.rollNo;
+        const updatedData = req.body; // Form data from frontend
+
+        // Find student by rollNo
+        const student = await studentModel.findOne({ rollNo });
+        if (!student) {
+            return res.status(404).json({ success: false, message: "Student not found" });
+        }
+
+        // Update student fields
+        Object.assign(student, updatedData, { mentorverified: true });
+
+        // Save updated student
+        await student.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Student verified and updated successfully!",
+            student
+        });
+
+    } catch (error) {
+        console.error("❌ Verification Error:", error);
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+};
+
+
+
+
