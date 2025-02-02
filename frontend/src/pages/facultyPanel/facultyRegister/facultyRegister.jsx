@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../../components/navbar/navbar";
 import axios from "axios";
+import styles from "./facultyRegister.module.css"; // Importing the CSS module
 
 const FacultyRegister = () => {
   const navigate = useNavigate();
@@ -24,51 +25,49 @@ const FacultyRegister = () => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:4000/faculty/register", formData);
-      console.log(response);
       if (response.status === 201) {
         const data = response.data;
-        localStorage.setItem('faculty-token', data.token);
+        localStorage.setItem("faculty-token", data.token);
         navigate("/faculty");
       }
     } catch (error) {
-        console.log(error);
-      setErrorMessage(error);
+      setErrorMessage(error.message);
     }
   };
 
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-purple-50 to-white px-6">
-        <div className="w-full max-w-md">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-semibold mb-2">Faculty Registration</h1>
-            <p className="text-gray-600">Join us by registering your details</p>
+      <div className={styles.container}>
+        <div className={styles.formWrapper}>
+          <div className={styles.textCenter}>
+            <h1 className={styles.heading}>Faculty Registration</h1>
+            <p className={styles.subText}>Join us by registering your details</p>
           </div>
-          <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className={styles.formCard}>
             {errorMessage && (
-              <div className="mb-4 p-4 bg-red-100 text-red-600 border border-red-300 rounded-lg">
+              <div className={styles.errorMessage}>
                 <p>{errorMessage}</p>
               </div>
             )}
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <select name="initial" value={formData.initial} onChange={handleChange} className="w-full px-4 py-3 rounded-lg border border-gray-300">
+            <form onSubmit={handleSubmit} className={styles.form}>
+              <select name="initial" value={formData.initial} onChange={handleChange} className={styles.inputField}>
                 <option value="Mr">Mr</option>
                 <option value="Mrs">Mrs</option>
                 <option value="Ms">Ms</option>
                 <option value="Dr">Dr</option>
               </select>
 
-              <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} className="w-full px-4 py-3 rounded-lg border border-gray-300" required />
-              
-              <select name="designation" value={formData.designation} onChange={handleChange} className="w-full px-4 py-3 rounded-lg border border-gray-300">
+              <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} className={styles.inputField} required />
+
+              <select name="designation" value={formData.designation} onChange={handleChange} className={styles.inputField}>
                 <option value="Professor">Professor</option>
                 <option value="Associate Professor">Associate Professor</option>
                 <option value="Assistant Professor">Assistant Professor</option>
                 <option value="Lecturer">Lecturer</option>
               </select>
-              
-              <select name="department" value={formData.department} onChange={handleChange} className="w-full px-4 py-3 rounded-lg border border-gray-300">
+
+              <select name="department" value={formData.department} onChange={handleChange} className={styles.inputField}>
                 <option value="">Choose one...</option>
                 <option value="Computer Engineering">Computer Engineering</option>
                 <option value="Electrical Engineering">Electrical Engineering</option>
@@ -81,20 +80,20 @@ const FacultyRegister = () => {
                 <option value="Master of Computer Applications">Master of Computer Applications</option>
                 <option value="Software Engineering">Software Engineering</option>
               </select>
-              
-              <input type="text" name="contactNo" placeholder="Contact Number" value={formData.contactNo} onChange={handleChange} className="w-full px-4 py-3 rounded-lg border border-gray-300" required />
-              
-              <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className="w-full px-4 py-3 rounded-lg border border-gray-300" required />
-              
-              <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} className="w-full px-4 py-3 rounded-lg border border-gray-300" required />
-              
-              <button type="submit" className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+
+              <input type="text" name="contactNo" placeholder="Contact Number" value={formData.contactNo} onChange={handleChange} className={styles.inputField} required />
+
+              <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} className={styles.inputField} required />
+
+              <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} className={styles.inputField} required />
+
+              <button type="submit" className={styles.submitButton}>
                 Register
               </button>
             </form>
 
-            <div className="mt-6 text-center space-y-2">
-              <Link to="/facultylogin" className="block text-purple-600 hover:text-purple-700">
+            <div className={styles.footerText}>
+              <Link to="/facultylogin" className={styles.linkText}>
                 Already registered? Sign in
               </Link>
             </div>
@@ -103,5 +102,6 @@ const FacultyRegister = () => {
       </div>
     </>
   );
-}
+};
+
 export default FacultyRegister;
