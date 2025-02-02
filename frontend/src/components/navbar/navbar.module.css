@@ -4,39 +4,32 @@
 }
 
 .navbarContainer {
-  width: 100%;
-  max-width: 1200px;
+  width: 90%;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 clamp(1rem, 3vw, 1.25rem);
 }
 
 .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 4rem;
+  height: clamp(3rem, 9vw, 4rem);
 }
 
 .logo {
-  font-size: 1.25rem;
+  font-size: clamp(1rem, 3vw, 1.25rem);
   font-weight: bold;
 }
 
 .desktopNav {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .desktopNav {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-  }
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
 }
 
 .navLink {
   position: relative;
-  font-size: 0.875rem;
+  font-size: clamp(0.875rem, 3vw, 1rem);
   font-weight: 500;
   color: #374151;
   transition: color 0.3s ease;
@@ -62,7 +55,7 @@
 
 .mobileMenuButton {
   display: block;
-  padding: 0.5rem;
+  padding: clamp(0.5rem, 2vw, 0.75rem);
   border-radius: 0.375rem;
   background-color: #f3f4f6;
   transition: background-color 0.2s ease;
@@ -96,13 +89,13 @@
 }
 
 .mobileSidebar {
-  width: 16rem;
+  width: 40%;
   background-color: white;
   height: 100%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  padding: 1.5rem;
+  padding: clamp(1.5rem, 3vw, 1.75rem);
   position: fixed;
   top: 0;
   right: 0;
@@ -137,7 +130,7 @@
 
 .mobileNavLink {
   position: relative;
-  font-size: 1.125rem;
+  font-size: clamp(1.125rem, 3vw, 1.25rem);
   font-weight: 500;
   color: #374151;
   transition: color 0.3s ease;
@@ -164,4 +157,100 @@
 .mobileButton {
   width: 100%;
   margin-top: 1rem;
+}
+
+/* Hide the mobile menu button by default */
+.mobileMenuButton {
+  display: none;
+}
+
+/* ======== Dropdown Styling ======== */
+.downloadDropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdownButton {
+  cursor: pointer;
+}
+
+.dropdownMenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  width: 100%;
+  z-index: 10;
+  padding: 1rem;
+}
+
+.downloadDropdown:hover .dropdownMenu {
+  display: block;
+}
+
+.dropdownItem {
+  display: block;
+  padding: 8px 15px;
+  color: black;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.2s ease-in-out;
+}
+
+.dropdownItem:hover {
+  background: #f4f4f4;
+}
+
+/* ======== Mobile Dropdown Styling ======== */
+.mobileDownloadDropdown {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+
+.mobileDropdownButton {
+  cursor: pointer;
+  width: 100%;
+  display: block;
+}
+
+.mobileDropdownMenu {
+  display: none;
+  position: relative;
+  background: white;
+  border-radius: 5px;
+  margin-top: 5px;
+  padding: 10px;
+}
+
+.mobileDownloadDropdown:hover .mobileDropdownMenu {
+  display: block;
+}
+
+.mobileDropdownItem {
+  display: block;
+  padding: 8px 15px;
+  color: black;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease-in-out;
+}
+
+.mobileDropdownItem:hover {
+  background: #f4f4f4;
+}
+
+
+/* Show mobile menu button only on smaller screens */
+@media (max-width: 767px) {
+  .mobileMenuButton {
+    display: block;
+  }
+
+  .desktopNav {
+    display: none;
+  }
 }

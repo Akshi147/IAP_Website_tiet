@@ -6,6 +6,16 @@ import { Menu, X } from "lucide-react";
 import { cn } from "../../lib/utils";
 import styles from "./navbar.module.css";
 
+const pdfFiles = [
+  { name: "Registration Form", file: "RegistrationForm.pdf" },
+  { name: "Training Letter/NOC from CSED", file: "TLN_CSED.pdf" },
+  { name: "Instruction Handbook", file: "InstructionHandbook.pdf" },
+  { name: "Peer-Review Form", file: "peerReview.pdf" },
+  { name: "Goal Report Format", file: "GoalReportFormat.pdf" },
+  { name: "Mid Way Report Format", file: "MidWayReportFormat.pdf" },
+  { name: "Project Semester Report Format", file: "PROJECT_SEMESTER_REPORT_FORMAT.docx" },
+];
+
 const Navbar = ({
   navItems = [
     { name: "Home", path: "/" },
@@ -13,9 +23,9 @@ const Navbar = ({
     { name: "Faculty Panel", path: "/faculty" },
     { name: "Mentor Panel", path: "/mentor" },
   ],
-  downloadButton = { text: "Download Files", onClick: () => {} }, // Default Download Button
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
     <header className={styles.navbarHeader}>
@@ -34,11 +44,32 @@ const Navbar = ({
                 <span className={styles.navUnderline}></span>
               </Link>
             ))}
-            {downloadButton && (
-              <Button variant="outline" onClick={downloadButton.onClick}>
-                {downloadButton.text}
+
+            {/* Download Files Dropdown */}
+            <div
+              className={styles.downloadDropdown}
+              onMouseEnter={() => setDropdownOpen(true)}
+              onMouseLeave={() => setDropdownOpen(false)}
+            >
+              <Button variant="outline" className={styles.dropdownButton}>
+                Download Files
               </Button>
-            )}
+              {dropdownOpen && (
+                <div className={styles.dropdownMenu}>
+                  {pdfFiles.map(({ name, file }, index) => (
+                    <a
+                      key={index}
+                      href={`/files/${file}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.dropdownItem}
+                    >
+                      {name}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -70,11 +101,33 @@ const Navbar = ({
                 <span className={styles.mobileNavUnderline}></span>
               </Link>
             ))}
-            {downloadButton && (
-              <Button variant="outline" className={styles.mobileButton} onClick={downloadButton.onClick}>
-                {downloadButton.text}
+
+            {/* Mobile Download Files Dropdown */}
+            <div className={styles.mobileDownloadDropdown}>
+              <Button
+                variant="outline"
+                className={styles.mobileDropdownButton}
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
+                Download Files
               </Button>
-            )}
+              {dropdownOpen && (
+                <div className={styles.mobileDropdownMenu}>
+                  {pdfFiles.map(({ name, file }, index) => (
+                    <a
+                      key={index}
+                      href={`/files/${file}`}
+                      target={file.endsWith(".pdf") ? "_blank" : "_self"} // Open PDFs in new tab, Word files in the same tab
+                      rel="noopener noreferrer"
+                      className={styles.dropdownItem}
+                      download={file.endsWith(".docx") ? file : undefined} // Force download only for Word files
+                    >
+                      {name}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
           </nav>
         </div>
       </div>
@@ -89,10 +142,6 @@ Navbar.propTypes = {
       path: PropTypes.string.isRequired,
     })
   ),
-  downloadButton: PropTypes.shape({
-    text: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired,
-  }),
 };
 
 export default Navbar;
