@@ -11,11 +11,11 @@ import StudentProtectedRoute from './pages/studentPanel/studentProtetedRoute';
 import StudentLogout from './pages/studentPanel/studentLogout/studentLogout';
 import StudentForgotPassword from './pages/studentPanel/studentForgotPassword/stuForgot';
 
-// import FacultyProtectedRoute from './pages/Faculty/FacultyProtectedRoute';
-// import { LoginFormFaculty } from './pages/Faculty/component/LoginFaculty';
-// import FacultyLogout from './pages/Faculty/component/FacultyLogout';
-// import { FacultyRegister } from './pages/Faculty/component/RegisterFaculty';
-// import FacultyPanel from './pages/Faculty/FacultyPanel';
+import FacultyProtectedRoute from './pages/facultyPanel/facultyProtectedRoute';
+import FacultyLogin from './pages/facultyPanel/facultyLogin/facultyLogin';
+import FacultyLogout from './pages/facultyPanel/facultyLogout/facultyLogout';
+import FacultyRegister from './pages/facultyPanel/facultyRegister/facultyRegister';
+import FacultyPanel from './pages/facultyPanel/facultyPanel';
 
 import AdminProtectedRoute from './pages/adminPanel/adminProtected';
 import AdminLogout from './pages/adminPanel/component/adminLogout';
@@ -43,18 +43,18 @@ const App = () => {
         <Route path="/login" element={<StudentLoginForm />} />
         <Route path="/register" element={<StudentRegisterForm />} />
 
-        {/* <Route path="/faculty/logout" element={
+        <Route path="/faculty/logout" element={
           <FacultyProtectedRoute>
             <FacultyLogout />
           </FacultyProtectedRoute>
         } />
-        <Route path="/facultylogin" element={<LoginFormFaculty />} />
+        <Route path="/facultylogin" element={<FacultyLogin />} />
         <Route path="/facultyregister" element={<FacultyRegister />} />
         <Route path="/faculty" element={
           <FacultyProtectedRoute>
             <FacultyPanel />
           </FacultyProtectedRoute>
-        } /> */}
+        } />
 
         <Route path="/admin/verifyStudentDocument/:rollNumber" element={
           <AdminProtectedRoute>
