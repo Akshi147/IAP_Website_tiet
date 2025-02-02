@@ -1,0 +1,97 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom right, #faf5ff, #ffffff);
+    padding: 1.5rem;
+  }
+  
+  .formWrapper {
+    width: 100%;
+    max-width: 28rem;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .subtitle {
+    color: #4b5563;
+  }
+  
+  .formCard {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
+  
+  .errorMessage {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fca5a5;
+    border-radius: 0.5rem;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .inputField {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  
+  .inputField:focus {
+    border-color: transparent;
+    box-shadow: 0 0 0 2px #a855f7;
+  }
+  
+  .submitButton {
+    width: 100%;
+    background-color: #9333ea;
+    color: #ffffff;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: background-color 0.2s;
+  }
+  
+  .submitButton:hover {
+    background-color: #7e22ce;
+  }
+  
+  .linksContainer {
+    margin-top: 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .link {
+    color: #9333ea;
+    transition: color 0.2s;
+  }
+  
+  .link:hover {
+    color: #7e22ce;
+  }
+  

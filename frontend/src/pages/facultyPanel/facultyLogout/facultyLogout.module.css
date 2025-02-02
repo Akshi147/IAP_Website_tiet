@@ -1,0 +1,12 @@
+.logoutContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .logoutMessage {
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  

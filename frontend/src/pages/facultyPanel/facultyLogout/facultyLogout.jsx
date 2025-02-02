@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import styles from './facultyLogout.module.css';
 
 const FacultyLogout = () => {
   const navigate = useNavigate();
@@ -32,8 +33,8 @@ const FacultyLogout = () => {
   }, [navigate]);
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <p className="text-lg font-semibold">Logging out...</p>
+    <div className={styles.logoutContainer}>
+      <p className={styles.logoutMessage}>Logging out...</p>
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../../../components/navbar/navbar"
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import styles from './facultyLogin.module.css';
 
 const FacultyLogin = () => {
   const navigate = useNavigate();
@@ -32,29 +33,29 @@ const FacultyLogin = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-purple-50 to-white px-6">
-        <div className="w-full max-w-md">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-semibold mb-2">Welcome to Project Semester</h1>
-            <p className="text-gray-600">Sign in to access your account</p>
+      <div className={styles.container}>
+        <div className={styles.formWrapper}>
+          <div className={styles.header}>
+            <h1 className={styles.title}>Welcome to Project Semester</h1>
+            <p className={styles.subtitle}>Sign in to access your account</p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className={styles.formCard}>
             {/* Error Message Alert */}
             {errorMessage && (
-              <div className="mb-4 p-4 bg-red-100 text-red-600 border border-red-300 rounded-lg">
+              <div className={styles.errorMessage}>
                 <p>{errorMessage}</p>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className={styles.form}>
               <div>
                 <input
                   type="text"
                   placeholder="Faculty Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className={styles.inputField}
                   required
                 />
               </div>
@@ -65,24 +66,24 @@ const FacultyLogin = () => {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className={styles.inputField}
                   required
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
+                className={styles.submitButton}
               >
                 Sign In
               </button>
             </form>
 
-            <div className="mt-6 text-center space-y-2">
-              <Link to="/facultyregister" className="block text-purple-600 hover:text-purple-700">
+            <div className={styles.linksContainer}>
+              <Link to="/facultyregister" className={styles.link}>
                 Register with us
               </Link>
-              <Link to="/forgot-password" className="block text-purple-600 hover:text-purple-700">
+              <Link to="/forgot-password" className={styles.link}>
                 Forgot Password?
               </Link>
             </div>
