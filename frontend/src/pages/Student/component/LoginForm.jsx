@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "../../../components/header";
+import { Footer } from "../../../components/footer";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -89,6 +90,7 @@ export function LoginForm() {
           </div>
         </div>
       </div>
+      <Footer/>
     </>
   );
 }
