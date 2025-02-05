@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FaEye, FaEyeSlash } from "react-icons/fa"
 import Navbar from "../../../components/navbar/navbar";
 import Hero from "../../../components/hero/hero";
 import styles from "./stuRegister.module.css"; // Importing the CSS module
@@ -25,6 +26,8 @@ const StudentRegisterForm = () => {
 
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
   // Function to determine branch from roll number
   const getBranchFromRollNumber = (rollNumber) => {
@@ -265,8 +268,9 @@ const StudentRegisterForm = () => {
                 required
               />
 
+              <div className={styles.passwordWrapper}>
               <input
-                type="password"
+                type={passwordVisible ? "text" : "password"}
                 name="password"
                 placeholder="Password"
                 value={formData.password}
@@ -274,9 +278,14 @@ const StudentRegisterForm = () => {
                 className={styles.input}
                 required
               />
+              <span className={styles.eyeIcon} onClick={() => setPasswordVisible(!passwordVisible)}>
+                {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+              </span>
+              </div>
 
+              <div className={styles.passwordWrapper}>
               <input
-                type="password"
+                type={confirmPasswordVisible ? "text" : "password"}
                 name="confirmPassword"
                 placeholder="Confirm Password"
                 value={formData.confirmPassword}
@@ -284,6 +293,10 @@ const StudentRegisterForm = () => {
                 className={styles.input}
                 required
               />
+              <span className={styles.eyeIcon} onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}>
+                {confirmPasswordVisible ? <FaEyeSlash /> : <FaEye />}
+              </span>
+              </div>
 
               <button type="submit" className={styles.submitButton}>
                 Register

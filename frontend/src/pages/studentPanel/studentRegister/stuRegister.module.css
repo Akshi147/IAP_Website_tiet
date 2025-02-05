@@ -97,6 +97,30 @@
   box-shadow: 0px 0px 4px rgba(139, 92, 246, 0.5);
 }
 
+.passwordWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passwordWrapper input {
+  width: 87%;
+  padding-right: clamp(2.75rem, 7vw, 3rem);
+}
+
+.eyeIcon {
+  position: absolute;
+  right: clamp(2.5rem, 8vw, 2.75rem);
+  cursor: pointer;
+  color: gray;
+  font-size: clamp(0.5rem, 3vw, 1rem);
+}
+
+.eyeIcon:hover {
+  color: black;
+}
+
+
 .submitButton {
   width: 90%;
   margin: 0 auto;
