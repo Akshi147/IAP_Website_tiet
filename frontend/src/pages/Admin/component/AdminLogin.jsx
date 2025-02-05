@@ -78,6 +78,11 @@ export function AdminLogin() {
                 Sign In
               </button>
             </form>
+            <div className="mt-6 text-center space-y-2">
+              <Link to="/forgotadminpassword" className="block text-purple-600 hover:text-purple-700">
+                Forgot Password?
+              </Link>
+            </div>
           </div>
         </div>
       </div>
