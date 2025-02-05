@@ -77,6 +77,7 @@ const StudentPanel = () => {
               { name: "Dashboard", path: "/dashboard" },
               { name: "Courses", path: "/courses" },
               { name: "Profile", path: "/profile" },
+              {name : "Log Out", path: "/student/logout"}
             ]}
             downloadButton={{
               text: "Log Out",
@@ -97,6 +98,7 @@ const StudentPanel = () => {
               { name: "Dashboard", path: "/dashboard" },
               { name: "Courses", path: "/courses" },
               { name: "Profile", path: "/profile" },
+              {name : "Log Out", path: "/student/logout"},
             ]}
             downloadButton={{
               text: "Log Out",

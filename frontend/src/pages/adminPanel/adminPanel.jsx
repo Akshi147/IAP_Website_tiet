@@ -13,6 +13,7 @@ const AdminPanel = () => {
         { name: "Verify Student", path: "/admin" },
         { name: "Verify Faculty", path: "/verifyfaculty" },
         { name: "Verify Mentor", path: "/mentor" },
+        {name: "logout", path: "/adminlogout"}
       ]}
       downloadButton={{
         text: "Log Out",
