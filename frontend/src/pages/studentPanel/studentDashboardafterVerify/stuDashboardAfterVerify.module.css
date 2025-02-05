@@ -1,11 +1,13 @@
 .dashboardContainer {
-    min-height: 100vh;
+  height: 80%;
     background: linear-gradient(to bottom right, #f3e8ff, #ffffff);
     padding: 3rem 1rem;
   }
   
   .dashboardWrapper {
-    max-width: 64rem;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
     margin: 0 auto;
   }
   
@@ -17,15 +19,15 @@
   }
   
   .dashboardHeader {
-    padding: 2rem;
+    padding: clamp(1rem, 5vw, 2rem);
   }
   
   .dashboardTitle {
     text-align: center;
-    font-size: 1.875rem;
+    font-size: (1.875rem, 3vw, 2rem);
     font-weight: 800;
     color: #1f2937;
-    margin-bottom: 2rem;
+    margin-bottom: clamp(1.5rem, 5vw,2rem);
   }
   
   .successMessage, .errorMessage {
@@ -54,6 +56,12 @@
     display: flex;
     flex-direction: column;
   }
+
+  .inputWrapper{
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+  }
   
   .inputLabel {
     font-size: 0.875rem;
@@ -62,16 +70,21 @@
   }
   
   .inputBox, .inputBoxWithSymbol {
-    width: 100%;
+    width: 90%;
     padding: 0.5rem;
     border: 1px solid #d1d5db;
     border-radius: 5px;
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05);
   }
+
+  .inputBoxWithSymbol{
+    width: 87%;
+  }
   
   .submitButton {
     background: #6d28d9;
     color: white;
+    margin-top: 0.75rem;
     padding: 0.75rem 1.5rem;
     border-radius: 5px;
     font-weight: 600;

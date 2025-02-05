@@ -27,33 +27,33 @@ const StudentDashboard = () => {
         const response = await axios.get("http://localhost:4000/students/profile", {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
-
+  
         const { trainingStartDate, trainingEndDate, mentorContact, phoneNumber, mentorEmail, mentorName, stipend } = response.data.student;
-        const { companyCountry, companyCity, companyName, completeAddress, landmark } = response.data.student.companyDetails;
-        
+        const { companyCountry, companyCity, companyName, completeAddress, landmark } = response.data.student.companyDetails || {};
+  
         setFormData({
-          mentorName,
-          mentorEmail,
-          trainingStartDate: trainingStartDate.split("T")[0],
-          stipendPerMonth: stipend,
-          mentorContact,
-          studentUpdatedNumber: phoneNumber,
-          trainingEndDate: trainingEndDate.split("T")[0],
+          mentorName: mentorName || "",
+          mentorEmail: mentorEmail || "",
+          trainingStartDate: trainingStartDate ? trainingStartDate.split("T")[0] : "",
+          stipendPerMonth: stipend || "",
+          mentorContact: mentorContact || "",
+          studentUpdatedNumber: phoneNumber || "",
+          trainingEndDate: trainingEndDate ? trainingEndDate.split("T")[0] : "",
           country: companyCountry || "India",
-          city: companyCity,
-          companyName,
-          completeAddress,
-          landmark,
+          city: companyCity || "",
+          companyName: companyName || "",
+          completeAddress: completeAddress || "",
+          landmark: landmark || "",
         });
-
+  
       } catch (error) {
         console.error("Error fetching profile data:", error);
         setErrorMessage("Failed to load profile data. Please try again.");
       }
     };
-
+  
     fetchProfile();
-  }, []);
+  }, []);  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -96,7 +96,7 @@ const StudentDashboard = () => {
             </h2>
             {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
             {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
-            <form onSubmit={handleSubmit} className={styles.formContainer}>
+            <form onSubmit={handleSubmit}>
               <div className={styles.inputGrid}>
                 <div className={styles.inputField}>
                   <label className={styles.inputLabel}>Mentor&apos;s Name</label>
@@ -109,8 +109,8 @@ const StudentDashboard = () => {
                 </div>
 
                 <div className={styles.inputField}>
-                  <label className={styles.inputLabel}>Training Start Date</label>
-                  <input type="date" name="trainingStartDate" value={formData.trainingStartDate} onChange={handleInputChange} className={styles.inputBox} required />
+                  <label className={styles.inputLabel}>Mentor&apos;s Contact Number</label>
+                  <input type="tel" name="mentorContact" value={formData.mentorContact} onChange={handleInputChange} className={styles.inputBox} required />
                 </div>
 
                 <div className={styles.inputField}>
@@ -122,8 +122,13 @@ const StudentDashboard = () => {
                 </div>
 
                 <div className={styles.inputField}>
-                  <label className={styles.inputLabel}>Mentor&apos;s Contact Number</label>
-                  <input type="tel" name="mentorContact" value={formData.mentorContact} onChange={handleInputChange} className={styles.inputBox} required />
+                  <label className={styles.inputLabel}>Training Start Date</label>
+                  <input type="date" name="trainingStartDate" value={formData.trainingStartDate} onChange={handleInputChange} className={styles.inputBox} required />
+                </div>
+
+                <div className={styles.inputField}>
+                  <label className={styles.inputLabel}>Training End Date(Tentative)</label>
+                  <input type="date" name="trainingEndDate" value={formData.trainingEndDate} onChange={handleInputChange} className={styles.inputBox} required />
                 </div>
 
                 <div className={styles.inputField}>
@@ -132,11 +137,6 @@ const StudentDashboard = () => {
                     <span className={styles.countryCode}>+91</span>
                     <input type="tel" name="studentUpdatedNumber" value={formData.studentUpdatedNumber} onChange={handleInputChange} className={styles.inputBoxWithSymbol} required />
                   </div>
-                </div>
-
-                <div className={styles.inputField}>
-                  <label className={styles.inputLabel}>Training End Date</label>
-                  <input type="date" name="trainingEndDate" value={formData.trainingEndDate} onChange={handleInputChange} className={styles.inputBox} required />
                 </div>
               </div>
 
