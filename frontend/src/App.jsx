@@ -16,6 +16,8 @@ import FacultyPanel from './pages/Faculty/FacultyPanel';
 import StudentVerification from './pages/Admin/component/VerifyDocument';
 import { AdminLogin } from './pages/Admin/component/AdminLogin';
 import AdminPanel from './pages/Admin/AdminPanel';
+import ForgotAdminPassword from './pages/Admin/component/ForgotAdminPassword';
+import ChangeAdminPassword from './pages/Admin/component/ChangeAdminPassword';
 
 const App = () => {
   return (
@@ -65,7 +67,13 @@ const App = () => {
             <AdminLogout />
           </AdminProtectedRoute>
         } />
-
+        <Route path="/forgotadminpassword" element={<ForgotAdminPassword/>} />
+        <Route path="/adminchangepassword" element={
+          <AdminProtectedRoute>
+            <ChangeAdminPassword />
+          </AdminProtectedRoute>
+          
+          } />
 
 
 

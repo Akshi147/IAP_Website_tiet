@@ -8,6 +8,8 @@ router.post('/register',adminController.Register);
 router.post('/login',adminController.Login);
 router.get('/logout',authAdmin,adminController.Logout);
 router.get('/profile',authAdmin,adminController.GetProfile);
+router.post('/forgotpassword',adminController.ForgotPassword);
+router.post('/changepassword',authAdmin,adminController.ChangePassword);
 
 
 module.exports = router;
