@@ -1,6 +1,7 @@
 const studentModel = require('../models/student.model');
 const facultyModel = require("../models/faculty.model");
 const AdminModel = require('../models/admin.model');
+const mentorModel = require("../models/mentor.model");
 const blacklistModel = require('../models/blacklist.model');
 const jwt = require('jsonwebtoken');
 
@@ -124,3 +125,52 @@ module.exports.authAdmin = async (req, res, next) => {
     }
 };
 
+
+
+
+//mentor auth
+module.exports.authMentor = async(req, res, next) => {
+    try {
+        let token = req.cookies.token || (req.headers.authorization ? req.headers.authorization.split(' ')[1] : null);
+
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized: No token provided'
+            });
+        }
+
+        // Checking if the token is blacklisted
+        const isBlacklisted = await blacklistModel.findOne({ token });
+
+        if (isBlacklisted) {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized: Token is blacklisted'
+            });
+        }
+
+        // Decoding the token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const mentor = await mentorModel.findById(decoded._id);
+
+        if (!mentor) {
+            return res.status(401).json({
+                success: false,
+                message: 'Unauthorized: Mentor not found'
+            });
+        }
+
+        req.mentor = mentor;
+        return next();
+    } catch (err) {
+        console.error('Auth Error:', err);
+        
+        return res.status(401).json({
+            success: false,
+            message: 'Unauthorized: Invalid or expired token',
+            error: err.message
+        });
+    }
+}
