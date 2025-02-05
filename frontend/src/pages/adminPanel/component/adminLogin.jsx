@@ -47,7 +47,7 @@ const AdminLogin = () => {
             )}
 
             <form onSubmit={handleSubmit} className={styles.form}>
-              <div>
+              <div className={styles.inputContainer}>
                 <input
                   type="text"
                   placeholder="Admin Email"
@@ -58,7 +58,7 @@ const AdminLogin = () => {
                 />
               </div>
 
-              <div>
+              <div className={styles.inputContainer}>
                 <input
                   type="password"
                   placeholder="Password"
