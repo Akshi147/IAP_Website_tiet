@@ -4,6 +4,7 @@ import Navbar from '../../../components/navbar/navbar';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from './stuLogin.module.css'; // Import the CSS module
+import Hero from '../../../components/hero/hero';
 
 const StudentLoginForm = () => {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ const StudentLoginForm = () => {
   return (
     <>
       <Navbar />
+      <Hero />
       <div className={styles.pageContainer}>
         <div className={styles.formWrapper}>
           <div className={styles.headerSection}>
@@ -48,8 +50,8 @@ const StudentLoginForm = () => {
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
+            <form onSubmit={handleSubmit} className={styles.formm}>
+              <div className={styles.divvv}>
                 <input
                   type="text"
                   placeholder="Student Roll Number"
@@ -60,13 +62,13 @@ const StudentLoginForm = () => {
                 />
               </div>
 
-              <div>
+              <div className={styles.divvv}>
                 <input
                   type="password"
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className={`${styles.passwordField} focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
+                  className={`${styles.inputField} focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
                   required
                 />
               </div>

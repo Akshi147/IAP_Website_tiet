@@ -1,0 +1,79 @@
+.dashboardContainer {
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #f3e8ff, #ffffff);
+    padding: 3rem 1rem;
+  }
+  
+  .dashboardWrapper {
+    max-width: 64rem;
+    margin: 0 auto;
+  }
+  
+  .dashboardCard {
+    background: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .dashboardHeader {
+    padding: 2rem;
+  }
+  
+  .dashboardTitle {
+    text-align: center;
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 2rem;
+  }
+  
+  .successMessage, .errorMessage {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 5px;
+  }
+  
+  .successMessage {
+    background: #d1fae5;
+    color: #065f46;
+  }
+  
+  .errorMessage {
+    background: #fee2e2;
+    color: #b91c1c;
+  }
+  
+  .inputGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  .inputField {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .inputLabel {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #9333ea;
+  }
+  
+  .inputBox, .inputBoxWithSymbol {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05);
+  }
+  
+  .submitButton {
+    background: #6d28d9;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    font-weight: 600;
+  }
+  
