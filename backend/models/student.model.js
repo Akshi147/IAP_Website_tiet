@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { phase3 } = require("../controllers/student.controller");
 
 const StudentSchema = new mongoose.Schema({
     name: { type: String, required: true},
@@ -49,6 +50,7 @@ const StudentSchema = new mongoose.Schema({
     stipend: { type: Number, default: 0 },
     trainingLetter: { type: String, default: null },
     feeReceipt: { type: String, default: null },
+    phase3:{type:Boolean,default:false},
 
     createdAt: { type: Date, default: Date.now }
 });

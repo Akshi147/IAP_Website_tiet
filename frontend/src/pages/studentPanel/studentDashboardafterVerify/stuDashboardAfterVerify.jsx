@@ -153,7 +153,19 @@ const StudentDashboard = () => {
 
                   <div className={styles.inputField}>
                     <label className={styles.inputLabel}>City</label>
-                    <input type="text" name="city" value={formData.city} onChange={handleInputChange} className={styles.inputBox} required />
+                    <input type="text" name="city" value={formData.city} readOnly className={styles.inputBox} required />
+                  </div>
+                  <div className={styles.inputField}>
+                    <label className={styles.inputLabel}>Company Name</label>
+                    <input type="text" name="companyName" value={formData.companyName} readOnly className={styles.inputBox} required />
+                  </div>
+                  <div className={styles.inputField}>
+                    <label className={styles.inputLabel}>Complete Address</label>
+                    <input type="text" name="completeAddress" value={formData.completeAddress} onChange={handleInputChange} className={styles.inputBox} required />
+                  </div>
+                  <div className={styles.inputField}>
+                    <label className={styles.inputLabel}>Landmark</label>
+                    <input type="text" name="landmark" value={formData.landmark} onChange={handleInputChange} className={styles.inputBox} required />
                   </div>
                 </div>
               </div>

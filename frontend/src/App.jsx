@@ -21,6 +21,8 @@ import AdminProtectedRoute from './pages/adminPanel/adminProtected';
 import AdminLogout from './pages/adminPanel/component/adminLogout';
 import AdminStudentVerification from './pages/adminPanel/component/adminVerifyDoc';
 import  AdminLogin  from './pages/adminPanel/component/adminLogin';
+import ChangeAdminPassword from './pages/adminPanel/component/adminChangePassword';
+import ForgotAdminPassword from './pages/adminPanel/component/adminForgotPassword';
 import AdminPanel from './pages/adminPanel/adminPanel';
 
 const App = () => {
@@ -70,6 +72,12 @@ const App = () => {
         <Route path="/adminlogout" element={
           <AdminProtectedRoute>
             <AdminLogout />
+          </AdminProtectedRoute>
+        } />
+          <Route path="/forgotadminpassword" element={<ForgotAdminPassword/>} />
+        <Route path="/adminchangepassword" element={
+          <AdminProtectedRoute>
+            <ChangeAdminPassword />
           </AdminProtectedRoute>
         } />
       </Routes>

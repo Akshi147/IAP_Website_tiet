@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from './adminLogin.module.css';  // Import the CSS module
 import Navbar from "../../../components/navbar/navbar";
@@ -76,6 +76,11 @@ const AdminLogin = () => {
                 Sign In
               </button>
             </form>
+            <div className={styles.forgotpass}>
+              <Link to="/forgotadminpassword" className={styles.passlink}>
+                Forgot Password?
+              </Link>
+            </div>
           </div>
         </div>
       </div>

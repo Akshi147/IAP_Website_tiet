@@ -86,4 +86,20 @@
   .submitButton:hover {
     background-color: #6d28d9;
   }
+
+  .forgotpass{
+    margin-top: 1.5rem;
+  text-align: center;
+  }
+
+  .passlink{
+    display: block; /* Ensures the link takes the full width */
+  color: #9333ea; /* Tailwind's purple-600 */
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+  }
+
+  .passlink:hover{
+    color: #7e22ce;
+  }
   

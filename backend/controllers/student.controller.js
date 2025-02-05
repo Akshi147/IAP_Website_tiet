@@ -436,6 +436,19 @@ module.exports.completeVerify = async (req, res) => {
         return res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
-
-
-
+module.exports.phase3 = async (req, res) => {
+    try {
+        const student = req.student;
+        updatedData = req.body;
+        Object.assign(student, updatedData, { phase3: true });
+        student.companyDetails.companyName=updatedData.companyName;
+        student.companyDetails.companyCity=updatedData.city;
+        student.companyDetails.companyCountry=updatedData.country;
+        student.companyDetails.completeAddress=updatedData.completeAddress;
+        student.companyDetails.landmark=updatedData.landmark;
+        await student.save();
+        res.status(200).json({ message: 'Phase 3 completed successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};

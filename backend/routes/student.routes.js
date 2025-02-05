@@ -34,6 +34,7 @@ router.get('/downloadfile/:feeReceipt',authAdmin,studentController.downloadFeeRe
 router.get('/verifyStudentDocument/:rollNo',authAdmin,studentController.verifyStudentDocument);
 router.post("/sendEmail/:rollNumber", authAdmin, studentController.sendErrorEmail);
 router.post("/completeverify/:rollNo", authAdmin, studentController.completeVerify);
+router.post("/phase3",authStudent,studentController.phase3);
 
 
 
