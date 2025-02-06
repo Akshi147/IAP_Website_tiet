@@ -85,7 +85,7 @@ const StudentLoginForm = () => {
               <Link to="/register" className={`${styles.linkText} ${styles.linkHover}`}>
                 Register with us
               </Link>
-              <Link to="/forgot-password" className={`${styles.linkText} ${styles.linkHover}`}>
+              <Link to="/forgotstudentpassword" className={`${styles.linkText} ${styles.linkHover}`}>
                 Forgot Password?
               </Link>
             </div>

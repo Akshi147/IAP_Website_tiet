@@ -2,7 +2,7 @@
 import { useNavigate } from 'react-router-dom'
 // import axios from 'axios'
 import Navbar from '../../components/navbar/navbar';
-import Admin from './component/admin'
+import Admin from './adminSearchStudent/admin';
 
 const AdminPanel = () => {
   const navigate = useNavigate()

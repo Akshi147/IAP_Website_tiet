@@ -9,7 +9,9 @@ import StudentLoginForm from './pages/studentPanel/studentLogin/stuLogin';
 import StudentRegisterForm from './pages/studentPanel/studentRegister/stuRegister';
 import StudentProtectedRoute from './pages/studentPanel/studentProtetedRoute';
 import StudentLogout from './pages/studentPanel/studentLogout/studentLogout';
-import StudentForgotPassword from './pages/studentPanel/studentForgotPassword/stuForgot';
+import ForgotStudentPassword from './pages/studentPanel/studentForgotPassword/stuForgot';
+import StudentResetPassword from './pages/studentPanel/studentResetPassword/stuResetPassword';
+
 
 import FacultyProtectedRoute from './pages/facultyPanel/facultyProtectedRoute';
 import FacultyLogin from './pages/facultyPanel/facultyLogin/facultyLogin';
@@ -18,11 +20,11 @@ import FacultyRegister from './pages/facultyPanel/facultyRegister/facultyRegiste
 import FacultyPanel from './pages/facultyPanel/facultyPanel';
 
 import AdminProtectedRoute from './pages/adminPanel/adminProtected';
-import AdminLogout from './pages/adminPanel/component/adminLogout';
-import AdminStudentVerification from './pages/adminPanel/component/adminVerifyDoc';
-import  AdminLogin  from './pages/adminPanel/component/adminLogin';
-import ChangeAdminPassword from './pages/adminPanel/component/adminChangePassword';
-import ForgotAdminPassword from './pages/adminPanel/component/adminForgotPassword';
+import AdminLogout from './pages/adminPanel/adminLogout/adminLogout';
+import AdminStudentVerification from './pages/adminPanel/adminVerifyDoc/adminVerifyDoc';
+import  AdminLogin  from './pages/adminPanel/adminLogin/adminLogin';
+import ChangeAdminPassword from './pages/adminPanel/adminChangePassword/adminChangePassword';
+import ForgotAdminPassword from './pages/adminPanel/adminForgotPasswrod/adminForgotPassword';
 import AdminPanel from './pages/adminPanel/adminPanel';
 
 const App = () => {
@@ -41,9 +43,10 @@ const App = () => {
             <StudentLogout />
           </StudentProtectedRoute>
         } />
-        <Route path="/forgot-password" element={<StudentForgotPassword />} />
         <Route path="/login" element={<StudentLoginForm />} />
         <Route path="/register" element={<StudentRegisterForm />} />
+        <Route path="/forgotstudentpassword" element={<ForgotStudentPassword />} />
+        <Route path="/reset-password" element={<StudentResetPassword />} />
 
         <Route path="/faculty/logout" element={
           <FacultyProtectedRoute>
