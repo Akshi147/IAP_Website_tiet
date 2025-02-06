@@ -8,6 +8,7 @@ import StudentProtectedRoute from './pages/Student/StudentProtectedRoute';
 import FacultyProtectedRoute from './pages/Faculty/FacultyProtectedRoute';
 import AdminProtectedRoute from './pages/Admin/AdminProtected';
 import StudentLogout from './pages/Student/component/StudentLogout';
+import ForgotStudentPassword from './pages/Student/component/ForgotPassword';
 import AdminLogout from './pages/Admin/component/AdminLogout';
 import { LoginFormFaculty } from './pages/Faculty/component/LoginFaculty';
 import FacultyLogout from './pages/Faculty/component/FacultyLogout';
@@ -18,6 +19,7 @@ import { AdminLogin } from './pages/Admin/component/AdminLogin';
 import AdminPanel from './pages/Admin/AdminPanel';
 import ForgotAdminPassword from './pages/Admin/component/ForgotAdminPassword';
 import ChangeAdminPassword from './pages/Admin/component/ChangeAdminPassword';
+import ResetPassword from './pages/Student/component/ResetPassword';
 
 const App = () => {
   return (
@@ -74,7 +76,8 @@ const App = () => {
           </AdminProtectedRoute>
           
           } />
-
+        <Route path="/forgotstudentpassword" element={<ForgotStudentPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
 
       </Routes>

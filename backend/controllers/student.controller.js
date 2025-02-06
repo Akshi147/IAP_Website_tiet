@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 const sendEmail = require('../libs/nodemailer')
 const fs = require('fs');
 const path = require('path'); // To ensure correct file path handling
+const crypto = require('crypto');
 
 
 module.exports.registerStudent = async (req, res) => {
@@ -452,6 +453,159 @@ module.exports.phase3 = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+module.exports.forgotPassword = async (req, res) => {
+    try {
+        const { rollNo } = req.body;
+        const student = await studentModel.findOne({ rollNo });
+
+        if (!student) {
+            return res.status(404).json({ message: "Student not found" });
+        }
+
+        // Generate reset token
+        const resetToken = student.generateResetToken();
+        await student.save();
+
+        // Reset link
+        const resetLink = `http://localhost:5173/reset-password?token=${resetToken}`;
+
+        // Send email
+        await sendEmail(
+            student.email,
+            "Reset Your Password",
+            `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Reset Request</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+        }
+        .email-content {
+            background-color: #ffffff;
+            padding: 30px;
+            max-width: 600px;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .header {
+            background-color: #6c63ff;
+            color: #ffffff;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        .message {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #6c63ff;
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .button:hover {
+            background-color: #5a54e3;
+        }
+        .footer {
+            font-size: 14px;
+            color: #777;
+            margin-top: 20px;
+            text-align: center;
+        }
+        @media screen and (max-width: 600px) {
+            .email-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="email-content">
+            <div class="header">Password Reset Request</div>
+
+            <p class="message">Dear <b>${student.name}</b>,</p>
+            <p class="message">
+                We received a request to reset your password. If this was you, please click the button below to set a new password. 
+                This link will expire in 1 hour for security reasons.
+            </p>
+
+            <div style="text-align: center;">
+                <a href="${resetLink}" class="button">Reset My Password</a>
+            </div>
+
+            <p class="message">
+                If you did not request a password reset, please ignore this email. Your account remains secure.
+            </p>
+
+            <p class="footer">If you need further assistance, please contact our support team.</p>
+        </div>
+    </div>
+
+</body>
+</html>
+`
+        );
+
+        res.status(200).json({ message: "Password reset link sent to your email.Please Check Spam Folder too" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+module.exports.resetPassword = async (req, res) => {
+    try {
+        const { token, newPassword } = req.body;
+
+        // Hash the token to find in DB
+        const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+        const student = await studentModel.findOne({
+            resetPasswordToken: hashedToken,
+            resetPasswordExpires: { $gt: Date.now() }, // Check expiration
+        });
+
+        if (!student) {
+            return res.status(400).json({ message: "Invalid or expired token" });
+        }
+
+        // Hash new password and save
+        student.password = await studentModel.hashPassword(newPassword);
+        student.resetPasswordToken = null;
+        student.resetPasswordExpires = null;
+        await student.save();
+
+        res.status(200).json({ message: "Password successfully reset!" });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 
 
 

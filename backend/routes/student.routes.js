@@ -35,6 +35,9 @@ router.get('/verifyStudentDocument/:rollNo',authAdmin,studentController.verifySt
 router.post("/sendEmail/:rollNumber", authAdmin, studentController.sendErrorEmail);
 router.post("/completeverify/:rollNo", authAdmin, studentController.completeVerify);
 router.post("/phase3",authStudent,studentController.phase3);
+router.post("/forgotpassword",studentController.forgotPassword);
+router.post("/resetpassword", studentController.resetPassword);
+
 
 
 

@@ -83,7 +83,7 @@ export function LoginForm() {
               <Link to="/register" className="block text-purple-600 hover:text-purple-700">
                 Register with us
               </Link>
-              <Link to="/forgot-password" className="block text-purple-600 hover:text-purple-700">
+              <Link to="/forgotstudentpassword" className="block text-purple-600 hover:text-purple-700">
                 Forgot Password?
               </Link>
             </div>
