@@ -291,7 +291,7 @@ module.exports.verifyStudentDocument = async (req, res) => {
         res.status(500).json({ error: "Internal server error. Please try again later." });
     }
 };
-const generateEmailTemplate = (student, fileType) => {
+const generateEmailTemplate = (student, fileType,reason,customMessage,contactPerson) => {
     const fileNames = {
         feeReceipt: "Fee Receipt",
         trainingLetter: "Training Letter"
@@ -343,6 +343,7 @@ const generateEmailTemplate = (student, fileType) => {
 };
 
 module.exports.sendErrorEmail = async (req, res) => {
+    console.log(req.body);
     try {
         const { fileType } = req.body;
         const { rollNumber } = req.params;
@@ -391,7 +392,41 @@ module.exports.sendErrorEmail = async (req, res) => {
         }
 
         // Send email
-        await sendEmail(student.email, `Your ${fileType} Has Been Rejected`, generateEmailTemplate(student, fileType));
+        await sendEmail(student.email, `Your ${fileType} Has Been Rejected`,`
+    <html>
+    <head>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f8f8f8; }
+            .container { width: 100%; text-align: center; padding: 20px; }
+            .content { background-color: white; padding: 40px; margin: 20px auto; max-width: 600px; border-radius: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); text-align: left; }
+            .title { font-size: 22px; font-weight: bold; color: #2b2b2b; text-align: center; }
+            .message { font-size: 16px; color: #4d4d4d; margin-top: 10px; }
+            .button { display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #b46dd3; color: white; text-decoration: none; font-size: 16px; border-radius: 5px; font-weight: bold; text-align: center; }
+            .footer { margin-top: 20px; font-size: 14px; color: #777; text-align: center; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #b46dd3; color: white; text-align: center;">
+                <tr><td style="padding: 20px; font-size: 24px; font-weight: bold;">IAP CELL</td></tr>
+                <tr><td style="font-size: 16px;">THAPAR INSTITUTE OF ENGINEERING AND TECHNOLOGY, PATIALA</td></tr>
+                <tr><td style="font-size: 16px;">(DEEMED TO BE UNIVERSITY)</td></tr>
+            </table>
+
+            <div class="content">
+                <div class="title">${fileType} Issue - Reupload Required</div>
+                <p class="message">Dear <b>${student.name}</b>,</p>
+                <p class="message">We regret to inform you that your submitted ${fileType} has an issue and is unverified. It has been removed from our database.</p>
+                <p class="message"><b>Reason:</b>${req.body.reason}:${req.body.customMessage} </p>
+                <p class="message">Please upload a valid ${fileType} to complete your registration process.</p>
+                 
+                ${req.body.contactPerson ? `<p class="message">Contact Person: ${req.body.contactPerson}</p>` : ''}
+                <p class="footer">If you believe this is a mistake, please contact the administration.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    `);
 
         // ✅ Send a success response for admin logs
         res.json({
@@ -441,7 +476,9 @@ module.exports.phase3 = async (req, res) => {
     try {
         const student = req.student;
         updatedData = req.body;
+        console.log(updatedData);
         Object.assign(student, updatedData, { phase3: true });
+        student.stipend=updatedData.stipendPerMonth;
         student.companyDetails.companyName=updatedData.companyName;
         student.companyDetails.companyCity=updatedData.city;
         student.companyDetails.companyCountry=updatedData.country;

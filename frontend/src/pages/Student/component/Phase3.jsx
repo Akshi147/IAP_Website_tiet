@@ -17,8 +17,10 @@ const Phase3 = () => {
     landmark: "",
   });
 
-  const [successMessage, setSuccessMessage] = useState(""); // ✅ Success message
-  const [errorMessage, setErrorMessage] = useState(""); // ❌ Error message
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isPhase3Locked, setIsPhase3Locked] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -27,9 +29,9 @@ const Phase3 = () => {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
 
-        const { trainingStartDate, trainingEndDate, mentorContact, phoneNumber, mentorEmail, mentorName, stipend } = response.data.student;
+        const { trainingStartDate, trainingEndDate, mentorContact, phoneNumber, mentorEmail, mentorName, stipend, phase3 } = response.data.student;
         const { companyCountry, companyCity, companyName, completeAddress, landmark } = response.data.student.companyDetails;
-        
+
         setFormData({
           mentorName,
           mentorEmail,
@@ -38,13 +40,14 @@ const Phase3 = () => {
           mentorContact,
           studentUpdatedNumber: phoneNumber,
           trainingEndDate: trainingEndDate.split("T")[0],
-          country: companyCountry||"India",
+          country: companyCountry || "India",
           city: companyCity,
           companyName,
-          completeAddress:completeAddress,
-          landmark:landmark,
+          completeAddress,
+          landmark,
         });
 
+        setIsPhase3Locked(phase3); // ✅ Set phase3 status
       } catch (error) {
         console.error("Error fetching profile data:", error);
         setErrorMessage("Failed to load profile data. Please try again.");
@@ -56,8 +59,7 @@ const Phase3 = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    
-    // Clear messages on input change
+
     setSuccessMessage("");
     setErrorMessage("");
 
@@ -69,11 +71,16 @@ const Phase3 = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    if (!showConfirmation) {
+      setShowConfirmation(true);
+      return; // ✅ Show confirmation warning first
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:4000/students/phase3",
-        formData, // No need for spread operator, `formData` is already an object
+        formData,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
@@ -81,20 +88,16 @@ const Phase3 = () => {
 
       console.log("Data submitted successfully:", response.data);
       setSuccessMessage("Your details have been updated successfully! 🎉");
-      setErrorMessage(""); // Clear any previous error
-
+      setErrorMessage("");
     } catch (error) {
       console.error("Error submitting form:", error);
-
       if (error.response) {
-        // If backend sends error message
         setErrorMessage(error.response.data.message || "Failed to update details. Please try again.");
       } else {
         setErrorMessage("Network error. Please check your internet connection.");
       }
     }
   };
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white py-12 px-4 sm:px-6 lg:px-8">
@@ -104,17 +107,38 @@ const Phase3 = () => {
             <h2 className="text-center text-3xl font-extrabold text-gray-900 mb-8">
               Stipend Information, Mentor Detail, Company Address
             </h2>
-    {/* ✅ Show success or error messages */}
-    {successMessage && (
+
+            {successMessage && (
               <div className="mb-4 text-green-700 bg-green-100 p-3 rounded-lg">{successMessage}</div>
             )}
             {errorMessage && (
               <div className="mb-4 text-red-700 bg-red-100 p-3 rounded-lg">{errorMessage}</div>
             )}
+
+            {showConfirmation && (
+              <div className="mb-4 text-yellow-700 bg-yellow-100 p-3 rounded-lg">
+                ⚠️ Please recheck your details! This is the final time you can edit.
+                <div className="flex justify-between mt-2">
+                  <button
+                    onClick={() => setShowConfirmation(false)}
+                    className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSubmit}
+                    className="px-4 py-2 bg-purple-600 text-white rounded-md"
+                  >
+                    Confirm & Submit
+                  </button>
+                </div>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Top Section */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
+
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-purple-600">Mentor's Name</label>
@@ -123,6 +147,8 @@ const Phase3 = () => {
                     name="mentorName"
                     value={formData.mentorName}
                     onChange={handleInputChange}
+                    disabled={isPhase3Locked}
+
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"
                     required
                   />
@@ -135,6 +161,8 @@ const Phase3 = () => {
                     name="mentorEmail"
                     value={formData.mentorEmail}
                     onChange={handleInputChange}
+                    disabled={isPhase3Locked}
+
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"
                     required
                   />
@@ -147,6 +175,8 @@ const Phase3 = () => {
                     name="trainingStartDate"
                     value={formData.trainingStartDate}
                     onChange={handleInputChange}
+                    disabled={isPhase3Locked}
+
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"
                     required
                   />
@@ -161,6 +191,8 @@ const Phase3 = () => {
                       name="stipendPerMonth"
                       value={formData.stipendPerMonth}
                       onChange={handleInputChange}
+                      disabled={isPhase3Locked}
+
                       className="w-full pl-7 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"
                       required
                     />
@@ -174,6 +206,8 @@ const Phase3 = () => {
                     name="mentorContact"
                     value={formData.mentorContact}
                     onChange={handleInputChange}
+                    disabled={isPhase3Locked}
+
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"
                     required
                   />
@@ -188,6 +222,8 @@ const Phase3 = () => {
                       name="studentUpdatedNumber"
                       value={formData.studentUpdatedNumber}
                       onChange={handleInputChange}
+                      disabled={isPhase3Locked}
+
                       className="w-full pl-12 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"
                       required
                     />
@@ -201,6 +237,7 @@ const Phase3 = () => {
                     name="trainingEndDate"
                     value={formData.trainingEndDate}
                     onChange={handleInputChange}
+                    disabled={isPhase3Locked}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"
                     required
                   />
@@ -217,6 +254,7 @@ const Phase3 = () => {
                       name="country"
                       value={formData.country}
                       onChange={handleInputChange}
+                      disabled={isPhase3Locked}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"
                     >
                       <option value="India">India</option>
@@ -231,6 +269,7 @@ const Phase3 = () => {
                       name="city"
                       value={formData.city}
                       onChange={handleInputChange}
+                      disabled={isPhase3Locked}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"
                       required
                     />
@@ -243,6 +282,7 @@ const Phase3 = () => {
                       name="companyName"
                       value={formData.companyName}
                       onChange={handleInputChange}
+                      disabled={isPhase3Locked}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"
                       required
                     />
@@ -254,6 +294,7 @@ const Phase3 = () => {
                       name="completeAddress"
                       value={formData.completeAddress}
                       onChange={handleInputChange}
+                      disabled={isPhase3Locked}
                       rows="3"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"
                       required
@@ -267,6 +308,8 @@ const Phase3 = () => {
                       name="landmark"
                       value={formData.landmark}
                       onChange={handleInputChange}
+                      disabled={isPhase3Locked}
+
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500"
                       required
                     />
@@ -274,22 +317,27 @@ const Phase3 = () => {
                 </div>
               </div>
 
-              {/* Submit Button */}
               <div className="flex justify-center pt-6">
                 <button
                   type="submit"
-                  className="px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                  disabled={isPhase3Locked}
+                  className={`px-6 py-3 border border-transparent text-base font-medium rounded-md text-white ${isPhase3Locked ? "bg-gray-400 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"}`}
                 >
                   Update
                 </button>
               </div>
+
+              {isPhase3Locked && (
+                <div className="mt-4 text-red-700 bg-red-100 p-3 rounded-lg text-center">
+                  🚫 You can no longer edit this form because it is locked.
+                </div>
+              )}
             </form>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Phase3
-
+export default Phase3;

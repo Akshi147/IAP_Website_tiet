@@ -25,6 +25,34 @@ const StudentVerification = () => {
     feeReceipt: ""
   });
   const [loading, setLoading] = useState(true);
+  const [rejectionModal, setRejectionModal] = useState({
+    show: false,
+    fileType: null,
+    reason: "",
+    customMessage: "",
+    contactPerson: ""
+  });
+
+  const trainingReasons = [
+    "Stipend less than 10000, take approval from Dr. Anupam Garg",
+    "Duration less than 4.5 months",
+    "Training not allowed. Non-tech profile, take approval from head CSED",
+    "Training duration not mentioned in training letter",
+    "Job profile not clear in training letter",
+    "Other"
+  ];
+
+  const feeReasons = [
+    "Bank receipt uploaded. Upload fee receipt from web kiosk",
+    "Full fee not paid. Upload approvals",
+    "Other"
+  ];
+
+  const contactPersons = [
+    "Finance Department",
+    "CSED Head",
+    "Training Coordinator"
+  ];
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -35,11 +63,7 @@ const StudentVerification = () => {
 
         const response = await axios.get(
           `http://localhost:4000/students/verifyStudentDocument/${rollNumber}`,
-          {
-            headers: {
-              Authorization: `Bearer ${AdminToken}`,
-            },
-          }
+          { headers: { Authorization: `Bearer ${AdminToken}` } }
         );
 
         if (response.data?.student) {
@@ -69,10 +93,7 @@ const StudentVerification = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleDownload = async (file) => {
@@ -100,26 +121,27 @@ const StudentVerification = () => {
     }
   };
 
-  const handleRemoveAndEmail = async (fileType, rollNumber) => {
+  const handleRejectionSubmit = async () => {
     setIsProcessing(true);
-    setProcessingFileType(fileType);
-
+    setProcessingFileType(rejectionModal.fileType);
+    
     try {
       const response = await axios.post(
-        `http://localhost:4000/students/sendEmail/${rollNumber}`,
-        { fileType },
+        `http://localhost:4000/students/sendEmail/${formData.rollNo}`,
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("admin-token")}`,
-          },
-        }
+          fileType: rejectionModal.fileType,
+          reason: rejectionModal.reason,
+          customMessage: rejectionModal.customMessage,
+          contactPerson: rejectionModal.contactPerson
+        },
+        { headers: { Authorization: `Bearer ${localStorage.getItem("admin-token")}` } }
       );
 
-      console.log(`✅ Successfully removed ${fileType} and emailed student`, response.data);
-      alert(`✅ Successfully removed ${fileType} and emailed ${response.data.student.name} (${response.data.student.email})`);
+      alert(`✅ Email sent to ${response.data.student.email}`);
+      setRejectionModal({ show: false, fileType: null, reason: "", customMessage: "", contactPerson: "" });
     } catch (error) {
-      console.error("❌ Error sending email:", error);
-      alert("❌ Failed to send email. Please try again.");
+      console.error("Error sending email:", error);
+      alert("❌ Failed to send email");
     } finally {
       setIsProcessing(false);
       setProcessingFileType(null);
@@ -158,32 +180,34 @@ const StudentVerification = () => {
     }
 };
 
-  
-
   return (
     <>
-     <Header
-           navItems={[
-             { name: "Verify Student", path: "/admin" },
-             { name: "Verify Faculty", path: "/verifyfaculty" },
-             { name: "Verify Mentor", path: "/mentor" },
-             {name:"Change Password",path:"/adminchangepassword"}
-           ]}
-           downloadButton={{
-             text: "Log Out",
-             onClick: () => navigate("/adminlogout"),
-           }}
-         />
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        <div className="bg-white shadow-xl rounded-lg overflow-hidden">
-          <div className="px-4 py-5 sm:p-6">
-            <h2 className="text-center text-3xl font-extrabold text-gray-900 mb-8">Verify Student Details</h2>
-            {loading ? (
-              <p className="text-center text-gray-600">Loading...</p>
-            ) : (
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 gap-6">
+      <Header
+        navItems={[
+          { name: "Verify Student", path: "/admin" },
+          { name: "Verify Faculty", path: "/verifyfaculty" },
+          { name: "Verify Mentor", path: "/mentor" },
+          { name: "Change Password", path: "/adminchangepassword" }
+        ]}
+        downloadButton={{
+          text: "Log Out",
+          onClick: () => navigate("/adminlogout"),
+        }}
+      />
+
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto">
+          <div className="bg-white shadow-xl rounded-lg overflow-hidden">
+            <div className="px-4 py-5 sm:p-6">
+              <h2 className="text-center text-3xl font-extrabold text-gray-900 mb-8">
+                Verify Student Details
+              </h2>
+              
+              {loading ? (
+                <p className="text-center text-gray-600">Loading...</p>
+              ) : (
+                <form className="space-y-6">
+                 <div className="grid grid-cols-1 gap-6">
                   {Object.keys(formData).map((key) => (
                     key !== "trainingLetter" && key !== "feeReceipt" && (
                       <div key={key} className="space-y-2">
@@ -204,42 +228,129 @@ const StudentVerification = () => {
                     )
                   ))}
                 </div>
-                <div className="space-y-4 border-t pt-4">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-medium text-purple-600">Training Letter</label>
-                    <div className="space-x-2">
-                      <button type="button" onClick={() => handleDownload(formData.trainingLetter)} className="text-purple-700 bg-purple-100 hover:bg-purple-200 px-3 py-1 rounded-md">Download</button>
-                      <button type="button" onClick={() => handleRemoveAndEmail("trainingLetter",formData.rollNo)} 
-                        className="text-white bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded-md disabled:opacity-50"
-                        disabled={isProcessing}>
-                        {isProcessing && processingFileType === "trainingLetter" ? "Processing..." : "Remove & Email"}
-                      </button>
+
+                  <div className="space-y-4 border-t pt-4">
+                    {/* Training Letter Section */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm font-medium text-purple-600">Training Letter</label>
+                        <div className="space-x-2">
+                          <button
+                            type="button"
+                            onClick={() => handleDownload(formData.trainingLetter)}
+                            className="text-purple-700 bg-purple-100 hover:bg-purple-200 px-3 py-1 rounded-md"
+                          >
+                            Download
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setRejectionModal({ show: true, fileType: "trainingLetter", reason: "", customMessage: "", contactPerson: "" })}
+                            className="text-white bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded-md disabled:opacity-50"
+                            disabled={isProcessing}
+                          >
+                            Remove & Email
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Fee Receipt Section */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm font-medium text-purple-600">Fee Receipt</label>
+                        <div className="space-x-2">
+                          <button
+                            type="button"
+                            onClick={() => handleDownload(formData.feeReceipt)}
+                            className="text-purple-700 bg-purple-100 hover:bg-purple-200 px-3 py-1 rounded-md"
+                          >
+                            Download
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setRejectionModal({ show: true, fileType: "feeReceipt", reason: "", customMessage: "", contactPerson: "" })}
+                            className="text-white bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded-md disabled:opacity-50"
+                            disabled={isProcessing}
+                          >
+                            Remove & Email
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-medium text-purple-600">Fee Receipt</label>
-                    <div className="space-x-2">
-                      <button type="button" onClick={() => handleDownload(formData.feeReceipt)} className="text-purple-700 bg-purple-100 hover:bg-purple-200 px-3 py-1 rounded-md">Download</button>
-                      <button type="button" onClick={() => handleRemoveAndEmail("feeReceipt",formData.rollNo)} 
-                        className="text-white bg-purple-600 hover:bg-purple-700 px-3 py-1 rounded-md disabled:opacity-50"
-                        disabled={isProcessing}>
-                        {isProcessing && processingFileType === "feeReceipt" ? "Processing..." : "Remove & Email"}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-6 text-center">
+
+                  <div className="mt-6 text-center">
                   <button type="button" onClick={()=>handleVerify(formData.rollNo)} disabled={isVerifying} className="w-full sm:w-auto px-6 py-3 text-white bg-purple-600 hover:bg-purple-700 rounded-md">
                     {isVerifying ? "Verifying..." : "Verify"}
                   </button>
                 </div>
-              </form>
-            )}
+                </form>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <Footer/>
+
+      {/* Rejection Reason Modal */}
+      {rejectionModal.show && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h3 className="text-lg font-bold mb-4">Select Rejection Details</h3>
+            
+            <div className="space-y-4">
+              <select
+                value={rejectionModal.reason}
+                onChange={(e) => setRejectionModal(prev => ({ ...prev, reason: e.target.value }))}
+                className="w-full p-2 border rounded"
+              >
+                <option value="">Select Reason</option>
+                {(rejectionModal.fileType === "trainingLetter" ? trainingReasons : feeReasons).map((reason) => (
+                  <option key={reason} value={reason}>{reason}</option>
+                ))}
+              </select>
+
+              {rejectionModal.reason === "Other" && (
+                <textarea
+                  value={rejectionModal.customMessage}
+                  onChange={(e) => setRejectionModal(prev => ({ ...prev, customMessage: e.target.value }))}
+                  placeholder="Enter custom message"
+                  className="w-full p-2 border rounded"
+                  rows="3"
+                />
+              )}
+
+              <select
+                value={rejectionModal.contactPerson}
+                onChange={(e) => setRejectionModal(prev => ({ ...prev, contactPerson: e.target.value }))}
+                className="w-full p-2 border rounded"
+              >
+                <option value="">Select Contact Person (optional)</option>
+                {contactPersons.map((person) => (
+                  <option key={person} value={person}>{person}</option>
+                ))}
+              </select>
+
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={() => setRejectionModal(prev => ({ ...prev, show: false }))}
+                  className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleRejectionSubmit}
+                  disabled={isProcessing}
+                  className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50"
+                >
+                  {isProcessing ? "Sending..." : "Send Email"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Footer />
     </>
   );
 };
