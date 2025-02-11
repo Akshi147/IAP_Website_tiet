@@ -1,0 +1,268 @@
+.container {
+  min-height: 100vh; /* min-h-screen */
+  background: linear-gradient(to bottom right, #faf5ff, #ffffff); /* bg-gradient-to-br from-purple-50 to-white */
+  padding: 3rem 1rem; /* py-12 px-4 */
+}
+@media (min-width: 1024px) { /* lg breakpoint */
+  .container {
+    padding-left: 2rem; /* lg:px-8 */
+    padding-right: 2rem;
+  }
+}
+
+.wrapper {
+  max-width: 48rem; /* max-w-3xl */
+  margin-left: auto; /* mx-auto */
+  margin-right: auto;
+}
+
+.card {
+  background-color: #ffffff; /* bg-white */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
+  border-radius: 0.5rem; /* rounded-lg */
+  overflow: hidden;
+}
+
+.content {
+  padding: 1.25rem; /* px-4 py-5 */
+}
+
+@media (min-width: 640px) { /* sm breakpoint */
+  .content {
+    padding: 1.5rem; /* sm:p-6 */
+  }
+  .container {
+    padding-left: 1.5rem; /* sm:px-6 */
+    padding-right: 1.5rem;
+  }
+}
+
+.heading {
+  text-align: center; /* text-center */
+  font-size: 1.875rem; /* text-3xl */
+  font-weight: 800; /* font-extrabold */
+  color: #111827; /* text-gray-900 */
+  margin-bottom: 2rem; /* mb-8 */
+}
+
+.textCenter {
+  text-align: center; /* text-center */
+  color: #4b5563; /* text-gray-600 */
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* space-y-6 */
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr; /* grid-cols-1 */
+  gap: 1.5rem; /* gap-6 */
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* space-y-2 */
+}
+
+.label {
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500; /* font-medium */
+  color: #9333ea; /* text-purple-600 */
+}
+
+
+.inputField {
+  width: 100%;
+  padding: 0.5rem 0.75rem; /* px-3 py-2 */
+  border: 1px solid #d1d5db; /* border-gray-300 */
+  border-radius: 0.375rem; /* rounded-md */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* shadow-sm */
+}
+
+.disabledInput {
+  background-color: #f3f4f6; /* bg-gray-100 */
+}
+
+
+.section {
+  margin-top: 1rem; /* space-y-4 */
+  padding-top: 1rem; /* pt-4 */
+  border-top: 1px solid #e5e7eb; /* border-t */
+}
+
+.flexBetween {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.spaceX2 > *:not(:last-child) {
+  margin-right: 0.5rem; /* space-x-2 */
+}
+
+.downloadButton {
+  color: #9333ea; /* text-purple-700 */
+  background-color: #f3e8ff; /* bg-purple-100 */
+  padding: 0.25rem 0.75rem; /* px-3 py-1 */
+  border-radius: 0.375rem; /* rounded-md */
+  transition: background-color 0.2s ease-in-out;
+}
+
+.downloadButton:hover {
+  background-color: #e9d5ff; /* hover:bg-purple-200 */
+}
+
+.removeButton {
+  color: #ffffff; /* text-white */
+  background-color: #9333ea; /* bg-purple-600 */
+  padding: 0.25rem 0.75rem; /* px-3 py-1 */
+  border-radius: 0.375rem; /* rounded-md */
+  transition: background-color 0.2s ease-in-out;
+}
+
+.removeButton:hover {
+  background-color: #7e22ce; /* hover:bg-purple-700 */
+}
+
+.removeButton:disabled {
+  opacity: 0.5; /* disabled:opacity-50 */
+  cursor: not-allowed;
+}
+
+.spaceY2 {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* space-y-2 */
+}
+
+.flexBetween {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.labelText {
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500; /* font-medium */
+  color: #9333ea; /* text-purple-600 */
+}
+
+.spaceX2 {
+  display: flex;
+  gap: 0.5rem; /* space-x-2 */
+}
+
+.verifyContainer {
+  margin-top: 1.5rem; /* mt-6 */
+  text-align: center; /* text-center */
+}
+
+.verifyButton {
+  width: 100%; /* w-full */
+  padding: 0.75rem 1.5rem; /* px-6 py-3 */
+  color: white; /* text-white */
+  background-color: #9333ea; /* bg-purple-600 */
+  border-radius: 0.375rem; /* rounded-md */
+  transition: background-color 0.2s;
+}
+
+.verifyButton:hover {
+  background-color: #7e22ce; /* hover:bg-purple-700 */
+}
+
+@media (min-width: 640px) {
+  .verifyButton {
+    width: auto; /* sm:w-auto */
+  }
+}
+
+.modalOverlay {
+  position: fixed; /* fixed */
+  inset: 0; /* inset-0 */
+  background-color: rgba(0, 0, 0, 0.5); /* bg-black bg-opacity-50 */
+  display: flex; /* flex */
+  align-items: center; /* items-center */
+  justify-content: center; /* justify-center */
+  padding: 1rem; /* p-4 */
+}
+
+.modalContent {
+  background-color: white; /* bg-white */
+  border-radius: 0.5rem; /* rounded-lg */
+  padding: 1.5rem; /* p-6 */
+  width: 100%; /* w-full */
+  max-width: 28rem; /* max-w-md */
+}
+
+.modalTitle {
+  font-size: 1.125rem; /* text-lg */
+  font-weight: bold; /* font-bold */
+  margin-bottom: 1rem; /* mb-4 */
+}
+
+.dropdownContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* space-y-4 */
+}
+
+.dropdown {
+  width: 100%; /* w-full */
+  padding: 0.5rem; /* p-2 */
+  border: 1px solid #d1d5db; /* border */
+  border-radius: 0.375rem; /* rounded */
+}
+
+.textarea {
+  width: 100%; /* w-full */
+  padding: 0.5rem; /* p-2 */
+  border: 1px solid #d1d5db; /* border */
+  border-radius: 0.375rem; /* rounded */
+  resize: vertical; /* Allows vertical resizing */
+}
+
+.selectarea {
+  width: 100%; /* w-full */
+  padding: 0.5rem; /* p-2 */
+  border: 1px solid #d1d5db; /* border */
+  border-radius: 0.375rem; /* rounded */
+}
+
+.buttonContainer {
+  display: flex; /* flex */
+  justify-content: flex-end; /* justify-end */
+  gap: 0.75rem; /* space-x-3 */
+}
+
+.cancelButton {
+  padding: 0.5rem 1rem; /* px-4 py-2 */
+  color: #4b5563; /* text-gray-600 */
+  background-color: transparent;
+  border-radius: 0.375rem; /* rounded */
+  transition: background-color 0.2s;
+}
+
+.cancelButton:hover {
+  background-color: #f3f4f6; /* hover:bg-gray-100 */
+}
+
+.submitButton {
+  padding: 0.5rem 1rem; /* px-4 py-2 */
+  background-color: #9333ea; /* bg-purple-600 */
+  color: white; /* text-white */
+  border-radius: 0.375rem; /* rounded */
+  transition: background-color 0.2s;
+}
+
+.submitButton:hover {
+  background-color: #7e22ce; /* hover:bg-purple-700 */
+}
+
+.submitButton:disabled {
+  opacity: 0.5; /* disabled:opacity-50 */
+  cursor: not-allowed;
+}

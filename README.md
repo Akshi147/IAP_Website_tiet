@@ -67,3 +67,30 @@
 - To register, go to: `/faculty/register`
 - To login, go to: `/faculty/login`
 - To logout, go to: `/faculty/logout`
+## Mentor Endpoints and payload
+### Mentor Registration Payload
+```json
+{
+    "email": "xyz@gmail.com"
+}
+```
+### Mentor Set Password For Registration Payload
+```json
+{
+    "password": "***123"
+}
+```
+### Mentor Login Payload
+```json
+{
+    "email": "xyz@gmail.com",
+    "password": "***123"
+}
+```
+### Mentor Endpoints
+- To register mentor, go to: `/mentors/register`
+- To login mentor, go to: `/mentors/login`
+- To logout mentor, go to: `/mentors/logout`
+- For passsword setup and email verification at once: `mentors/setPassword/token`
+- To get assigned students, go to: `mentors/assignedStudents`
+- 

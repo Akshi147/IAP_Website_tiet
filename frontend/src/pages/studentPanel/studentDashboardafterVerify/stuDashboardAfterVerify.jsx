@@ -20,6 +20,8 @@ const StudentDashboard = () => {
 
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isPhase3Locked, setIsPhase3Locked] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -27,25 +29,26 @@ const StudentDashboard = () => {
         const response = await axios.get("http://localhost:4000/students/profile", {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
-  
-        const { trainingStartDate, trainingEndDate, mentorContact, phoneNumber, mentorEmail, mentorName, stipend } = response.data.student;
-        const { companyCountry, companyCity, companyName, completeAddress, landmark } = response.data.student.companyDetails || {};
-  
+
+        const { trainingStartDate, trainingEndDate, mentorContact, phoneNumber, mentorEmail, mentorName, stipend, phase3 } = response.data.student;
+        const { companyCountry, companyCity, companyName, completeAddress, landmark } = response.data.student.companyDetails;
+
         setFormData({
-          mentorName: mentorName || "",
-          mentorEmail: mentorEmail || "",
-          trainingStartDate: trainingStartDate ? trainingStartDate.split("T")[0] : "",
-          stipendPerMonth: stipend || "",
-          mentorContact: mentorContact || "",
-          studentUpdatedNumber: phoneNumber || "",
-          trainingEndDate: trainingEndDate ? trainingEndDate.split("T")[0] : "",
+          mentorName,
+          mentorEmail,
+          trainingStartDate: trainingStartDate.split("T")[0],
+          stipendPerMonth: stipend,
+          mentorContact,
+          studentUpdatedNumber: phoneNumber,
+          trainingEndDate: trainingEndDate.split("T")[0],
           country: companyCountry || "India",
-          city: companyCity || "",
-          companyName: companyName || "",
-          completeAddress: completeAddress || "",
-          landmark: landmark || "",
+          city: companyCity,
+          companyName,
+          completeAddress,
+          landmark,
         });
-  
+
+        setIsPhase3Locked(phase3);
       } catch (error) {
         console.error("Error fetching profile data:", error);
         setErrorMessage("Failed to load profile data. Please try again.");
@@ -67,7 +70,11 @@ const StudentDashboard = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    if (!showConfirmation) {
+      setShowConfirmation(true);
+      return; // ✅ Show confirmation warning first
+    }
     try {
       const response = await axios.post(
         "http://localhost:4000/students/phase3",
@@ -82,7 +89,11 @@ const StudentDashboard = () => {
       setErrorMessage("");
     } catch (error) {
       console.error("Error submitting form:", error);
-      setErrorMessage(error.response?.data?.message || "Failed to update details. Please try again.");
+      if (error.response) {
+        setErrorMessage(error.response.data.message || "Failed to update details. Please try again.");
+      } else {
+        setErrorMessage("Network error. Please check your internet connection.");
+      }
     }
   };
 
@@ -95,47 +106,70 @@ const StudentDashboard = () => {
               Stipend Information, Mentor Detail, Company Address
             </h2>
             {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
-            {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
-            <form onSubmit={handleSubmit}>
+            {errorMessage && (
+              <div className={styles.errorMessage}>{errorMessage}</div>
+            )}
+
+            {showConfirmation && (
+              <div className={styles.warningMessage}>
+                ⚠️ Please recheck your details! This is the final time you can edit.
+                <div className={styles.divv}>
+                  <button
+                    onClick={() => setShowConfirmation(false)}
+                    className={styles.cancelButton}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSubmit}
+                    className={styles.confirmButton}
+                  >
+                    Confirm & Submit
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className={styles.formContainer}>
               <div className={styles.inputGrid}>
                 <div className={styles.inputField}>
                   <label className={styles.inputLabel}>Mentor&apos;s Name</label>
-                  <input type="text" name="mentorName" value={formData.mentorName} onChange={handleInputChange} className={styles.inputBox} required />
+                  <input type="text" name="mentorName" value={formData.mentorName} onChange={handleInputChange} disabled={isPhase3Locked} className={styles.inputBox} required />
                 </div>
 
                 <div className={styles.inputField}>
                   <label className={styles.inputLabel}>Mentor&apos;s Email</label>
-                  <input type="email" name="mentorEmail" value={formData.mentorEmail} onChange={handleInputChange} className={styles.inputBox} required />
+                  <input type="email" name="mentorEmail" value={formData.mentorEmail} onChange={handleInputChange} disabled={isPhase3Locked} className={styles.inputBox} required />
                 </div>
 
                 <div className={styles.inputField}>
                   <label className={styles.inputLabel}>Mentor&apos;s Contact Number</label>
-                  <input type="tel" name="mentorContact" value={formData.mentorContact} onChange={handleInputChange} className={styles.inputBox} required />
+                  <input type="tel" name="mentorContact" value={formData.mentorContact} onChange={handleInputChange} disabled={isPhase3Locked} className={styles.inputBox} required />
                 </div>
 
                 <div className={styles.inputField}>
                   <label className={styles.inputLabel}>Stipend (/Month)</label>
                   <div className={styles.inputWrapper}>
                     <span className={styles.currencySymbol}>₹</span>
-                    <input type="number" name="stipendPerMonth" value={formData.stipendPerMonth} onChange={handleInputChange} className={styles.inputBoxWithSymbol} required />
+                    <input type="number" name="stipendPerMonth" value={formData.stipendPerMonth} onChange={handleInputChange} disabled={isPhase3Locked} className={styles.inputBoxWithSymbol} required />
                   </div>
                 </div>
 
                 <div className={styles.inputField}>
                   <label className={styles.inputLabel}>Training Start Date</label>
-                  <input type="date" name="trainingStartDate" value={formData.trainingStartDate} onChange={handleInputChange} className={styles.inputBox} required />
+                  <input type="date" name="trainingStartDate" value={formData.trainingStartDate} onChange={handleInputChange} disabled={isPhase3Locked} className={styles.inputBox} required />
                 </div>
 
                 <div className={styles.inputField}>
                   <label className={styles.inputLabel}>Training End Date(Tentative)</label>
-                  <input type="date" name="trainingEndDate" value={formData.trainingEndDate} onChange={handleInputChange} className={styles.inputBox} required />
+                  <input type="date" name="trainingEndDate" value={formData.trainingEndDate} onChange={handleInputChange} disabled={isPhase3Locked} className={styles.inputBox} required />
                 </div>
 
                 <div className={styles.inputField}>
                   <label className={styles.inputLabel}>Student&apos;s Updated Number</label>
                   <div className={styles.inputWrapper}>
                     <span className={styles.countryCode}>+91</span>
-                    <input type="tel" name="studentUpdatedNumber" value={formData.studentUpdatedNumber} onChange={handleInputChange} className={styles.inputBoxWithSymbol} required />
+                    <input type="tel" name="studentUpdatedNumber" value={formData.studentUpdatedNumber} onChange={handleInputChange} disabled={isPhase3Locked} className={styles.inputBoxWithSymbol} required />
                   </div>
                 </div>
               </div>
@@ -145,7 +179,7 @@ const StudentDashboard = () => {
                 <div className={styles.inputGrid}>
                   <div className={styles.inputField}>
                     <label className={styles.inputLabel}>Country</label>
-                    <select name="country" value={formData.country} onChange={handleInputChange} className={styles.inputBox}>
+                    <select name="country" value={formData.country} onChange={handleInputChange} disabled={isPhase3Locked} className={styles.inputBox}>
                       <option value="India">India</option>
                       <option value="Others">Others</option>
                     </select>
@@ -153,24 +187,34 @@ const StudentDashboard = () => {
 
                   <div className={styles.inputField}>
                     <label className={styles.inputLabel}>City</label>
-                    <input type="text" name="city" value={formData.city} readOnly className={styles.inputBox} required />
+                    <input type="text" name="city" value={formData.city} onChange={handleInputChange} disabled={isPhase3Locked} className={styles.inputBox} required />
                   </div>
                   <div className={styles.inputField}>
                     <label className={styles.inputLabel}>Company Name</label>
-                    <input type="text" name="companyName" value={formData.companyName} readOnly className={styles.inputBox} required />
+                    <input type="text" name="companyName" value={formData.companyName} onChange={handleInputChange} disabled={isPhase3Locked} className={styles.inputBox} required />
                   </div>
                   <div className={styles.inputField}>
                     <label className={styles.inputLabel}>Complete Address</label>
-                    <input type="text" name="completeAddress" value={formData.completeAddress} onChange={handleInputChange} className={styles.inputBox} required />
+                    <textarea name="completeAddress" value={formData.completeAddress} onChange={handleInputChange} disabled={isPhase3Locked} rows="3" className={styles.inputBox} required />
                   </div>
                   <div className={styles.inputField}>
                     <label className={styles.inputLabel}>Landmark</label>
-                    <input type="text" name="landmark" value={formData.landmark} onChange={handleInputChange} className={styles.inputBox} required />
+                    <input type="text" name="landmark" value={formData.landmark} onChange={handleInputChange} disabled={isPhase3Locked} className={styles.inputBox} required />
                   </div>
                 </div>
               </div>
 
-              <button type="submit" className={styles.submitButton}>Submit</button>
+              <div className={styles.buttonContainer}>
+                <button type="submit" disabled={isPhase3Locked} className={`${styles.button} ${isPhase3Locked ? styles.disabled : styles.active}`}>
+                  Update
+                </button>
+              </div>
+
+              {isPhase3Locked && (
+                <div className={styles.lockedMessage}>
+                  🚫 You can no longer edit this form because it is locked.
+                </div>
+              )}
             </form>
           </div>
         </div>
