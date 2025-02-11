@@ -52,6 +52,7 @@ const StudentSchema = new mongoose.Schema({
     trainingLetter: { type: String, default: null },
     feeReceipt: { type: String, default: null },
     phase3:{type:Boolean,default:false},
+    phase3verified:{type:Boolean,default:false},
     resetPasswordToken: { type: String, default: null },
     resetPasswordExpires: { type: Date, default: null },
     createdAt: { type: Date, default: Date.now }

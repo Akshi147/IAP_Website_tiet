@@ -1,6 +1,8 @@
 const sendEmail = require('../libs/nodemailer');
 const AdminModel = require('../models/admin.model');
 const blacklistModel = require("../models/blacklist.model");
+const studentModel = require('../models/student.model');
+const StudentModel = require("../models/student.model");
 const moment = require("moment");
 
 module.exports.Register = async (req, res) => {
@@ -251,4 +253,78 @@ module.exports.ChangePassword = async (req, res) => {
             error: error.message
         });
     }
+};
+module.exports.UnderDocumentVerification = async (req, res) => {
+    try {
+        const students = await StudentModel.find({ mentorverified: false,verified:true,trainingLetter: { $ne: null }, feeReceipt: { $ne: null } });
+        res.status(200).json({
+            success: true,
+            students
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+};
+module.exports.UnderPhase2Verification = async (req, res) => {
+    try {
+        const students = await StudentModel.find({ phase3: true, phase3verified: false });
+        res.status(200).json({
+            success: true,
+            students
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+};
+module.exports.VerifyPhase2 = async (req, res) => {
+    try {
+        const student = await studentModel.findOne({ rollNo: req.params.rollNo });
+        if (!student) {
+            return res.status(404).json({
+                success: false,
+                message: 'Student not found'
+            });
+        }
+        student.phase3verified = true;
+        await student.save();
+        res.status(200).json({
+            success: true,
+            message: 'Student verified successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+};
+module.exports.UnlockPhase2 = async (req, res) => {
+    try {
+        const student = await studentModel.findOne({ rollNo: req.params.rollNo });
+        if (!student) {
+            return res.status(404).json({
+                success: false,
+                message: 'Student not found'
+            });
+        }
+        student.phase3 = false;
+        await student.save();
+        res.status(200).json({
+            success: true,
+            message: 'Student unlocked successfully'
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+
 };

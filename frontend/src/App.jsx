@@ -20,6 +20,8 @@ import AdminPanel from './pages/Admin/AdminPanel';
 import ForgotAdminPassword from './pages/Admin/component/ForgotAdminPassword';
 import ChangeAdminPassword from './pages/Admin/component/ChangeAdminPassword';
 import ResetPassword from './pages/Student/component/ResetPassword';
+import UnderDocumentVerification from './pages/Admin/component/Underdocumentverification';
+import UnderPhase2Verification from './pages/Admin/component/UnderPhase2Verification';
 
 const App = () => {
   return (
@@ -78,7 +80,16 @@ const App = () => {
           } />
         <Route path="/forgotstudentpassword" element={<ForgotStudentPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-
+        <Route path="/underdocumentverification" element={
+          <AdminProtectedRoute>
+            <UnderDocumentVerification />
+          </AdminProtectedRoute>
+        } />
+        <Route path="/phase2verification" element={
+          <AdminProtectedRoute>
+            <UnderPhase2Verification />
+          </AdminProtectedRoute>
+        } />
 
       </Routes>
     </div>

@@ -32,7 +32,7 @@ module.exports.registerMentor = async (req, res) => {
         if (mentor.mentorverified) {
             return res.status(400).json({ 
                 success: false,
-                message: "Mentor is already verified." });
+                message: "Mentor is already verified.Kindly Login" });
         }
         
 
