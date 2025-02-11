@@ -80,20 +80,11 @@ const MentorRegister = () => {
             )}
 
             <form onSubmit={handleSubmit} className={styles.formGrid}>
-              <input
-                type="text"
-                name="name"
-                placeholder="Full Name"
-                value={formData.name}
-                onChange={handleChange}
-                className={styles.input}
-                required
-              />
 
               <input
                 type="email"
                 name="email"
-                placeholder="Email (must be @thapar.edu)"
+                placeholder="Email"
                 value={formData.email}
                 onChange={handleChange}
                 className={styles.input}

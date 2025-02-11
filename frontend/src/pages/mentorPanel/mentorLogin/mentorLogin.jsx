@@ -92,7 +92,7 @@ const MentorLogin= () => {
                 Register as Mentor
               </Link>
               <Link
-                to="/forgotmentorpassword"
+                to="/mentors/forgotpassword"
                 className={`${styles.linkText} ${styles.linkHover}`}
               >
                 Forgot Password?

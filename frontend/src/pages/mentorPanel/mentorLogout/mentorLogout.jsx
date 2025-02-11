@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import styles from "./MmntorLogout.module.css"; // Import the CSS Module
+import styles from "./mentorLogout.module.css"; // Import the CSS Module
 
 const MentorLogout = () => {
   const navigate = useNavigate();
