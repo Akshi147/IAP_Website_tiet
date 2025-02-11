@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./adminChangePassword.module.css";
+import Navbar from "../../../components/navbar/navbar";
 
 const ChangeAdminPassword = () => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -52,6 +53,8 @@ const ChangeAdminPassword = () => {
   };
 
   return (
+    <>
+    <Navbar />
     <div className={styles.container}>
       <div className={styles.wrapper}>
         <div className={styles.header}>
@@ -127,6 +130,7 @@ const ChangeAdminPassword = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

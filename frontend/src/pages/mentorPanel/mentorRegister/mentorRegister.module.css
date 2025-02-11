@@ -1,0 +1,134 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom right, #f5e8ff, #ffffff);
+    padding: clamp(1rem, 5vw, 2rem);
+  }
+  
+  .formWrapper {
+    width: 90%;
+  }
+  
+  .heading {
+    text-align: center;
+    margin-bottom: clamp(0.75rem, 4vw, 1.5rem);
+  }
+  
+  .heading h1 {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    font-weight: 600;
+    margin-bottom: clamp(0.5rem, 3vw, 1rem);
+  }
+  
+  .heading p {
+    color: #4b5563;
+  }
+  
+  .formContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: clamp(1rem, 5vw, 2rem);
+  }
+  
+  .alert {
+    padding: clamp(0.5rem, 2vw, 1rem);
+    border-radius: 8px;
+    font-size: clamp(0.75rem, 2vw, 1rem);
+    text-align: center;
+    margin-bottom: clamp(0.5rem, 3vw, 1rem);
+  }
+  
+  .error {
+    background: #ffe4e6;
+    color: #b91c1c;
+    border: 1px solid #fbd5d5;
+  }
+  
+  .success {
+    background: #d1fae5;
+    color: #047857;
+    border: 1px solid #c6f6d5;
+  }
+  
+  .formGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 90%;
+    margin: 0 auto;
+  }
+  
+  .input {
+    width: 90%;
+    padding: clamp(0.5rem, 2vw, 1rem);
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: clamp(0.75rem, 2vw, 1rem);
+    margin: 0 auto;
+    outline: none;
+    color: #4b5563;
+  }
+  
+  .passwordWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .passwordWrapper input {
+    width: 87%;
+    padding-right: clamp(2.75rem, 7vw, 3rem);
+  }
+  
+  .eyeIcon {
+    position: absolute;
+    right: clamp(2.5rem, 8vw, 2.75rem);
+    cursor: pointer;
+    color: gray;
+    font-size: clamp(0.5rem, 3vw, 1rem);
+  }
+  
+  .eyeIcon:hover {
+    color: black;
+  }
+  
+  .submitButton {
+    width: 90%;
+    margin: 0 auto;
+    background-color: #8b5cf6;
+    color: white;
+    font-size: clamp(0.75rem, 2vw, 1rem);
+    font-weight: 600;
+    padding: clamp(0.5rem, 2vw, 1rem);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .submitButton:hover {
+    background-color: #7c3aed;
+  }
+  
+  .links {
+    text-align: center;
+    margin-top: 16px;
+  }
+  
+  .links a {
+    color: #8b5cf6;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+  
+  .links a:hover {
+    color: #7c3aed;
+  }
+  

@@ -19,9 +19,9 @@ const pdfFiles = [
 const Navbar = ({
   navItems = [
     { name: "Home", path: "/" },
-    { name: "Student Panel", path: "/student" },
+    { name: "Student Panel", path: "/login" },
     { name: "Faculty Panel", path: "/faculty" },
-    { name: "Mentor Panel", path: "/mentor" },
+    { name: "Mentor Panel", path: "/mentors/login" },
   ],
 }) => {
   const [isOpen, setIsOpen] = useState(false);

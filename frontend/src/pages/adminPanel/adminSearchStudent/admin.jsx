@@ -59,7 +59,7 @@ const Admin = () => {
             )}
 
             <form onSubmit={handleSubmit} className={styles.form}>
-              <div>
+              <div className={styles.formGroup}>
                 <label htmlFor="rollNumber" className={styles.label}>
                   Enter Student Roll Number
                 </label>

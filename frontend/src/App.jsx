@@ -7,7 +7,7 @@ import Home from './pages/home/home';
 import StudentPanel from './pages/studentPanel/studentPanel'
 import StudentLoginForm from './pages/studentPanel/studentLogin/stuLogin';
 import StudentRegisterForm from './pages/studentPanel/studentRegister/stuRegister';
-import StudentProtectedRoute from './pages/studentPanel/studentProtetedRoute';
+import StudentProtectedRoute from './pages/studentPanel/studentProtectedRoute';
 import StudentLogout from './pages/studentPanel/studentLogout/studentLogout';
 import ForgotStudentPassword from './pages/studentPanel/studentForgotPassword/stuForgot';
 import StudentResetPassword from './pages/studentPanel/studentResetPassword/stuResetPassword';
@@ -17,6 +17,13 @@ import FacultyLogin from './pages/facultyPanel/facultyLogin/facultyLogin';
 import FacultyLogout from './pages/facultyPanel/facultyLogout/facultyLogout';
 import FacultyRegister from './pages/facultyPanel/facultyRegister/facultyRegister';
 import FacultyPanel from './pages/facultyPanel/facultyPanel';
+
+import MentorPanel from './pages/mentorPanel/mentorPanel';
+import MentorProtectedRoute from './pages/mentorPanel/mentorProtectedRoute';
+import MentorLogin from './pages/mentorPanel/mentorLogin/mentorLogin';
+import MentorLogout from './pages/mentorPanel/mentorLogout/mentorLogout';
+import MentorRegister from './pages/mentorPanel/mentorRegister/mentorRegister';
+import MentorAssignedStudents from './pages/mentorPanel/mentorAssignedStu/mentorAssignedStu';
 
 import AdminProtectedRoute from './pages/adminPanel/adminProtected';
 import AdminLogout from './pages/adminPanel/adminLogout/adminLogout';
@@ -60,6 +67,24 @@ const App = () => {
           <FacultyProtectedRoute>
             <FacultyPanel />
           </FacultyProtectedRoute>
+        } />
+
+        <Route path="/mentor" element={
+          <MentorProtectedRoute>
+            <MentorPanel />
+          </MentorProtectedRoute>
+        } />
+        <Route path="/mentors/login" element={<MentorLogin />} />
+        <Route path="/mentors/register" element={<MentorRegister />} />
+        <Route path="/mentors/logout" element={
+          <MentorProtectedRoute>
+            <MentorLogout />
+          </MentorProtectedRoute>
+          } />
+        <Route path="/mentors/assignedStudents" element={
+          <MentorProtectedRoute>
+            <MentorAssignedStudents />
+          </MentorProtectedRoute>
         } />
 
         <Route path="/admin/verifyStudentDocument/:rollNumber" element={
