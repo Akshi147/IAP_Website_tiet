@@ -328,3 +328,47 @@ module.exports.UnlockPhase2 = async (req, res) => {
     }
 
 };
+module.exports.GetDeleteStudent = async (req, res) => {
+    try {
+        const student = await studentModel.findOne({ rollNo: req.params.rollNumber });
+        if (!student) {
+            return res.status(404).json({
+                success: false,
+                message: 'Student not found'
+            });
+        }
+        res.status(200).json({
+            success: true,
+            student
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+};
+
+module.exports.DeleteStudent = async (req, res) => {
+    try {
+        const student = await studentModel.findOneAndDelete({ rollNo: req.params.rollNumber });
+        if (!student) {
+            return res.status(404).json({
+                success: false,
+                message: 'Student not found'
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message: 'Student deleted successfully'
+        });
+    } catch (error) {
+        console.error('Error deleting student:', error); // For debugging
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message
+        });
+    }
+};
+

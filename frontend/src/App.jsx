@@ -22,6 +22,7 @@ import ChangeAdminPassword from './pages/Admin/component/ChangeAdminPassword';
 import ResetPassword from './pages/Student/component/ResetPassword';
 import UnderDocumentVerification from './pages/Admin/component/Underdocumentverification';
 import UnderPhase2Verification from './pages/Admin/component/UnderPhase2Verification';
+import DeleteStudent from './pages/Admin/component/DeleteStudent';
 
 const App = () => {
   return (
@@ -90,6 +91,14 @@ const App = () => {
             <UnderPhase2Verification />
           </AdminProtectedRoute>
         } />
+        <Route path="/deletestudent" element=
+        {
+          <AdminProtectedRoute>
+            <DeleteStudent/>
+          </AdminProtectedRoute>
+        
+      
+      } />
 
       </Routes>
     </div>
