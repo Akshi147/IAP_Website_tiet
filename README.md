@@ -100,9 +100,9 @@
 - To register mentor, go to: `/mentors/register`
 - To login mentor, go to: `/mentors/login`
 - To logout mentor, go to: `/mentors/logout`
-- For passsword setup and email verification at once: `mentors/setPassword/token`
+- For passsword and info setup, and email verification at once: `mentors/setPassword/token`
 - To get assigned students, go to: `mentors/getAssignedStudents`
-- For setting mentor details, go to: `mentors/setDetails`
+<!-- - For setting mentor details, go to: `mentors/setDetails` -->
 
 
 ### Registration Workflow
@@ -115,9 +115,12 @@
 
 2. **Mentor enters password**  
    - **Details:**  
-     - **Payload for setting password:**  
+     - **Payload for setting password and other info:**  
        ```json
        {
+           "name": "Mentor's name",
+           "designation": "Mentor's designation",
+           "contact": "97********",
            "password": "***123"
        }
        ```
