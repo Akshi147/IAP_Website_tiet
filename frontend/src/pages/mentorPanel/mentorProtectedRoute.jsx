@@ -10,7 +10,8 @@ const MentorProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     if (!token) {
-      navigate("/mentors/login"); // Redirect to mentor login if no token
+      setIsLoading(false);
+      navigate("/mentors/login"); // Redirect to login if no token
       return;
     }
 
@@ -20,9 +21,19 @@ const MentorProtectedRoute = ({ children }) => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (response.status !== 200) throw new Error("Unauthorized");
+        const mentor = response.data.mentor;
+
+        if (!mentor) {
+          throw new Error("Unauthorized: No mentor data found");
+        }
+
+        // Redirect to set password if mentor has not completed registration
+        if (!mentor.passwordSet) {
+          navigate("/mentors/setPassword");
+          return;
+        }
       } catch (error) {
-        console.error("Error:", error);
+        console.error("Error verifying mentor:", error);
         localStorage.removeItem("token");
         navigate("/mentors/login");
       } finally {
