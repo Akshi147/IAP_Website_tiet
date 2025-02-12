@@ -14,5 +14,7 @@ router.get('/underdocumentverification',authAdmin,adminController.UnderDocumentV
 router.get('/underphase2verification',authAdmin,adminController.UnderPhase2Verification);
 router.post('/verifyphase2/:rollNo',authAdmin,adminController.VerifyPhase2);
 router.post('/unlockphase2/:rollNo',authAdmin,adminController.UnlockPhase2);
+router.get('/getdeletestudent/:rollNumber',authAdmin,adminController.GetDeleteStudent);
+router.post('/getdeletestudent/:rollNumber',authAdmin,adminController.DeleteStudent);
 
 module.exports = router;

@@ -147,7 +147,7 @@ module.exports.registerMentor = async (req, res) => {
 module.exports.setPassword = async(req, res) => {
     try{
         const token = req.params.param.trim();
-        const {password} = req.body;
+        const {password, name, designation, contact} = req.body;
         
         //token not found
         if(!token){
@@ -192,6 +192,9 @@ module.exports.setPassword = async(req, res) => {
             password: hashedPassword,
             email: mentorLinked.mentorEmail,
             verified: true,
+            name: name,
+            designation: designation,
+            contact: contact
         })
 
         await newMentor.save();
@@ -271,28 +274,28 @@ module.exports.logoutMentor = async(req, res) => {
     res.status(200).json({message:'Logged out successfully'});
 }
 
-module.exports.setMentorDetails = async(req, res) => {
-    try{
-        const {name, designation, contact} = req.body;
-        const mentor = await mentorModel.findById(req.mentor._id);
+// module.exports.setMentorDetails = async(req, res) => {
+//     try{
+//         const {name, designation, contact} = req.body;
+//         const mentor = await mentorModel.findById(req.mentor._id);
 
-        mentor.name = name;
-        mentor.designation = designation;
-        mentor.contact = contact;
+//         mentor.name = name;
+//         mentor.designation = designation;
+//         mentor.contact = contact;
 
-        await mentor.save();
+//         await mentor.save();
 
-        res.status(200).json({
-            success: true,
-            message: "Mentor Details Set Successfully"
-        })
-    }catch(err){
-        res.status(500).json({
-            success: false,
-            message: err.error
-        })
-    }
-}
+//         res.status(200).json({
+//             success: true,
+//             message: "Mentor Details Set Successfully"
+//         })
+//     }catch(err){
+//         res.status(500).json({
+//             success: false,
+//             message: err.error
+//         })
+//     }
+// }
 
 
 module.exports.forgotPassword = async(req, res) => {
