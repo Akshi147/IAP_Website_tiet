@@ -24,6 +24,7 @@ import MentorLogin from './pages/mentorPanel/mentorLogin/mentorLogin';
 import MentorLogout from './pages/mentorPanel/mentorLogout/mentorLogout';
 import MentorRegister from './pages/mentorPanel/mentorRegister/mentorRegister';
 import MentorAssignedStudents from './pages/mentorPanel/mentorAssignedStu/mentorAssignedStu';
+import MentorDetailForm from './pages/mentorPanel/mentorDetailForm/mentorDetailForm';
 
 import AdminProtectedRoute from './pages/adminPanel/adminProtected';
 import AdminLogout from './pages/adminPanel/adminLogout/adminLogout';
@@ -76,12 +77,13 @@ const App = () => {
         } />
         <Route path="/mentors/login" element={<MentorLogin />} />
         <Route path="/mentors/register" element={<MentorRegister />} />
+        <Route path="/mentors/setPassword" element={<MentorDetailForm />} />
         <Route path="/mentors/logout" element={
           <MentorProtectedRoute>
             <MentorLogout />
           </MentorProtectedRoute>
           } />
-        <Route path="/mentors/assignedStudents" element={
+        <Route path="/mentors/getAssignedStudents" element={
           <MentorProtectedRoute>
             <MentorAssignedStudents />
           </MentorProtectedRoute>

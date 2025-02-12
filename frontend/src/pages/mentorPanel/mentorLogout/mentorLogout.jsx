@@ -1,42 +1,24 @@
 import { useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import styles from "./mentorLogout.module.css"; // Import the CSS Module
+import axios from "axios";
 
 const MentorLogout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      navigate("/mentors/login");
-      return;
-    }
-
-    const logout = async () => {
+    const logoutMentor = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/mentors/logout", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (response.status === 200) {
-          localStorage.removeItem("token");
-          navigate("/mentors/login");
-        }
+        await axios.post("http://localhost:4000/mentors/logout", {}, { withCredentials: true });
+        navigate("/mentors/login"); // Redirect to login after logout
       } catch (error) {
-        console.error("Logout Error:", error);
+        console.error("Logout failed:", error.response?.data?.message || "Unknown error");
       }
     };
 
-    logout();
+    logoutMentor();
   }, [navigate]);
 
-  return (
-    <div className={styles.container}>
-      <p className={styles.text}>Logging out...</p>
-    </div>
-  );
+  return null; // No UI needed
 };
 
 export default MentorLogout;

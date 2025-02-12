@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../../../components/navbar/navbar";
 import styles from "./stuDashboardAfterVerify.module.css";
 
 const StudentDashboard = () => {
@@ -17,7 +19,7 @@ const StudentDashboard = () => {
     completeAddress: "",
     landmark: "",
   });
-
+  const navigate = useNavigate();
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isPhase3Locked, setIsPhase3Locked] = useState(false);
@@ -98,6 +100,17 @@ const StudentDashboard = () => {
   };
 
   return (
+    <>
+      <Navbar 
+      navItems={[
+        {name:"Dashboard",path:"/studentdashboardafterverify"},
+        {name:"Change Password",path:"/studentchangepassword"}
+      ]}
+      downloadButton={{
+        text: "Log Out",
+        onClick: () => navigate("/logout"),
+      }}
+      />
     <div className={styles.dashboardContainer}>
       <div className={styles.dashboardWrapper}>
         <div className={styles.dashboardCard}>
@@ -220,6 +233,7 @@ const StudentDashboard = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

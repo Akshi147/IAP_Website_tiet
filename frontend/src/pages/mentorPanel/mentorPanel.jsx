@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Navbar from "../../components/navbar/navbar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import MentorAccVerify from "./mentoAccVerify/mentorAccVerify";
 import MentorAssignedStudents from "./mentorAssignedStu/mentorAssignedStu";
 import styles from "./mentorPanel.module.css"; // Import the CSS module
 
@@ -15,19 +14,25 @@ const MentorPanel = () => {
     const fetchMentorStatus = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:4000/mentor/profile", {
+        if (!token) {
+          navigate("/mentors/login"); // Redirect to login if no token
+          return;
+        }
+
+        const response = await axios.get("http://localhost:4000/mentors/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setMentorData(response.data.mentor);
       } catch (error) {
         console.error("Error fetching mentor status:", error);
+        navigate("/mentors/login"); // Redirect to login on error
       } finally {
         setLoading(false);
       }
     };
 
     fetchMentorStatus();
-  }, []);
+  }, [navigate]);
 
   if (loading) {
     return (
@@ -37,46 +42,22 @@ const MentorPanel = () => {
     );
   }
 
-  // Check if the mentor is not verified
-  if (mentorData && !mentorData.verified) {
-    return (
-      <>
-        <Navbar
-          navItems={[
-            { name: "Dashboard", path: "/dashboard" },
-            { name: "Profile", path: "/profile" },
-          ]}
-          downloadButton={{
-            text: "Log Out",
-            onClick: () => navigate("/mentors/logout"),
-          }}
-        />
-        <MentorAccVerify />
-      </>
-    );
-  }
-
-  // If the mentor is verified, show assigned students
-  if (mentorData && mentorData.verified) {
-    return (
-      <>
-        <Navbar
-          navItems={[
-            { name: "Dashboard", path: "/dashboard" },
-            { name: "Profile", path: "/profile" },
-            { name: "Log Out", path: "/mentors/logout" },
-          ]}
-          downloadButton={{
-            text: "Log Out",
-            onClick: () => navigate("/mentors/logout"),
-          }}
-        />
-        <MentorAssignedStudents />
-      </>
-    );
-  }
-
-  return null;
+  return (
+    <>
+      <Navbar
+        navItems={[
+          { name: "Dashboard", path: "/mentors/panel" },
+          { name: "Profile", path: "/mentors/profile" },
+          { name: "Log Out", path: "/mentors/logout" },
+        ]}
+        downloadButton={{
+          text: "Log Out",
+          onClick: () => navigate("/mentors/logout"),
+        }}
+      />
+      <MentorAssignedStudents />
+    </>
+  );
 };
 
 export default MentorPanel;

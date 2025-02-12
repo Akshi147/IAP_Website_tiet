@@ -1,106 +1,90 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import Navbar from "../../../components/navbar/navbar";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import styles from "./MentorLogin.module.css"; // Import CSS module
-import Hero from "../../../components/hero/hero";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Navbar from "../../../components/navbar/navbar";
+import styles from "./mentorLogin.module.css";
 
-const MentorLogin= () => {
+const MentorLogin = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); // Error message state
+  
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const mentor = {
-      email,
-      password,
-    };
+    setErrorMessage("");
 
     try {
-      const response = await axios.post(
-        "http://localhost:4000/mentors/login",
-        mentor
-      );
+      const response = await axios.post("http://localhost:4000/mentors/login", formData, {
+        withCredentials: true,
+      });
+
       if (response.status === 200) {
-        const data = response.data;
-        localStorage.setItem("token", data.token);
-        navigate("/mentors/assignedStudents"); // Redirect mentor to dashboard
+        navigate("/mentors/getAssignedStudents"); // Redirect to mentor dashboard
       }
     } catch (error) {
-      setErrorMessage(error.response?.data?.message || "Login failed");
+      setErrorMessage(error.response?.data?.message || "Login failed. Please check your credentials.");
     }
   };
 
   return (
     <>
-      <Navbar />
-      <Hero />
-      <div className={styles.pageContainer}>
-        <div className={styles.formWrapper}>
-          <div className={styles.headerSection}>
-            <h1 className={styles.headerTitle}>Mentor Portal</h1>
-            <p className={styles.headerSubtitle}>Sign in to continue</p>
+    <Navbar />
+    <div className={styles.container}>
+      <div className={styles.formWrapper}>
+        <h1>Mentor Login</h1>
+        <p>Sign in to access your dashboard</p>
+
+        {errorMessage && <div className={`${styles.alert} ${styles.error}`}>{errorMessage}</div>}
+
+        <form onSubmit={handleSubmit} className={styles.formGrid}>
+          <input 
+            type="email" 
+            name="email" 
+            placeholder="Email" 
+            value={formData.email} 
+            onChange={handleChange} 
+            required 
+          />
+
+          <div className={styles.passwordWrapper}>
+            <input
+              type={passwordVisible ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+            <span className={styles.eyeIcon} onClick={() => setPasswordVisible(!passwordVisible)}>
+              {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+            </span>
           </div>
 
-          <div className={styles.formContainer}>
-            {/* Error Message Alert */}
-            {errorMessage && (
-              <div className={styles.errorAlert}>
-                <p>{errorMessage}</p>
-              </div>
-            )}
+          <button type="submit" className={styles.submitButton}>Login</button>
+        </form>
 
-            <form onSubmit={handleSubmit} className={styles.formm}>
-              <div className={styles.divvv}>
-                <input
-                  type="email"
-                  placeholder="Mentor Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className={`${styles.inputField}`}
-                  required
-                />
-              </div>
-
-              <div className={styles.divvv}>
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className={`${styles.inputField}`}
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                className={`${styles.submitButton} ${styles.submitButtonHover}`}
-              >
-                Sign In
-              </button>
-            </form>
-
-            <div className={styles.linkContainer}>
-              <Link
-                to="/mentors/register"
-                className={`${styles.linkText} ${styles.linkHover}`}
-              >
-                Register as Mentor
-              </Link>
-              <Link
-                to="/mentors/forgotpassword"
-                className={`${styles.linkText} ${styles.linkHover}`}
-              >
-                Forgot Password?
-              </Link>
-            </div>
-          </div>
+        <div className={styles.links}>
+          <Link to="/mentors/forgot-password">Forgot Password?</Link>
+          <br />
+          <Link to="/mentors/register">New Mentor? Register</Link>
         </div>
       </div>
+    </div>
     </>
   );
 };
