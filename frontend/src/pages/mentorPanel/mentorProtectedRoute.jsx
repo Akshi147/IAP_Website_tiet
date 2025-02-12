@@ -17,7 +17,7 @@ const MentorProtectedRoute = ({ children }) => {
 
     const verifyMentor = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/mentor/profile", {
+        const response = await axios.get("http://localhost:4000/mentors/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
 

@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Navbar from "../../../components/navbar/navbar";
 import styles from "./mentorLogin.module.css";
 
 const MentorLogin = () => {
-  const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
     email: "",
@@ -27,19 +26,28 @@ const MentorLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
-
+  
     try {
       const response = await axios.post("http://localhost:4000/mentors/login", formData, {
         withCredentials: true,
       });
-
+  
       if (response.status === 200) {
-        navigate("/mentors/getAssignedStudents"); // Redirect to mentor dashboard
+        console.log("✅ Login successful. Storing token...");
+        
+        // ✅ Store token properly
+        localStorage.setItem("token", response.data.token);
+  
+        // ✅ Navigate **after** storing token
+        window.location.href = "/mentors";
       }
     } catch (error) {
       setErrorMessage(error.response?.data?.message || "Login failed. Please check your credentials.");
     }
   };
+  
+  
+
 
   return (
     <>

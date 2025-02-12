@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Header } from "../../../components/header";
-import { Footer } from "../../../components/footer";
+import Navbar from "../../../components/navbar/navbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styles from './adminVerifyDoc.module.css';
 
-const StudentVerification = () => {
+const AdminStudentVerification = () => {
   const navigate = useNavigate();
   const { rollNumber } = useParams();
   const [isVerifying, setIsVerifying] = useState(false);
@@ -183,7 +182,7 @@ const StudentVerification = () => {
 
   return (
     <>
-      <Header
+      <Navbar
         navItems={[
           { name: "Verify Student", path: "/admin" },
           { name: "Verify Faculty", path: "/verifyfaculty" },
@@ -298,9 +297,8 @@ const StudentVerification = () => {
           </div>
         </div>
       )}
-      <Footer />
     </>
   );
 };
 
-export default StudentVerification;
+export default AdminStudentVerification;

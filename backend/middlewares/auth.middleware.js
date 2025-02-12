@@ -126,52 +126,64 @@ module.exports.authAdmin = async (req, res, next) => {
 };
 
 
-
-
-//mentor auth
-module.exports.authMentor = async(req, res, next) => {
+module.exports.authMentor = async (req, res, next) => {
     try {
+        // Check token from cookies OR Authorization header
         let token = req.cookies.token || (req.headers.authorization ? req.headers.authorization.split(' ')[1] : null);
 
         if (!token) {
             return res.status(401).json({
                 success: false,
-                message: 'Unauthorized: No token provided'
+                message: "Unauthorized: No token provided. Please log in again."
             });
         }
 
-        // Checking if the token is blacklisted
+        // ✅ Check if token is blacklisted
         const isBlacklisted = await blacklistModel.findOne({ token });
-
         if (isBlacklisted) {
             return res.status(401).json({
                 success: false,
-                message: 'Unauthorized: Token is blacklisted'
+                message: "Unauthorized: Session expired. Please log in again."
             });
         }
 
-        // Decoding the token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log(decoded._id);
-        
-        const mentor = await mentorModel.findById(decoded._id);
+        // ✅ Verify JWT Token
+        let decoded;
+        try {
+            decoded = jwt.verify(token, process.env.JWT_SECRET);
+        } catch (err) {
+            if (err.name === "TokenExpiredError") {
+                return res.status(401).json({
+                    success: false,
+                    message: "Unauthorized: Token has expired. Please log in again."
+                });
+            }
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized: Invalid token."
+            });
+        }
 
+        console.log("Mentor ID from Token:", decoded._id);
+
+        // ✅ Find Mentor in Database
+        const mentor = await mentorModel.findById(decoded._id);
         if (!mentor) {
             return res.status(401).json({
                 success: false,
-                message: 'Unauthorized: Mentor not found'
+                message: "Unauthorized: Mentor not found. Please log in again."
             });
         }
 
         req.mentor = mentor;
         return next();
+
     } catch (err) {
-        console.error('Auth Error:', err);
-        
-        return res.status(401).json({
+        console.error("Auth Error:", err);
+        return res.status(500).json({
             success: false,
-            message: 'Unauthorized: Invalid or expired token',
+            message: "Internal server error during authentication",
             error: err.message
         });
     }
-}
+};

@@ -7,43 +7,42 @@ const crypto = require("crypto");
 const sendEmail = require('../libs/nodemailer');
 
 
+
 // Register Mentor (Only Email Submission)
+
 module.exports.registerMentor = async (req, res) => {
     try {
-        //validation of email
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-        
-        //checking whether mentor exists or not in student model
-        const mentor = await studentModel.findOne({ mentorEmail: req.body.email });
-        
-        console.log(mentor);
+        const mentorEmail = req.body.email.trim().toLowerCase();
+        const mentorStudentEntry = await studentModel.findOne({ mentorEmail });
 
-        if (!mentor) {
-            return res.status(404).json({ 
-                success: false,
-                message: "Mentor not found. Please only register with the email that the student has tagged" 
-            });
+        if (!mentorStudentEntry) {
+            return res.status(404).json({ success: false, message: "Mentor not found." });
         }
 
-        //mentor exists
-        console.log(mentor.mentorverified);
-        //mentor already verified
-        if (mentor.mentorverified) {
-            return res.status(400).json({ 
-                success: false,
-                message: "Mentor is already verified.Kindly Login" });
+        let existingMentor = await mentorModel.findOne({ email: mentorEmail });
+
+        if (existingMentor && existingMentor.verified) {
+            return res.status(400).json({ success: false, message: "Mentor already registered. Kindly log in." });
         }
-        
 
-        //mentor not verified
-        //generate token
-        const token = mentor.generateAuthToken();
+        // ✅ Generate resetToken before using it
+        const resetToken = crypto.randomBytes(32).toString("hex");  
+        const hashedToken = crypto.createHash("sha256").update(resetToken).digest("hex");
 
-        // Send Email
-        await sendEmail(mentor.mentorEmail, "Set up your password", `
+        // Save reset token in mentor model
+        if (!existingMentor) {
+            existingMentor = new mentorModel({ email: mentorEmail });
+        }
+
+        existingMentor.resetPasswordToken = hashedToken;
+        existingMentor.resetPasswordExpires = Date.now() + 60 * 60 * 1000; // Expires in 1 hour
+
+        await existingMentor.save();
+
+        console.log("✅ Reset Token Generated:", resetToken);
+
+        // ✅ Use resetToken in email instead of undefined "token"
+        await sendEmail(mentorEmail, "Set up your password", `
             <!DOCTYPE html>
             <html>
             <head>
@@ -121,110 +120,102 @@ module.exports.registerMentor = async (req, res) => {
                         
 
                         <div style="text-align: center;">
-                            <a href="http://localhost:5173/mentor/setPassword?token=${token}" class="button">Set password</a>
+                            <a href="http://localhost:5173/mentors/setPassword?token=${resetToken}" class="button">Set password</a>
                         </div>
                     </div>
                 </div>
             </body>
             </html>
             `);
-        
-        res.status(201).json({
-            success: true, 
-            message: "Password setup link sent." ,
-            token
+
+        res.status(201).json({ success: true, message: "Verification email sent.", resetToken });
+
+    } catch (err) {
+        console.error("Registration Error:", err);
+        res.status(500).json({ success: false, message: "Internal server error." });
+    }
+};
+
+module.exports.setPassword = async (req, res) => {
+    try {
+        const token = req.params.param?.trim();
+        const { password, name, designation, contact } = req.body;
+
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized: No token provided."
+            });
+        }
+
+        const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+        // Find mentor using reset token
+        const mentor = await mentorModel.findOne({
+            resetPasswordToken: hashedToken,
+            resetPasswordExpires: { $gt: Date.now() },
+        });
+
+        if (!mentor) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid or expired token."
+            });
+        }
+
+        // ✅ Update mentor details
+        mentor.password = await mentorModel.hashPassword(password);
+        mentor.name = name;
+        mentor.designation = designation;
+        mentor.contact = contact;
+        mentor.verified = true; // ✅ Mark mentor as verified
+        mentor.resetPasswordToken = null;
+        mentor.resetPasswordExpires = null;
+
+        await mentor.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Registration completed successfully. You can now log in."
         });
     } catch (err) {
-        res.status(500).json({ 
+        console.error("Error in setPassword:", err);
+        res.status(500).json({
             success: false,
-            message: err.message 
+            message: "Internal server error."
         });
     }
 };
 
 
 
-module.exports.setPassword = async(req, res) => {
-    try{
-        const token = req.params.param.trim();
-        const {password, name, designation, contact} = req.body;
-        
-        //token not found
-        if(!token){
-            return res.status(401).json({
-                success: false,
-                message: "Unauthorized: No token provided"
-            })
+
+exports.checkToken = async (req, res) => {
+    const { token } = req.params;
+    
+    try {
+        console.log("Checking token:", token);
+
+        // 🔹 Hash the token before searching in the database
+        const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+        // 🔹 Find the mentor with this hashed token
+        const mentor = await mentorModel.findOne({ resetPasswordToken: hashedToken, resetPasswordExpires: { $gt: Date.now() } });
+
+        if (!mentor) {
+            console.error("Token not found:", token);
+            return res.status(400).json({ success: false, message: "Invalid or expired token." });
         }
 
-        //decoding the token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        //invalid token
-        if(!decoded || !decoded._id){
-            return res.status(401).json({
-                success: false,
-                message: "Unauthorized: Invalid token"
-            })
-        }
-
-
-        const mentorLinked = await studentModel.findById(decoded._id);
-        
-        //mentor not found
-        if(!mentorLinked){
-            return res.status(404).json({
-                success: false,
-                message: "Mentor not found"
-            })
-        }
-        
-        //mentor with that id found
-        //set the password
-        const hashedPassword = await mentorModel.hashPassword(password);
-
-        //mark mentor as verified
-        mentorLinked.mentorverified = true;
-        await mentorLinked.save();    //entry to DB
-        
-        //save entry to the 
-        const newMentor = new mentorModel({
-            password: hashedPassword,
-            email: mentorLinked.mentorEmail,
-            verified: true,
-            name: name,
-            designation: designation,
-            contact: contact
-        })
-
-        await newMentor.save();
-
-        res.status(200).json({
-            success: true,
-            message: "Password set successfully. Registration Complete"
-        });
-
-    }catch(err){
-        console.log("JWT Verification Error")
-
-        if (err.name === 'JsonWebTokenError'){
-            return res.status(401).json({
-                success: false,
-                message: 'Unauthorized: Invalid token' 
-            });
-        }
-        
-        res.status(500).json({
-            success: false,
-            message: err.message
-        })
+        res.status(200).json({ success: true, message: "Token is valid" });
+    } catch (error) {
+        console.error("❌ Error in checkToken:", error);
+        res.status(500).json({ success: false, message: "Server error." });
     }
-}
+};
 
-
-
-module.exports.loginMentor = async(req, res) => {
-    try{
+module.exports.loginMentor = async (req, res) => {
+    try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
@@ -232,37 +223,45 @@ module.exports.loginMentor = async(req, res) => {
 
         const mentor = await mentorModel.findOne({ email: req.body.email }).select('+password');
 
-        if(!mentor){
+        if (!mentor) {
             return res.status(400).json({ 
                 success: false,
-                message: 'Mentor not found' 
+                message: "Mentor not found" 
+            });
+        }
+
+        if (!mentor.verified) {
+            return res.status(403).json({
+                success: false,
+                message: "Account not verified. Please check your email to set up your password."
             });
         }
 
         const validPassword = await mentor.comparePassword(req.body.password);
-
-        if(!validPassword){
+        if (!validPassword) {
             return res.status(400).json({
                 success: false,
                 message: "Invalid Password"
-            })
+            });
         }
 
         const token = mentor.generateAuthToken();
-        res.cookie("token", token);
+        res.cookie("token", token, { httpOnly: true, secure: false });
 
         res.status(200).json({
             success: true,
             message: "Mentor logged in successfully",
             token
-        })
-    }catch(err){
+        });
+    } catch (err) {
         res.status(500).json({
             success: false,
             message: err.message
-        })
+        });
     }
-}
+};
+
+
 
 
 module.exports.logoutMentor = async(req, res) => {
@@ -468,29 +467,39 @@ module.exports.resetPassword = async(req, res) => {
     }
 }
 
-module.exports.getAssignedStudents = async(req, res) => {
-    try{
-        console.log(req.mentor);
-        const mentor = await mentorModel.findById(req.mentor._id);
-        
-        const studentsAssigned = await studentModel.find({mentorEmail: mentor.email});
-
-        console.log(studentsAssigned);
-        if(!studentsAssigned.length){
-            return res.status(404).json({
-                success: false, 
-                message: "No students assigned." 
-            });
-        }
-        
-        res.status(200).json({
-            success: true,
-            studentsAssigned: studentsAssigned
-        })
-    }catch(err){
-        res.status(500).json({
-            success: false,
-            error: err.message
-        });
+module.exports.getAssignedStudents = async (req, res) => {
+    try {
+      const mentor = await mentorModel.findById(req.mentor._id);
+      if (!mentor) {
+        return res.status(404).json({ success: false, message: "Mentor not found" });
+      }
+  
+      const studentsAssigned = await studentModel.find({ mentorEmail: mentor.email });
+  
+      if (!studentsAssigned.length) {
+        return res.status(404).json({ success: false, message: "No students assigned" });
+      }
+  
+      res.status(200).json({ success: true, students: studentsAssigned });
+    } catch (error) {
+      console.error("Error fetching assigned students:", error);
+      res.status(500).json({ success: false, message: "Internal Server Error" });
     }
-}
+  };
+  
+
+
+module.exports.getMentorProfile = async (req, res) => {
+    try {
+      const mentor = await mentorModel.findById(req.mentor._id);
+      if (!mentor) {
+        return res.status(404).json({ success: false, message: "Mentor not found" });
+      }
+  
+      res.status(200).json({ success: true, mentor });
+    } catch (error) {
+      console.error("Error fetching mentor profile:", error);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  };
+  

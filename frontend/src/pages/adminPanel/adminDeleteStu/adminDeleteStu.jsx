@@ -1,5 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Navbar from '../../../components/navbar/navbar';
 import styles from './adminDeleteStu.module.css';
 
 const AdminDeleteStudent = () => {
@@ -8,6 +10,7 @@ const AdminDeleteStudent = () => {
   const [student, setStudent] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -111,6 +114,23 @@ const AdminDeleteStudent = () => {
   );
 
   return (
+    <>
+      <Navbar
+            navItems={[
+              {name:"Students Under Document Verification",path:"/underdocumentverification"},
+              {name:"Students In Phase 2",path:"/phase2verification"},
+              { name: "Verify Student", path: "/admin" },
+              {name:"Delete Student",path:"/deletestudent"},
+              
+              { name: "Verify Faculty", path: "/verifyfaculty" },
+              { name: "Verify Mentor", path: "/mentor" },
+              {name:"Change Password",path:"/adminchangepassword"}
+            ]}
+            downloadButton={{
+              text: "Log Out",
+              onClick: () => navigate("/adminlogout"),
+            }}
+          />
     <div className={styles.pageContainer}>
       <div className={styles.formContainer}>
         <div className={styles.formBox}>
@@ -145,6 +165,7 @@ const AdminDeleteStudent = () => {
       {showDetailsModal && <StudentDetailsModal />}
       {showConfirmModal && <ConfirmDeleteModal />}
     </div>
+    </>
   );
 };
 

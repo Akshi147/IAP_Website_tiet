@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../../../components/navbar/navbar";
 import Hero from "../../../components/hero/hero";
-import styles from "./mentorRegister.module.css"; // Importing the CSS module
+import styles from "./mentorRegister.module.css"; 
 
 const MentorRegister = () => {
   const [email, setEmail] = useState("");
@@ -18,12 +18,17 @@ const MentorRegister = () => {
     try {
       const response = await axios.post("http://localhost:4000/mentors/register", { email });
 
-      if (response.status === 200) {
-        setSuccessMessage("Email verification link sent. Check your email.");
+      if (response.status === 201) {
+        setSuccessMessage("A verification email has been sent. Please check your inbox.");
       }
     } catch (error) {
-      console.error(error);
-      setErrorMessage(error.response?.data?.message || "Registration failed. Please try again.");
+      if (error.response?.status === 400) {
+        setErrorMessage(error.response.data.message);
+      } else if (error.response?.status === 404) {
+        setErrorMessage("Mentor email not found in student records. Make sure a student has assigned your email.");
+      } else {
+        setErrorMessage("An error occurred. Please try again.");
+      }
     }
   };
 

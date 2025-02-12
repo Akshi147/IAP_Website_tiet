@@ -28,7 +28,7 @@ import MentorDetailForm from './pages/mentorPanel/mentorDetailForm/mentorDetailF
 
 import AdminProtectedRoute from './pages/adminPanel/adminProtected';
 import AdminLogout from './pages/adminPanel/adminLogout/adminLogout';
-import AdminStudentVerification from './pages/adminPanel/adminVerifyDoc/adminVerifyDoc';
+import AdminStudentVerification from './pages/adminPanel/adminVerifyDocument/adminVerifyDoc';
 import  AdminLogin  from './pages/adminPanel/adminLogin/adminLogin';
 import ChangeAdminPassword from './pages/adminPanel/adminChangePassword/adminChangePassword';
 import ForgotAdminPassword from './pages/adminPanel/adminForgotPasswrod/adminForgotPassword';
@@ -71,7 +71,7 @@ const App = () => {
           </FacultyProtectedRoute>
         } />
 
-        <Route path="/mentor" element={
+        <Route path="/mentors" element={
           <MentorProtectedRoute>
             <MentorPanel />
           </MentorProtectedRoute>

@@ -239,7 +239,7 @@ const StudentRegisterForm = () => {
               <input
                 type="email"
                 name="email"
-                placeholder="Email"
+                placeholder="Email(use thapar email Id)"
                 value={formData.email}
                 onChange={handleChange}
                 className={styles.input}

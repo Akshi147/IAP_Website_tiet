@@ -16,13 +16,14 @@ const pdfFiles = [
   { name: "Project Semester Report Format", file: "PROJECT_SEMESTER_REPORT_FORMAT.docx" },
 ];
 
-const Navbar = ({
+const Navbar = ({ 
   navItems = [
     { name: "Home", path: "/" },
     { name: "Student Panel", path: "/login" },
     { name: "Faculty Panel", path: "/faculty" },
     { name: "Mentor Panel", path: "/mentors/login" },
   ],
+  downloadButton 
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -45,31 +46,37 @@ const Navbar = ({
               </Link>
             ))}
 
-            {/* Download Files Dropdown */}
-            <div
-              className={styles.downloadDropdown}
-              onMouseEnter={() => setDropdownOpen(true)}
-              onMouseLeave={() => setDropdownOpen(false)}
-            >
-              <Button variant="outline" className={styles.dropdownButton}>
-                Download Files
+            {/* Conditionally Render Either Download Files or Custom Button */}
+            {downloadButton ? (
+              <Button variant="outline" className={styles.logoutButton} onClick={downloadButton.onClick}>
+                {downloadButton.text}
               </Button>
-              {dropdownOpen && (
-                <div className={styles.dropdownMenu}>
-                  {pdfFiles.map(({ name, file }, index) => (
-                    <a
-                      key={index}
-                      href={`/files/${file}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.dropdownItem}
-                    >
-                      {name}
-                    </a>
-                  ))}
-                </div>
-              )}
-            </div>
+            ) : (
+              <div
+                className={styles.downloadDropdown}
+                onMouseEnter={() => setDropdownOpen(true)}
+                onMouseLeave={() => setDropdownOpen(false)}
+              >
+                <Button variant="outline" className={styles.dropdownButton}>
+                  Download Files
+                </Button>
+                {dropdownOpen && (
+                  <div className={styles.dropdownMenu}>
+                    {pdfFiles.map(({ name, file }, index) => (
+                      <a
+                        key={index}
+                        href={`/files/${file}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.dropdownItem}
+                      >
+                        {name}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -102,32 +109,45 @@ const Navbar = ({
               </Link>
             ))}
 
-            {/* Mobile Download Files Dropdown */}
-            <div className={styles.mobileDownloadDropdown}>
+            {/* Conditionally Render Either Download Files or Custom Button in Mobile View */}
+            {downloadButton ? (
               <Button
                 variant="outline"
-                className={styles.mobileDropdownButton}
-                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className={styles.mobileLogoutButton}
+                onClick={() => {
+                  setIsOpen(false);
+                  downloadButton.onClick();
+                }}
               >
-                Download Files
+                {downloadButton.text}
               </Button>
-              {dropdownOpen && (
-                <div className={styles.mobileDropdownMenu}>
-                  {pdfFiles.map(({ name, file }, index) => (
-                    <a
-                      key={index}
-                      href={`/files/${file}`}
-                      target={file.endsWith(".pdf") ? "_blank" : "_self"} // Open PDFs in new tab, Word files in the same tab
-                      rel="noopener noreferrer"
-                      className={styles.dropdownItem}
-                      download={file.endsWith(".docx") ? file : undefined} // Force download only for Word files
-                    >
-                      {name}
-                    </a>
-                  ))}
-                </div>
-              )}
-            </div>
+            ) : (
+              <div className={styles.mobileDownloadDropdown}>
+                <Button
+                  variant="outline"
+                  className={styles.mobileDropdownButton}
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  Download Files
+                </Button>
+                {dropdownOpen && (
+                  <div className={styles.mobileDropdownMenu}>
+                    {pdfFiles.map(({ name, file }, index) => (
+                      <a
+                        key={index}
+                        href={`/files/${file}`}
+                        target={file.endsWith(".pdf") ? "_blank" : "_self"}
+                        rel="noopener noreferrer"
+                        className={styles.dropdownItem}
+                        download={file.endsWith(".docx") ? file : undefined}
+                      >
+                        {name}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </nav>
         </div>
       </div>
@@ -142,6 +162,10 @@ Navbar.propTypes = {
       path: PropTypes.string.isRequired,
     })
   ),
+  downloadButton: PropTypes.shape({
+    text: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
+  }),
 };
 
 export default Navbar;

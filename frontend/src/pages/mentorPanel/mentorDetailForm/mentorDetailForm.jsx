@@ -25,22 +25,32 @@ const MentorDetailForm = () => {
   const [isExpired, setIsExpired] = useState(false);
 
   useEffect(() => {
+    // If user is already logged in, don't check token validity
+    const token = localStorage.getItem("token");
+    if (token) {
+        navigate("/mentors"); // ✅ Redirect to Mentor Panel
+        return;
+    }
+
     if (!token) {
-      setIsExpired(true);
-      return;
+        setIsExpired(true);
+        return;
     }
 
     const checkTokenValidity = async () => {
-      try {
-        await axios.get(`http://localhost:4000/mentors/checkToken/${token}`);
-      } catch (error) {
-        setIsExpired(true);
-        setErrorMessage(error || "Failed to verify token.");
-      }
+        try {
+            const response = await axios.get(`http://localhost:4000/mentors/checkToken/${token}`);
+            console.log("✅ Token check response:", response.data);
+        } catch (error) {
+            console.error("❌ Token check failed:", error.response?.data || error);
+            setIsExpired(true);
+            setErrorMessage(error.response?.data?.message || "Failed to verify token.");
+        }
     };
 
     checkTokenValidity();
-  }, [token]);
+}, [token, navigate]); // ✅ Added `navigate` so it reacts properly
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -62,6 +72,7 @@ const MentorDetailForm = () => {
 
     try {
       await axios.post(`http://localhost:4000/mentors/setPassword/${token}`, {
+        token: token,
         name: formData.name,
         designation: formData.designation,
         phone: formData.phone,
