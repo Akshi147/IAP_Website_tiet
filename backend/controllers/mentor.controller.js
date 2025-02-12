@@ -3,6 +3,7 @@ const studentModel = require("../models/student.model");
 const { validationResult } = require('express-validator');
 const blacklistModel = require('../models/blacklist.model');
 const jwt = require('jsonwebtoken')
+const crypto = require("crypto");
 const sendEmail = require('../libs/nodemailer');
 
 
@@ -17,6 +18,7 @@ module.exports.registerMentor = async (req, res) => {
         
         //checking whether mentor exists or not in student model
         const mentor = await studentModel.findOne({ mentorEmail: req.body.email });
+        
         console.log(mentor);
 
         if (!mentor) {
@@ -41,7 +43,7 @@ module.exports.registerMentor = async (req, res) => {
         const token = mentor.generateAuthToken();
 
         // Send Email
-        await sendEmail(mentor.email, "Enter your password", `
+        await sendEmail(mentor.mentorEmail, "Set up your password", `
             <!DOCTYPE html>
             <html>
             <head>
@@ -269,6 +271,29 @@ module.exports.logoutMentor = async(req, res) => {
     res.status(200).json({message:'Logged out successfully'});
 }
 
+module.exports.setMentorDetails = async(req, res) => {
+    try{
+        const {name, designation, contact} = req.body;
+        const mentor = await mentorModel.findById(req.mentor._id);
+
+        mentor.name = name;
+        mentor.designation = designation;
+        mentor.contact = contact;
+
+        await mentor.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Mentor Details Set Successfully"
+        })
+    }catch(err){
+        res.status(500).json({
+            success: false,
+            message: err.error
+        })
+    }
+}
+
 
 module.exports.forgotPassword = async(req, res) => {
     try{
@@ -390,7 +415,8 @@ module.exports.forgotPassword = async(req, res) => {
 
         res.status(200).json({
             success: true,
-            message: "Password reset link sent to your email. Please Check Spam Folder too" 
+            message: "Password reset link sent to your email. Please Check Spam Folder too",
+            resetToken
         });
     }catch(err){
         res.status(500).json({
@@ -399,7 +425,6 @@ module.exports.forgotPassword = async(req, res) => {
         })
     }
 }
-
 
 
 module.exports.resetPassword = async(req, res) => {

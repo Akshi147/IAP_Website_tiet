@@ -152,7 +152,8 @@ module.exports.authMentor = async(req, res, next) => {
 
         // Decoding the token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
+        console.log(decoded._id);
+        
         const mentor = await mentorModel.findById(decoded._id);
 
         if (!mentor) {

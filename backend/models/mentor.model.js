@@ -23,6 +23,15 @@ const MentorSchema = new mongoose.Schema({
         type: Boolean, 
         default: false 
     },
+    designation: {
+        type: String,
+        default: null
+    },
+    contact: {
+        type: String,
+        match: /^[0-9]{10}$/, 
+        default: null
+    },
     resetPasswordToken: { type: String, default: null },
     resetPasswordExpires: { type: Date, default: null },
     // students: [{ 
