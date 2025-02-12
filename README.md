@@ -101,5 +101,35 @@
 - To login mentor, go to: `/mentors/login`
 - To logout mentor, go to: `/mentors/logout`
 - For passsword setup and email verification at once: `mentors/setPassword/token`
-- To get assigned students, go to: `mentors/assignedStudents`
-- 
+- To get assigned students, go to: `mentors/getAssignedStudents`
+- For setting mentor details, go to: `mentors/setDetails`
+
+
+### Registration Workflow
+1. **Mentor email is submitted.**
+    - **Mentor exists**
+        - Email sent for password setup and email verification
+        - Set Password link directing to the frontend: `http://localhost:5173/mentor/setPassword?token=${token}` 
+    - **Mentor doesn't exist** 
+        - Show error
+
+2. **Mentor enters password**  
+   - **Details:**  
+     - **Payload for setting password:**  
+       ```json
+       {
+           "password": "***123"
+       }
+       ```
+     - **Route for setting password:** `mentors/setPassword/token`  
+     - **Mentor set password successful**  
+
+
+3. **Mentor goes to login**
+    - **Route for login:** `/mentors/login`
+    - **Payload for login**
+    ```json
+    {
+        "email": "xyz@gmail.com",
+        "password": "***123"
+    }
