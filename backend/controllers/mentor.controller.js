@@ -3,6 +3,7 @@ const studentModel = require("../models/student.model");
 const { validationResult } = require('express-validator');
 const blacklistModel = require('../models/blacklist.model');
 const jwt = require('jsonwebtoken')
+const crypto = require("crypto");
 const sendEmail = require('../libs/nodemailer');
 
 
@@ -17,6 +18,7 @@ module.exports.registerMentor = async (req, res) => {
         
         //checking whether mentor exists or not in student model
         const mentor = await studentModel.findOne({ mentorEmail: req.body.email });
+        
         console.log(mentor);
 
         if (!mentor) {
@@ -41,7 +43,7 @@ module.exports.registerMentor = async (req, res) => {
         const token = mentor.generateAuthToken();
 
         // Send Email
-        await sendEmail(mentor.email, "Enter your password", `
+        await sendEmail(mentor.mentorEmail, "Set up your password", `
             <!DOCTYPE html>
             <html>
             <head>
@@ -119,7 +121,7 @@ module.exports.registerMentor = async (req, res) => {
                         
 
                         <div style="text-align: center;">
-                            <a href="http://localhost:4000/mentor/setPassword/${token}" class="button">Set password</a>
+                            <a href="http://localhost:5173/mentor/setPassword?token=${token}" class="button">Set password</a>
                         </div>
                     </div>
                 </div>
@@ -269,6 +271,199 @@ module.exports.logoutMentor = async(req, res) => {
     res.status(200).json({message:'Logged out successfully'});
 }
 
+module.exports.setMentorDetails = async(req, res) => {
+    try{
+        const {name, designation, contact} = req.body;
+        const mentor = await mentorModel.findById(req.mentor._id);
+
+        mentor.name = name;
+        mentor.designation = designation;
+        mentor.contact = contact;
+
+        await mentor.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Mentor Details Set Successfully"
+        })
+    }catch(err){
+        res.status(500).json({
+            success: false,
+            message: err.error
+        })
+    }
+}
+
+
+module.exports.forgotPassword = async(req, res) => {
+    try{
+        const {email} = req.body;
+        const mentor = await mentorModel.findOne({email});
+        console.log(mentor);
+
+        if(!mentor){
+            return res.status(404).json({
+                success: false,
+                message: "Mentor not found" 
+            });
+        }
+
+        const resetToken = mentor.generateResetToken();
+        await mentor.save();
+
+
+        const resetLink = `http://localhost:5173/reset-password?token=${resetToken}`;
+
+        await sendEmail(mentor.email, "Reset your password", `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Reset Request</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+        }
+        .email-content {
+            background-color: #ffffff;
+            padding: 30px;
+            max-width: 600px;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .header {
+            background-color: #6c63ff;
+            color: #ffffff;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        .message {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #6c63ff;
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .button:hover {
+            background-color: #5a54e3;
+        }
+        .footer {
+            font-size: 14px;
+            color: #777;
+            margin-top: 20px;
+            text-align: center;
+        }
+        @media screen and (max-width: 600px) {
+            .email-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="email-content">
+            <div class="header">Password Reset Request</div>
+
+            <p class="message">Dear <b>${mentor.name}</b>,</p>
+            <p class="message">
+                We received a request to reset your password. If this was you, please click the button below to set a new password. 
+                This link will expire in 1 hour for security reasons.
+            </p>
+
+            <div style="text-align: center;">
+                <a href="${resetLink}" class="button">Reset My Password</a>
+            </div>
+
+            <p class="message">
+                If you did not request a password reset, please ignore this email. Your account remains secure.
+            </p>
+
+            <p class="footer">If you need further assistance, please contact our support team.</p>
+        </div>
+    </div>
+
+</body>
+</html>
+        `);
+
+        res.status(200).json({
+            success: true,
+            message: "Password reset link sent to your email. Please Check Spam Folder too",
+            resetToken
+        });
+    }catch(err){
+        res.status(500).json({
+            success: false,
+            message: err.message
+        })
+    }
+}
+
+
+module.exports.resetPassword = async(req, res) => {
+    try{
+        const { token, newPassword } = req.body;
+        
+        // Hash the token to find in DB
+        const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+        const mentor = await mentorModel.findOne({
+            resetPasswordToken: hashedToken,
+            resetPasswordExpires: { $gt: Date.now() }, // Check expiration
+        });
+
+        if (!mentor) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid or expired token" 
+            });
+        }
+
+        // Hash new password and save
+        mentor.password = await mentorModel.hashPassword(newPassword);
+        mentor.resetPasswordToken = null;
+        mentor.resetPasswordExpires = null;
+
+        await mentor.save();
+
+        res.status(200).json({ 
+            success: true,
+            message: "Password successfully reset!" 
+        });
+    }catch(err){
+        res.status(500).json({
+            success: false,
+            message: err.message
+        })
+    }
+}
 
 module.exports.getAssignedStudents = async(req, res) => {
     try{

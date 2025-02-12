@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 
 const MentorSchema = new mongoose.Schema({
@@ -22,8 +23,19 @@ const MentorSchema = new mongoose.Schema({
         type: Boolean, 
         default: false 
     },
+    designation: {
+        type: String,
+        default: null
+    },
+    contact: {
+        type: String,
+        match: /^[0-9]{10}$/, 
+        default: null
+    },
+    resetPasswordToken: { type: String, default: null },
+    resetPasswordExpires: { type: Date, default: null },
     // students: [{ 
-    //         type: mongoose.Schema.Types.ObjectId, ref: "Student" 
+    //type: mongoose.Schema.Types.ObjectId, ref: "Student" 
     // }],
     createdAt: { 
         type: Date, 
@@ -50,5 +62,14 @@ MentorSchema.methods.comparePassword = async function (enteredPassword) {
 MentorSchema.statics.hashPassword = async (password) => {
     return await bcrypt.hash(password, 10);
 };
+
+
+MentorSchema.methods.generateResetToken = function () {
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    this.resetPasswordExpires = Date.now() + 60 * 60 * 1000; // Token expires in 1 hour
+    return resetToken;
+};
+
 
 module.exports = mongoose.model("Mentor", MentorSchema);
