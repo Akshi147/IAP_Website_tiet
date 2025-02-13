@@ -32,9 +32,9 @@ router.get("/getAssignedStudents", authMentor, mentorController.getAssignedStude
 
 router.get("/checkToken/:token", mentorController.checkToken);
 
-router.post("/setPassword/:token", [
+router.post("/setPassword", [
     body("password").notEmpty().withMessage("Password is required."),
-], mentorController.setPassword);
+],authMentor, mentorController.setPassword);
 
 
 router.post("/forgotpassword", mentorController.forgotPassword);
@@ -43,7 +43,7 @@ router.post("/resetpassword", mentorController.resetPassword);
 
 router.get("/profile", authMentor, async (req, res) => {
     try {
-        console.log("📌 Mentor ID from Token:", req.mentor._id);
+        console.log("📌 Mentor ID from Tokensssss:", req.mentor._id);
 
         const mentor = await mentorModel.findById(req.mentor._id);
 

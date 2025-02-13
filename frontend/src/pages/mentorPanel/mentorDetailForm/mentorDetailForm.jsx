@@ -23,34 +23,32 @@ const MentorDetailForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isExpired, setIsExpired] = useState(false);
+  const [isTokenChecked, setIsTokenChecked] = useState(false);
 
   useEffect(() => {
-    // If user is already logged in, don't check token validity
-    const token = localStorage.getItem("token");
-    if (token) {
-        navigate("/mentors"); // ✅ Redirect to Mentor Panel
-        return;
-    }
-
     if (!token) {
-        setIsExpired(true);
-        return;
+      setErrorMessage("Token not provided.");
+      return;
     }
 
     const checkTokenValidity = async () => {
-        try {
-            const response = await axios.get(`http://localhost:4000/mentors/checkToken/${token}`);
-            console.log("✅ Token check response:", response.data);
-        } catch (error) {
-            console.error("❌ Token check failed:", error.response?.data || error);
-            setIsExpired(true);
-            setErrorMessage(error.response?.data?.message || "Failed to verify token.");
-        }
+      try {
+        const response = await axios.get(`http://localhost:4000/mentors/checkToken/${token}`);
+        console.log("✅ Token check response:", response.data);
+        localStorage.setItem("mentor-token", response.data.token);
+        setIsTokenChecked(true); // ✅ Set token check as completed
+      } catch (error) {
+        console.error("❌ Token check failed:", error.response?.data || error);
+        setIsExpired(true);
+        setErrorMessage(error.response?.data?.message || "Failed to verify token.");
+        setIsTokenChecked(true); // ✅ Set token check as completed
+      }
     };
 
-    checkTokenValidity();
-}, [token, navigate]); // ✅ Added `navigate` so it reacts properly
-
+    if (!isTokenChecked) {
+      checkTokenValidity();
+    }
+  }, [token, isTokenChecked]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,6 +62,7 @@ const MentorDetailForm = () => {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
+    const jwttoken = localStorage.getItem("mentor-token");
 
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage("Passwords do not match!");
@@ -71,16 +70,26 @@ const MentorDetailForm = () => {
     }
 
     try {
-      await axios.post(`http://localhost:4000/mentors/setPassword/${token}`, {
-        token: token,
-        name: formData.name,
-        designation: formData.designation,
-        phone: formData.phone,
-        password: formData.password,
-      });
+      await axios.post(
+        `http://localhost:4000/mentors/setPassword`,
+        {
+          token: token,
+          name: formData.name,
+          designation: formData.designation,
+          phone: formData.phone,
+          password: formData.password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${jwttoken}`,
+          },
+        }
+      );
 
       setSuccessMessage("Registration successful!");
-      setTimeout(() => navigate("/mentors/getAssignedStudents"), 2000);
+      setTimeout(() => {
+        navigate("/mentors/getAssignedStudents"); // ✅ Navigate after success message is shown
+      }, 1000);
     } catch (error) {
       setErrorMessage(error.response?.data?.message || "Failed to set password.");
     }
@@ -89,58 +98,72 @@ const MentorDetailForm = () => {
   if (isExpired) {
     return (
       <>
-      <Navbar
-      navItems={[
-        {name:"Grade Students",path:"/mentors/gradeStudents"},
-        {name:"Change Password",path:"/mentors/changepassword"}
-      ]}
-      downloadButton={{
-        text: "Log Out",
-        onClick: () => navigate("/mentors/logout"),
-      }}
-      />
-      <div className={styles.expiredContainer}>
-        <h2>Link Expired</h2>
-        <p>Your registration link has expired. Please request a new one.</p>
-      </div>
+        <Navbar
+          navItems={[
+            { name: "Grade Students", path: "/mentors/gradeStudents" },
+            { name: "Change Password", path: "/mentors/changepassword" },
+          ]}
+          downloadButton={{
+            text: "Log Out",
+            onClick: () => navigate("/mentors/logout"),
+          }}
+        />
+        <div className={styles.expiredContainer}>
+          <h2>Link Expired</h2>
+          <p>Your registration link has expired. Please request a new one.</p>
+        </div>
       </>
     );
   }
 
   return (
     <>
-    <Navbar />
-    <div className={styles.container}>
-      <div className={styles.formWrapper}>
-        <h1>Complete Your Registration</h1>
-        <p>Fill in the details to set up your account</p>
+      <Navbar />
+      <div className={styles.container}>
+        <div className={styles.formWrapper}>
+          <h1>Complete Your Registration</h1>
+          <p>Fill in the details to set up your account</p>
 
-        {errorMessage && <div className={`${styles.alert} ${styles.error}`}>{errorMessage}</div>}
-        {successMessage && <div className={`${styles.alert} ${styles.success}`}>{successMessage}</div>}
+          {errorMessage && <div className={`${styles.alert} ${styles.error}`}>{errorMessage}</div>}
+          {successMessage && <div className={`${styles.alert} ${styles.success}`}>{successMessage}</div>}
 
-        <form onSubmit={handleSubmit} className={styles.formGrid}>
-          <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} required />
-          <input type="text" name="designation" placeholder="Designation" value={formData.designation} onChange={handleChange} required />
-          <input type="tel" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} required />
+          <form onSubmit={handleSubmit} className={styles.formGrid}>
+            <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} required />
+            <input type="text" name="designation" placeholder="Designation" value={formData.designation} onChange={handleChange} required />
+            <input type="tel" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} required />
 
-          <div className={styles.passwordWrapper}>
-            <input type={passwordVisible ? "text" : "password"} name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
-            <span className={styles.eyeIcon} onClick={() => setPasswordVisible(!passwordVisible)}>
-              {passwordVisible ? <FaEyeSlash /> : <FaEye />}
-            </span>
-          </div>
+            <div className={styles.passwordWrapper}>
+              <input
+                type={passwordVisible ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              <span className={styles.eyeIcon} onClick={() => setPasswordVisible(!passwordVisible)}>
+                {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
 
-          <div className={styles.passwordWrapper}>
-            <input type={confirmPasswordVisible ? "text" : "password"} name="confirmPassword" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} required />
-            <span className={styles.eyeIcon} onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}>
-              {confirmPasswordVisible ? <FaEyeSlash /> : <FaEye />}
-            </span>
-          </div>
+            <div className={styles.passwordWrapper}>
+              <input
+                type={confirmPasswordVisible ? "text" : "password"}
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+              <span className={styles.eyeIcon} onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}>
+                {confirmPasswordVisible ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
 
-          <button type="submit" className={styles.submitButton}>Register</button>
-        </form>
+            <button type="submit" className={styles.submitButton}>Register</button>
+          </form>
+        </div>
       </div>
-    </div>
     </>
   );
 };

@@ -6,7 +6,7 @@ import axios from "axios";
 const MentorProtectedRoute = ({ children }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("mentor-token");
 
   useEffect(() => {
     if (!token) {
@@ -26,15 +26,9 @@ const MentorProtectedRoute = ({ children }) => {
         if (!mentor) {
           throw new Error("Unauthorized: No mentor data found");
         }
-
-        // Redirect to set password if mentor has not completed registration
-        if (!mentor.passwordSet) {
-          navigate("/mentors/setPassword");
-          return;
-        }
       } catch (error) {
         console.error("Error verifying mentor:", error);
-        localStorage.removeItem("token");
+        localStorage.removeItem("mentor-token");
         navigate("/mentors/login");
       } finally {
         setIsLoading(false);

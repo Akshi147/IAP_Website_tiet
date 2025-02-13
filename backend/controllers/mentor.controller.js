@@ -39,7 +39,6 @@ module.exports.registerMentor = async (req, res) => {
 
         await existingMentor.save();
 
-        console.log("✅ Reset Token Generated:", resetToken);
 
         // ✅ Use resetToken in email instead of undefined "token"
         await sendEmail(mentorEmail, "Set up your password", `
@@ -120,7 +119,7 @@ module.exports.registerMentor = async (req, res) => {
                         
 
                         <div style="text-align: center;">
-                            <a href="http://localhost:5173/mentors/setPassword?token=${resetToken}" class="button">Set password</a>
+                            <a href="http://localhost:5173/mentors/setPassword?token=${hashedToken}" class="button">Set password</a>
                         </div>
                     </div>
                 </div>
@@ -128,7 +127,7 @@ module.exports.registerMentor = async (req, res) => {
             </html>
             `);
 
-        res.status(201).json({ success: true, message: "Verification email sent.", resetToken });
+        res.status(201).json({ success: true, message: "Verification email sent.",hashedToken});
 
     } catch (err) {
         console.error("Registration Error:", err);
@@ -137,23 +136,16 @@ module.exports.registerMentor = async (req, res) => {
 };
 
 module.exports.setPassword = async (req, res) => {
+
+    console.log(req.mentor);
     try {
-        const token = req.params.param?.trim();
+        const {_id}=req.mentor;
         const { password, name, designation, contact } = req.body;
 
-        if (!token) {
-            return res.status(401).json({
-                success: false,
-                message: "Unauthorized: No token provided."
-            });
-        }
-
-        const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
         // Find mentor using reset token
         const mentor = await mentorModel.findOne({
-            resetPasswordToken: hashedToken,
-            resetPasswordExpires: { $gt: Date.now() },
+            _id,
         });
 
         if (!mentor) {
@@ -190,24 +182,21 @@ module.exports.setPassword = async (req, res) => {
 
 
 
-exports.checkToken = async (req, res) => {
+module.exports.checkToken = async (req, res) => {
     const { token } = req.params;
     
     try {
         console.log("Checking token:", token);
 
-        // 🔹 Hash the token before searching in the database
-        const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
-
         // 🔹 Find the mentor with this hashed token
-        const mentor = await mentorModel.findOne({ resetPasswordToken: hashedToken, resetPasswordExpires: { $gt: Date.now() } });
+        const mentor = await mentorModel.findOne({ resetPasswordToken: token, resetPasswordExpires: { $gt: Date.now() } });
 
         if (!mentor) {
             console.error("Token not found:", token);
             return res.status(400).json({ success: false, message: "Invalid or expired token." });
         }
-
-        res.status(200).json({ success: true, message: "Token is valid" });
+        const createtoken = mentor.generateAuthToken();
+        res.status(200).json({ success: true, message: "Token is valid",token:createtoken });
     } catch (error) {
         console.error("❌ Error in checkToken:", error);
         res.status(500).json({ success: false, message: "Server error." });

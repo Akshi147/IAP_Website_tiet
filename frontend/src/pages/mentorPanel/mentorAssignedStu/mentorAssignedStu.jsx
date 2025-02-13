@@ -8,11 +8,13 @@ const MentorAssignedStudents = () => {
   const [students, setStudents] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
+
   useEffect(() => {
     const fetchAssignedStudents = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/mentors/getAssignedStudents", {
-          withCredentials: true,
+        const token = localStorage.getItem("mentor-token");
+        const response = await axios.get("http://localhost:4000/mentors/getAssignedStudents",{
+          headers: { Authorization: `Bearer ${token}` },
         });
         setStudents(response.data.students);
       } catch (error) {
