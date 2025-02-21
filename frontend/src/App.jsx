@@ -24,6 +24,12 @@ import UnderDocumentVerification from './pages/Admin/component/Underdocumentveri
 import UnderPhase2Verification from './pages/Admin/component/UnderPhase2Verification';
 import DeleteStudent from './pages/Admin/component/DeleteStudent';
 import GenerateExcel from './pages/Admin/component/GenerateExcel';
+import {MentorLogin} from './pages/Mentor/MentorLogin';
+import {MentorProtectedRoute} from './pages/Mentor/MentorProtectedRoute';
+import MentorPanel from './pages/Mentor/MentorPanel';
+import { MentorRegister } from './pages/Mentor/MentorRegister';
+import { MentorSetPassword } from './pages/Mentor/MentorSetPassword';
+
 const App = () => {
   return (
     <div>
@@ -101,9 +107,23 @@ const App = () => {
           </AdminProtectedRoute>
         
       
+      } 
+      
+      
+      
+      />
+      <Route path="/mentorlogin" element={<MentorLogin/>} />
+      <Route path="/mentor" element={
+        <MentorProtectedRoute>
+          <MentorPanel/>
+        </MentorProtectedRoute>
       } />
+      <Route path="/mentorregister" element={<MentorRegister />} />
+      <Route path="/mentor/setPassword" element={<MentorSetPassword />} />
 
       </Routes>
+      
+
     </div>
   );
 };
