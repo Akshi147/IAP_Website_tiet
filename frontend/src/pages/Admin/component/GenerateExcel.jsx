@@ -156,10 +156,10 @@ const GenerateExcel = () => {
                   onChange={(e) => setBranch(e.target.value)}
                 >
                   <option value="">Choose one...</option>
-                  <option value="COE">Computer Engineering (COE)</option>
-                  <option value="COPC">Computer Science & Engineering (COPC)</option>
-                  <option value="COBS">Computer Science & Business Systems (COBS)</option>
-                  <option value="ME-CSE">ME Computer Science & Engineering</option>
+                  <option value="Computer Engineering">Computer Engineering (COE)</option>
+                  <option value="Computer Science And Engineering">Computer Science & Engineering (COPC)</option>
+                  <option value="Computer Science And Business System">Computer Science & Business Systems (COBS)</option>
+                  <option value="ME Computer Science And Engineering">ME Computer Science & Engineering</option>
                   <option value="ALL">All Branches</option>
                 </select>
               </div>

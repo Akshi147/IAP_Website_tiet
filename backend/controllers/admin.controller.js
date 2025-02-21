@@ -5,6 +5,7 @@ const studentModel = require('../models/student.model');
 const StudentModel = require("../models/student.model");
 const moment = require("moment");
 const ExcelJS = require('exceljs');
+const { query } = require('express');
 
 module.exports.Register = async (req, res) => {
     console.log(req.body);
@@ -393,27 +394,42 @@ module.exports.generateExcelReport = async (req, res) => {
         }
         
         let students = [];
+        // Add headers based on report type
+        //common header
+        const headers = ['Roll No', 'Name', 'Email', 'Phone Number'];
         
+        const extraHeaderInfoOne = ['Branch', 'Semester Type', 'Class Subgroup', 'Training Arranged By', 'Company Name', 'Company City'];
+
         switch(reportNumber) {
             case 1:
                 // Registration Form Data
-                students = await StudentModel.find(queryObj).select('name rollNo email phoneNumber');
+                if(queryObj.branch === 'ALL'){
+                    students = await StudentModel.find({}).select('rollNo name branch semesterType classSubgroup trainingArrangedBy phoneNumber email companyDetails.companyName companyDetails.companyCity');
+                }else{
+                    students = await StudentModel.find({
+                        branch,
+                    }).select('rollNo name branch semesterType classSubgroup trainingArrangedBy phoneNumber email companyDetails.companyName companyDetails.companyCity');
+                }
+
                 break;
                 
             case 2:
                 // Students Verified
-                students = await StudentModel.find({ 
+                students = await StudentModel.find({
                     ...queryObj,
-                    isVerified: true 
+                    mentorverified: true
                 });
+                console.log(students);
+                
                 break;
                 
             case 3:
                 // Students not Verified
-                students = await StudentModel.find({ 
+                students = await StudentModel.find({
                     ...queryObj,
-                    isVerified: false 
+                    mentorverified: false
                 });
+                console.log(students);
                 break;
                 
             case 4:
@@ -475,8 +491,11 @@ module.exports.generateExcelReport = async (req, res) => {
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('Students');
 
-        // Add headers based on report type
-        const headers = ['Roll No', 'Name', 'Email', 'Phone Number'];
+
+        if(reportNumber == 1){
+            headers.push(...extraHeaderInfoOne);
+        }
+
         if (reportNumber === 7) headers.push('Stipend Amount');
         worksheet.addRow(headers);
 
@@ -488,7 +507,22 @@ module.exports.generateExcelReport = async (req, res) => {
                 student.email,
                 student.phoneNumber
             ];
-            if (reportNumber === 7) row.push(student.stipend);
+
+            if (reportNumber === 1) {
+                row.push(
+                    student.branch,
+                    student.semesterType,
+                    student.classSubgroup,
+                    student.trainingArrangedBy,
+                    student.companyDetails.companyName,
+                    student.companyDetails.companyCity
+                );
+            }
+            
+            if (reportNumber === 7) {
+                row.push(student.stipend);
+            }
+
             worksheet.addRow(row);
         });
 
