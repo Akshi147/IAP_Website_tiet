@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { Header } from "../../../components/header";
+import { useNavigate } from "react-router-dom";
 
 const ChangeAdminPassword = () => {
+  const navigate = useNavigate();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -51,6 +54,23 @@ const ChangeAdminPassword = () => {
   };
 
   return (
+    <>
+    <Header
+      navItems={[
+        {name:"Students Under Document Verification",path:"/underdocumentverification"},
+        {name:"Students In Phase 2",path:"/phase2verification"},
+        { name: "Verify Student", path: "/admin" },
+        {name:"Delete Student",path:"/deletestudent"},
+        
+        { name: "Verify Faculty", path: "/verifyfaculty" },
+        { name: "Verify Mentor", path: "/mentor" },
+        {name:"Change Password",path:"/adminchangepassword"}
+      ]}
+      downloadButton={{
+        text: "Log Out",
+        onClick: () => navigate("/adminlogout"),
+      }}
+    />
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-purple-50 to-white px-6">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
@@ -126,6 +146,8 @@ const ChangeAdminPassword = () => {
         </div>
       </div>
     </div>
+    </>
+    
   );
 };
 

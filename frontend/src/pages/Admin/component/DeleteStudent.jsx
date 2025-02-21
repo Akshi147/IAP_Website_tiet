@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Header } from "../../../components/header";
 import axios from "axios";
 
 const DeleteStudent = () => {
@@ -119,6 +120,24 @@ const DeleteStudent = () => {
   );
 
   return (
+    <>
+    <Header
+      navItems={[
+        {name:"Students Under Document Verification",path:"/underdocumentverification"},
+        {name:"Students In Phase 2",path:"/phase2verification"},
+        { name: "Verify Student", path: "/admin" },
+        {name:"Delete Student",path:"/deletestudent"},
+        
+        { name: "Verify Faculty", path: "/verifyfaculty" },
+        { name: "Verify Mentor", path: "/mentor" },
+        {name:"Change Password",path:"/adminchangepassword"}
+      ]}
+      downloadButton={{
+        text: "Log Out",
+        onClick: () => navigate("/adminlogout"),
+      }}
+    />
+    
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-xl mx-auto">
         <div className="bg-white shadow-xl rounded-lg overflow-hidden">
@@ -163,6 +182,8 @@ const DeleteStudent = () => {
       {showDetailsModal && <StudentDetailsModal />}
       {showConfirmModal && <ConfirmDeleteModal />}
     </div>
+    </>
+    
   );
 };
 

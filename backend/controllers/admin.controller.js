@@ -4,6 +4,7 @@ const blacklistModel = require("../models/blacklist.model");
 const studentModel = require('../models/student.model');
 const StudentModel = require("../models/student.model");
 const moment = require("moment");
+const ExcelJS = require('exceljs');
 
 module.exports.Register = async (req, res) => {
     console.log(req.body);
@@ -163,7 +164,7 @@ module.exports.ForgotPassword = async (req, res) => {
             </div>
 
             <p class="message warning">⚠️ For security reasons, please change your password immediately after logging in.</p>
-            <p class="footer">If you didn’t request this email, please contact the administration immediately.</p>
+            <p class="footer">If you didn't request this email, please contact the administration immediately.</p>
         </div>
     </div>
 </body>
@@ -369,6 +370,145 @@ module.exports.DeleteStudent = async (req, res) => {
             message: 'Internal server error',
             error: error.message
         });
+    }
+};
+
+module.exports.generateExcelReport = async (req, res) => {
+    try {
+        console.log(req.body);  
+        const { year, branch, semester, faculty } = req.body;
+        const reportNumber = parseInt(req.params.reportNumber);
+        
+        // Base query object
+        let queryObj = { year };
+        
+        // Add branch to query if not ALL
+        if (branch !== 'ALL') {
+            queryObj.branch = branch;
+        }
+        
+        // Add semester to query if not ALL
+        if (semester !== 'ALL') {
+            queryObj.semester = semester;
+        }
+        
+        let students = [];
+        
+        switch(reportNumber) {
+            case 1:
+                // Registration Form Data
+                students = await StudentModel.find(queryObj).select('name rollNo email phoneNumber');
+                break;
+                
+            case 2:
+                // Students Verified
+                students = await StudentModel.find({ 
+                    ...queryObj,
+                    isVerified: true 
+                });
+                break;
+                
+            case 3:
+                // Students not Verified
+                students = await StudentModel.find({ 
+                    ...queryObj,
+                    isVerified: false 
+                });
+                break;
+                
+            case 4:
+                // ALTERNATE semester students
+                students = await StudentModel.find({ 
+                    ...queryObj,
+                    internshipType: 'ALTERNATE' 
+                });
+                break;
+                
+            case 5:
+                // PROJECT semester students
+                students = await StudentModel.find({ 
+                    ...queryObj,
+                    internshipType: 'PROJECT' 
+                });
+                break;
+                
+            case 6:
+                // Students with STIPEND
+                students = await StudentModel.find({ 
+                    ...queryObj,
+                    stipend: { $exists: true, $ne: null } 
+                });
+                break;
+                
+            case 7:
+                // Students tagged with specific faculty
+                if (!faculty) {
+                    return res.status(400).json({ message: 'Faculty email is required for this report' });
+                }
+                students = await StudentModel.find({ 
+                    ...queryObj,
+                    assignedFaculty: faculty 
+                });
+                break;
+                
+            case 8:
+                // Phase 2 COMPLETE
+                students = await StudentModel.find({ 
+                    ...queryObj,
+                    phase2Status: 'COMPLETE' 
+                });
+                break;
+                
+            case 9:
+                // Phase 2 PENDING
+                students = await StudentModel.find({ 
+                    ...queryObj,
+                    phase2Status: 'PENDING' 
+                });
+                break;
+                
+            default:
+                return res.status(400).json({ message: 'Invalid report number' });
+        }
+
+        // Generate Excel file
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Students');
+
+        // Add headers based on report type
+        const headers = ['Roll No', 'Name', 'Email', 'Phone Number'];
+        if (reportNumber === 7) headers.push('Stipend Amount');
+        worksheet.addRow(headers);
+
+        // Add data
+        students.forEach(student => {
+            const row = [
+                student.rollNo,
+                student.name,
+                student.email,
+                student.phoneNumber
+            ];
+            if (reportNumber === 7) row.push(student.stipend);
+            worksheet.addRow(row);
+        });
+
+        // Set response headers
+        res.setHeader(
+            'Content-Type',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+        res.setHeader(
+            'Content-Disposition',
+            `attachment; filename=Report_${reportNumber}.xlsx`
+        );
+
+        // Send the Excel file
+        await workbook.xlsx.write(res);
+        res.end();
+
+    } catch (error) {
+        console.error('Error generating report:', error);
+        res.status(500).json({ message: 'Failed to generate report' });
     }
 };
 

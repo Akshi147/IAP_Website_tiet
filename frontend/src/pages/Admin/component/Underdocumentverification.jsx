@@ -38,19 +38,21 @@ const UnderDocumentVerification = () => {
   return (
     <>
     <Header
-    navItems={[
-      {name:"Students Under Document Verification",path:"/underdocumentverification"},
-      {name:"Students In Phase 2",path:"/phase2verification"},
-      { name: "Verify Student", path: "/admin" },
-      
-      { name: "Verify Faculty", path: "/verifyfaculty" },
-      { name: "Verify Mentor", path: "/mentor" },
-      {name:"Change Password",path:"/adminchangepassword"}
-    ]}
-    downloadButton={{
-      text: "Log Out",
-      onClick: () => navigate("/adminlogout"),
-    }}/>
+      navItems={[
+        {name:"Students Under Document Verification",path:"/underdocumentverification"},
+        {name:"Students In Phase 2",path:"/phase2verification"},
+        { name: "Verify Student", path: "/admin" },
+        {name:"Delete Student",path:"/deletestudent"},
+        
+        { name: "Verify Faculty", path: "/verifyfaculty" },
+        { name: "Verify Mentor", path: "/mentor" },
+        {name:"Change Password",path:"/adminchangepassword"}
+      ]}
+      downloadButton={{
+        text: "Log Out",
+        onClick: () => navigate("/adminlogout"),
+      }}
+    />
      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
         <div className="px-6 py-5">

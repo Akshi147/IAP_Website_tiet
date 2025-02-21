@@ -23,7 +23,7 @@ import ResetPassword from './pages/Student/component/ResetPassword';
 import UnderDocumentVerification from './pages/Admin/component/Underdocumentverification';
 import UnderPhase2Verification from './pages/Admin/component/UnderPhase2Verification';
 import DeleteStudent from './pages/Admin/component/DeleteStudent';
-
+import GenerateExcel from './pages/Admin/component/GenerateExcel';
 const App = () => {
   return (
     <div>
@@ -58,8 +58,11 @@ const App = () => {
           <AdminProtectedRoute>
             <StudentVerification />
           </AdminProtectedRoute>
-
-
+        } />
+        <Route path="/generateExcel" element={
+          <AdminProtectedRoute>
+            <GenerateExcel />
+          </AdminProtectedRoute>
         } />
         <Route path="/adminlogin" element={<AdminLogin />} />
         <Route path="/admin" element={
