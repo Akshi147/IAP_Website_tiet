@@ -16,7 +16,7 @@ const MentorPanel = () => {
 
     const fetchMentorData = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("mentor-token");
 
         if (!token) {
           console.warn("❌ No token found. Redirecting to login.");
@@ -71,7 +71,7 @@ const MentorPanel = () => {
         downloadButton={{
           text: "Log Out",
           onClick: () => {
-            localStorage.removeItem("token"); // ✅ Clears token on logout
+            localStorage.removeItem("mentor-token"); // ✅ Clears token on logout
             navigate("/mentors/login");
           },
         }}
