@@ -36,6 +36,7 @@ import AdminPanel from './pages/adminPanel/adminPanel';
 import AdminStudentUnderDocumentVerification from './pages/adminPanel/underDocVerify/adminUnderDocVerify';
 import AdminStudentUnderPhase2Verification from './pages/adminPanel/underPhase2Verify/adminUnderPhase2Verify';
 import AdminDeleteStudent from './pages/adminPanel/adminDeleteStu/adminDeleteStu';
+import AdminGenerateExcel from './pages/adminPanel/adminExcelGenerate/adminExcelGenerate';
 
 const App = () => {
   return (
@@ -125,6 +126,11 @@ const App = () => {
         <Route path="/deletestudent" element={
           <AdminProtectedRoute>
             <AdminDeleteStudent />
+          </AdminProtectedRoute>
+        } />
+        <Route path="/generateExcel" element={
+          <AdminProtectedRoute>
+            <AdminGenerateExcel />
           </AdminProtectedRoute>
         } />
       </Routes>

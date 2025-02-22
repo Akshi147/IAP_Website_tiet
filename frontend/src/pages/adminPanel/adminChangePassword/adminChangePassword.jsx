@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from "./adminChangePassword.module.css";
 import Navbar from "../../../components/navbar/navbar";
+import { useNavigate } from "react-router-dom";
 
 const ChangeAdminPassword = () => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -10,6 +11,7 @@ const ChangeAdminPassword = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPasswords, setShowPasswords] = useState(false);
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPasswords(!showPasswords);
@@ -54,7 +56,22 @@ const ChangeAdminPassword = () => {
 
   return (
     <>
-    <Navbar />
+    <Navbar
+          navLinks={[
+          {name:"Students Under Document Verification",path:"/underdocumentverification"},
+            {name:"Students In Phase 2",path:"/phase2verification"},
+            { name: "Verify Student", path: "/admin" },
+            {name:"Delete Student",path:"/deletestudent"},
+            {name: "Generate Excel", path: "/generateexcel" },
+            { name: "Verify Faculty", path: "/verifyfaculty" },
+            { name: "Verify Mentor", path: "/mentor" },
+            {name:"Change Password",path:"/adminchangepassword"}
+          ]}
+          downloadButton={{
+            text: "Log Out",
+            onClick: () => navigate("/adminlogout"),
+          }}
+        />
     <div className={styles.container}>
       <div className={styles.wrapper}>
         <div className={styles.header}>

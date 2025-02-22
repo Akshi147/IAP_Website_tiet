@@ -116,12 +116,12 @@ const AdminDeleteStudent = () => {
   return (
     <>
       <Navbar
-            navItems={[
-              {name:"Students Under Document Verification",path:"/underdocumentverification"},
+            navLinks={[
+            {name:"Students Under Document Verification",path:"/underdocumentverification"},
               {name:"Students In Phase 2",path:"/phase2verification"},
               { name: "Verify Student", path: "/admin" },
               {name:"Delete Student",path:"/deletestudent"},
-              
+              {name: "Generate Excel", path: "/generateexcel" },
               { name: "Verify Faculty", path: "/verifyfaculty" },
               { name: "Verify Mentor", path: "/mentor" },
               {name:"Change Password",path:"/adminchangepassword"}

@@ -4,6 +4,8 @@ const blacklistModel = require("../models/blacklist.model");
 const studentModel = require('../models/student.model');
 const StudentModel = require("../models/student.model");
 const moment = require("moment");
+const ExcelJS = require('exceljs');
+const { query } = require('express');
 
 module.exports.Register = async (req, res) => {
     console.log(req.body);
@@ -163,7 +165,7 @@ module.exports.ForgotPassword = async (req, res) => {
             </div>
 
             <p class="message warning">⚠️ For security reasons, please change your password immediately after logging in.</p>
-            <p class="footer">If you didn’t request this email, please contact the administration immediately.</p>
+            <p class="footer">If you didn't request this email, please contact the administration immediately.</p>
         </div>
     </div>
 </body>
@@ -371,3 +373,128 @@ module.exports.DeleteStudent = async (req, res) => {
         });
     }
 };
+
+
+module.exports.generateExcelReport = async (req, res) => {
+    try {
+        console.log(req.body);
+        const { year, branch, semester, faculty,semesterType } = req.body;
+        const reportNumber = parseInt(req.params.reportNumber);
+
+        // Validate report number
+        if (isNaN(reportNumber) || reportNumber < 1 || reportNumber > 9) {
+            return res.status(400).json({ message: 'Invalid report number' });
+        }
+
+        // Convert year to date range
+        const startOfYear = new Date(`${year}-01-01T00:00:00.000Z`);
+        const endOfYear = new Date(`${year}-12-31T23:59:59.999Z`);
+
+        // Construct base filter
+        const filter = { createdAt: { $gte: startOfYear, $lte: endOfYear } };
+        if (branch && branch !== 'ALL') filter.branch = branch;
+        if (semester && semester !== 'ALL') filter.semesterType = semester;
+
+        // Modify filter based on report type
+        switch (reportNumber) {
+            case 2:
+                filter.mentorverified = true;
+                break;
+            case 3:
+                filter.mentorverified = false;
+                break;
+            case 4:
+                filter.semesterType = 'Alternate Semester';
+                break;
+            case 5:
+                filter.internshipType = 'PROJECT';
+                break;
+            case 6:
+                filter.stipend = { $exists: true, $ne: null };
+                break;
+            case 7:
+                if (!faculty) {
+                    return res.status(400).json({ message: 'Faculty email is required for this report' });
+                }
+                filter.assignedFaculty = faculty;
+                break;
+            case 8:
+                filter.phase2Status = 'COMPLETE';
+                break;
+            case 9:
+                filter.phase2Status = 'PENDING';
+                break;
+        }
+
+        // Define selected fields for each report type
+        let selectFields = 'rollNo name email phoneNumber';
+        if (reportNumber === 1) {
+            selectFields += ' branch semesterType classSubgroup trainingArrangedBy companyDetails.companyName companyDetails.companyCity';
+        }
+        if (reportNumber === 7) {
+            selectFields += ' stipend';
+        }
+
+        // Fetch students data
+        const students = await StudentModel.find(filter).select(selectFields);
+
+        // Create Excel workbook
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Students');
+
+        // Define headers dynamically
+        const headers = ['Roll No', 'Name', 'Email', 'Phone Number'];
+        if (reportNumber === 1) {
+            headers.push('Branch', 'Semester Type', 'Class Subgroup', 'Training Arranged By', 'Company Name', 'Company City');
+        }
+        if (reportNumber === 7) {
+            headers.push('Stipend Amount');
+        }
+
+        // Add headers to worksheet
+        worksheet.addRow(headers);
+
+        // Add student data
+        students.forEach(student => {
+            const row = [
+                student.rollNo,
+                student.name,
+                student.email,
+                student.phoneNumber
+            ];
+            if (reportNumber === 1) {
+                row.push(
+                    student.branch,
+                    student.semesterType,
+                    student.classSubgroup,
+                    student.trainingArrangedBy,
+                    student.companyDetails?.companyName || 'N/A',
+                    student.companyDetails?.companyCity || 'N/A'
+                );
+            }
+            if (reportNumber === 7) {
+                row.push(student.stipend || 'N/A');
+            }
+            worksheet.addRow(row);
+        });
+
+        // Set response headers
+        res.setHeader(
+            'Content-Type',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+        res.setHeader(
+            'Content-Disposition',
+            `attachment; filename=Report_${reportNumber}.xlsx`
+        );
+
+        // Send Excel file
+        await workbook.xlsx.write(res);
+        res.end();
+
+    } catch (error) {
+        console.error('Error generating report:', error);
+        res.status(500).json({ message: 'Failed to generate report' });
+    }
+};
+

@@ -74,19 +74,21 @@ const AdminStudentUnderPhase2Verification = () => {
   return (
     <>
     <Navbar
-    navItems={[
+      navLinks={[
       {name:"Students Under Document Verification",path:"/underdocumentverification"},
-      {name:"Students In Phase 2",path:"/phase2verification"},
-      { name: "Verify Student", path: "/admin" },
-      
-      { name: "Verify Faculty", path: "/verifyfaculty" },
-      { name: "Verify Mentor", path: "/mentor" },
-      {name:"Change Password",path:"/adminchangepassword"}
-    ]}
-    downloadButton={{
-      text: "Log Out",
-      onClick: () => navigate("/adminlogout"),
-    }}/>
+        {name:"Students In Phase 2",path:"/phase2verification"},
+        { name: "Verify Student", path: "/admin" },
+        {name:"Delete Student",path:"/deletestudent"},
+        {name: "Generate Excel", path: "/generateexcel" },
+        { name: "Verify Faculty", path: "/verifyfaculty" },
+        { name: "Verify Mentor", path: "/mentor" },
+        {name:"Change Password",path:"/adminchangepassword"}
+      ]}
+      downloadButton={{
+        text: "Log Out",
+        onClick: () => navigate("/adminlogout"),
+      }}
+    />
     <div className={styles.container}>
         <div className={styles.card}>
           <div className={styles.cardContent}>
