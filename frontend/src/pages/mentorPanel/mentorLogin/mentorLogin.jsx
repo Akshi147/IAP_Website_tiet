@@ -36,7 +36,7 @@ const MentorLogin = () => {
         console.log("✅ Login successful. Storing token...");
         
         // ✅ Store token properly
-        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("mentor-token", response.data.token);
   
         // ✅ Navigate **after** storing token
         window.location.href = "/mentors";
