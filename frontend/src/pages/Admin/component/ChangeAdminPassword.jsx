@@ -55,12 +55,13 @@ const ChangeAdminPassword = () => {
 
   return (
     <>
-    <Header
+   <Header
       navItems={[
         {name:"Students Under Document Verification",path:"/underdocumentverification"},
         {name:"Students In Phase 2",path:"/phase2verification"},
         { name: "Verify Student", path: "/admin" },
         {name:"Delete Student",path:"/deletestudent"},
+        {name:"Generate Excel Sheet",path:"/generateExcel"},
         
         { name: "Verify Faculty", path: "/verifyfaculty" },
         { name: "Verify Mentor", path: "/mentor" },

@@ -39,6 +39,7 @@ const GenerateExcel = () => {
         year,
         branch,
         semester,
+        ...(reportNumber===4 && {semesterType:'Alternate Semester'}),
         ...(reportNumber === 8 && { faculty: facultyEmail })
       };
 
@@ -104,22 +105,23 @@ const GenerateExcel = () => {
 
   return (
     <>
-      <Header
-        navItems={[
-          {name:"Students Under Document Verification",path:"/underdocumentverification"},
-          {name:"Students In Phase 2",path:"/phase2verification"},
-          { name: "Verify Student", path: "/admin" },
-          {name:"Delete Student",path:"/deletestudent"},
-          {name:"Generate Excel Sheet",path:"/generateexcel"},
-          { name: "Verify Faculty", path: "/verifyfaculty" },
-          { name: "Verify Mentor", path: "/mentor" },
-          {name:"Change Password",path:"/adminchangepassword"}
-        ]}
-        downloadButton={{
-          text: "Log Out",
-          onClick: () => navigate("/adminlogout"),
-        }}
-      />
+    <Header
+      navItems={[
+        {name:"Students Under Document Verification",path:"/underdocumentverification"},
+        {name:"Students In Phase 2",path:"/phase2verification"},
+        { name: "Verify Student", path: "/admin" },
+        {name:"Delete Student",path:"/deletestudent"},
+        {name:"Generate Excel Sheet",path:"/generateExcel"},
+        
+        { name: "Verify Faculty", path: "/verifyfaculty" },
+        { name: "Verify Mentor", path: "/mentor" },
+        {name:"Change Password",path:"/adminchangepassword"}
+      ]}
+      downloadButton={{
+        text: "Log Out",
+        onClick: () => navigate("/adminlogout"),
+      }}
+    />
 
       <div className="min-h-screen bg-gray-100 py-6 px-4">
         <div className="max-w-7xl mx-auto">
@@ -143,6 +145,7 @@ const GenerateExcel = () => {
                   onChange={(e) => setYear(e.target.value)}
                 >
                   <option value="">Choose one...</option>
+                  <option value="2025">2025</option>
                   <option value="2024">2024</option>
                   <option value="2023">2023</option>
                 </select>

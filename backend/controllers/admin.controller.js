@@ -374,132 +374,87 @@ module.exports.DeleteStudent = async (req, res) => {
     }
 };
 
+
 module.exports.generateExcelReport = async (req, res) => {
     try {
-        console.log(req.body);  
-        const { year, branch, semester, faculty } = req.body;
+        console.log(req.body);
+        const { year, branch, semester, faculty,semesterType } = req.body;
         const reportNumber = parseInt(req.params.reportNumber);
-        
-        // Base query object
-        let queryObj = { year };
-        
-        // Add branch to query if not ALL
-        if (branch !== 'ALL') {
-            queryObj.branch = branch;
-        }
-        
-        // Add semester to query if not ALL
-        if (semester !== 'ALL') {
-            queryObj.semester = semester;
-        }
-        
-        let students = [];
-        // Add headers based on report type
-        //common header
-        const headers = ['Roll No', 'Name', 'Email', 'Phone Number'];
-        
-        const extraHeaderInfoOne = ['Branch', 'Semester Type', 'Class Subgroup', 'Training Arranged By', 'Company Name', 'Company City'];
 
-        switch(reportNumber) {
-            case 1:
-                // Registration Form Data
-                if(queryObj.branch === 'ALL'){
-                    students = await StudentModel.find({}).select('rollNo name branch semesterType classSubgroup trainingArrangedBy phoneNumber email companyDetails.companyName companyDetails.companyCity');
-                }else{
-                    students = await StudentModel.find({
-                        branch,
-                    }).select('rollNo name branch semesterType classSubgroup trainingArrangedBy phoneNumber email companyDetails.companyName companyDetails.companyCity');
-                }
+        // Validate report number
+        if (isNaN(reportNumber) || reportNumber < 1 || reportNumber > 9) {
+            return res.status(400).json({ message: 'Invalid report number' });
+        }
 
-                break;
-                
+        // Convert year to date range
+        const startOfYear = new Date(`${year}-01-01T00:00:00.000Z`);
+        const endOfYear = new Date(`${year}-12-31T23:59:59.999Z`);
+
+        // Construct base filter
+        const filter = { createdAt: { $gte: startOfYear, $lte: endOfYear } };
+        if (branch && branch !== 'ALL') filter.branch = branch;
+        if (semester && semester !== 'ALL') filter.semesterType = semester;
+
+        // Modify filter based on report type
+        switch (reportNumber) {
             case 2:
-                // Students Verified
-                students = await StudentModel.find({
-                    ...queryObj,
-                    mentorverified: true
-                });
-                console.log(students);
-                
+                filter.mentorverified = true;
                 break;
-                
             case 3:
-                // Students not Verified
-                students = await StudentModel.find({
-                    ...queryObj,
-                    mentorverified: false
-                });
-                console.log(students);
+                filter.mentorverified = false;
                 break;
-                
             case 4:
-                // ALTERNATE semester students
-                students = await StudentModel.find({ 
-                    ...queryObj,
-                    internshipType: 'ALTERNATE' 
-                });
+                filter.semesterType = 'Alternate Semester';
                 break;
-                
             case 5:
-                // PROJECT semester students
-                students = await StudentModel.find({ 
-                    ...queryObj,
-                    internshipType: 'PROJECT' 
-                });
+                filter.internshipType = 'PROJECT';
                 break;
-                
             case 6:
-                // Students with STIPEND
-                students = await StudentModel.find({ 
-                    ...queryObj,
-                    stipend: { $exists: true, $ne: null } 
-                });
+                filter.stipend = { $exists: true, $ne: null };
                 break;
-                
             case 7:
-                // Students tagged with specific faculty
                 if (!faculty) {
                     return res.status(400).json({ message: 'Faculty email is required for this report' });
                 }
-                students = await StudentModel.find({ 
-                    ...queryObj,
-                    assignedFaculty: faculty 
-                });
+                filter.assignedFaculty = faculty;
                 break;
-                
             case 8:
-                // Phase 2 COMPLETE
-                students = await StudentModel.find({ 
-                    ...queryObj,
-                    phase2Status: 'COMPLETE' 
-                });
+                filter.phase2Status = 'COMPLETE';
                 break;
-                
             case 9:
-                // Phase 2 PENDING
-                students = await StudentModel.find({ 
-                    ...queryObj,
-                    phase2Status: 'PENDING' 
-                });
+                filter.phase2Status = 'PENDING';
                 break;
-                
-            default:
-                return res.status(400).json({ message: 'Invalid report number' });
         }
 
-        // Generate Excel file
+        // Define selected fields for each report type
+        let selectFields = 'rollNo name email phoneNumber';
+        if (reportNumber === 1) {
+            selectFields += ' branch semesterType classSubgroup trainingArrangedBy companyDetails.companyName companyDetails.companyCity';
+        }
+        if (reportNumber === 7) {
+            selectFields += ' stipend';
+        }
+
+        // Fetch students data
+        const students = await StudentModel.find(filter).select(selectFields);
+
+        // Create Excel workbook
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('Students');
 
-
-        if(reportNumber == 1){
-            headers.push(...extraHeaderInfoOne);
+        // Define headers dynamically
+        const headers = ['Roll No', 'Name', 'Email', 'Phone Number'];
+        if (reportNumber === 1) {
+            headers.push('Branch', 'Semester Type', 'Class Subgroup', 'Training Arranged By', 'Company Name', 'Company City');
+        }
+        if (reportNumber === 7) {
+            headers.push('Stipend Amount');
         }
 
-        if (reportNumber === 7) headers.push('Stipend Amount');
+        // Add headers to worksheet
         worksheet.addRow(headers);
 
-        // Add data
+        // Add student data
         students.forEach(student => {
             const row = [
                 student.rollNo,
@@ -507,22 +462,19 @@ module.exports.generateExcelReport = async (req, res) => {
                 student.email,
                 student.phoneNumber
             ];
-
             if (reportNumber === 1) {
                 row.push(
                     student.branch,
                     student.semesterType,
                     student.classSubgroup,
                     student.trainingArrangedBy,
-                    student.companyDetails.companyName,
-                    student.companyDetails.companyCity
+                    student.companyDetails?.companyName || 'N/A',
+                    student.companyDetails?.companyCity || 'N/A'
                 );
             }
-            
             if (reportNumber === 7) {
-                row.push(student.stipend);
+                row.push(student.stipend || 'N/A');
             }
-
             worksheet.addRow(row);
         });
 
@@ -536,7 +488,7 @@ module.exports.generateExcelReport = async (req, res) => {
             `attachment; filename=Report_${reportNumber}.xlsx`
         );
 
-        // Send the Excel file
+        // Send Excel file
         await workbook.xlsx.write(res);
         res.end();
 
@@ -545,4 +497,5 @@ module.exports.generateExcelReport = async (req, res) => {
         res.status(500).json({ message: 'Failed to generate report' });
     }
 };
+
 
