@@ -11,14 +11,7 @@ const studentRoutes = require('./routes/student.routes');
 const facultyRoutes = require('./routes/faculty.routes');
 const mentorRoutes = require('./routes/mentor.routes');
 const adminRoutes = require('./routes/admin.routes');
-
-app.use(cors({
-    origin: "http://localhost:5173", 
-    credentials: true, 
-    methods: ["GET", "POST", "PUT", "DELETE"], 
-    allowedHeaders: ["Content-Type", "Authorization"],
-}));
-
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 app.use(logger('dev'));
 app.use(express.urlencoded({extended:true}));

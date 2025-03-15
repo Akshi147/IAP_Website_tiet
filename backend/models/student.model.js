@@ -2,9 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
-function getPhase3() {
-    return require("../controllers/student.controller").phase3;
-  }  
+const { phase3 } = require("../controllers/student.controller");
 
 const StudentSchema = new mongoose.Schema({
     name: { type: String, required: true},
