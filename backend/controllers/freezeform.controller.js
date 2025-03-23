@@ -1,9 +1,5 @@
 const Fortnightly = require('../models/fortnightly.model');
 
-module.exports.createFortnightly = async (req, res) => {
-    console.log(req.body);
-};
-
 module.exports.submitFortnightlyReport = async (req, res) => {
     try {
         const studentId = req.student._id;
@@ -36,8 +32,11 @@ module.exports.getFortnightlyReports = async (req, res) => {
     try {
         const studentId = req.student._id;
         const reports = await Fortnightly.findOne({ studentId });
+        console.log(reports);
+        
 
         if (!reports) {
+            await Fortnightly.create({ studentId });
             return res.status(404).json({ message: 'No reports found' });
         }
 
