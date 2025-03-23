@@ -11,6 +11,7 @@ const studentRoutes = require('./routes/student.routes');
 const facultyRoutes = require('./routes/faculty.routes');
 const mentorRoutes = require('./routes/mentor.routes');
 const adminRoutes = require('./routes/admin.routes');
+const freezeformRoutes = require('./routes/freezeform.routes');
 app.use(cors({ origin: '*' }));
 app.use(express.json());
 app.use(logger('dev'));
@@ -20,6 +21,7 @@ app.use('/students',studentRoutes);
 app.use('/faculty',facultyRoutes);
 app.use('/mentors',mentorRoutes);
 app.use('/admin',adminRoutes);
+app.use('/freezeform', freezeformRoutes);
 
 
 

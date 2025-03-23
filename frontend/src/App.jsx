@@ -120,6 +120,7 @@ const App = () => {
       } />
       <Route path="/mentorregister" element={<MentorRegister />} />
       <Route path="/mentor/setPassword" element={<MentorSetPassword />} />
+      
 
       </Routes>
       

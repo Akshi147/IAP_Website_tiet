@@ -53,23 +53,23 @@ const UnderPhase2Verification = () => {
       setErrorMessage(error.response?.data?.error || "An error occurred. Please try again.");
     }
   };
-  const handleVerifys = async (rollNo) => {
-    try {
-      const response = await axios.post(
-        `http://localhost:4000/admin/unlockphase2/${rollNo}`,
-        {},
-        { headers: { Authorization: `Bearer ${localStorage.getItem("admin-token")}` } }
-      );
+  // const handleVerifys = async (rollNo) => {
+  //   try {
+  //     const response = await axios.post(
+  //       `http://localhost:4000/admin/unlockphase2/${rollNo}`,
+  //       {},
+  //       { headers: { Authorization: `Bearer ${localStorage.getItem("admin-token")}` } }
+  //     );
 
-      if (response.data.success) {
-        setStudents((prevStudents) => prevStudents.filter((student) => student.rollNo !== rollNo));
-      } else {
-        setErrorMessage("Failed to verify student document.");
-      }
-    } catch (error) {
-      setErrorMessage(error.response?.data?.error || "An error occurred. Please try again.");
-    }
-  };
+  //     if (response.data.success) {
+  //       setStudents((prevStudents) => prevStudents.filter((student) => student.rollNo !== rollNo));
+  //     } else {
+  //       setErrorMessage("Failed to verify student document.");
+  //     }
+  //   } catch (error) {
+  //     setErrorMessage(error.response?.data?.error || "An error occurred. Please try again.");
+  //   }
+  // };
 
   return (
     <>
@@ -94,7 +94,7 @@ const UnderPhase2Verification = () => {
       <div className="max-w-6xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
         <div className="px-6 py-5">
           <h2 className="text-center text-3xl font-extrabold text-gray-900 mb-6">
-            Students Under Document Verification
+            Students Under Phase 2 Form Verification
           </h2>
 
           {errorMessage && (
@@ -159,12 +159,12 @@ const UnderPhase2Verification = () => {
                             >
                               Verify Student
                             </button>
-                            <button
+                            {/* <button
                               onClick={() => handleVerifys(student.rollNo)}
                               className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
                             >
                               Dont Verify And Reunlock Phase 2 Form
-                            </button>
+                            </button> */}
                           </td>
                         </tr>
                       )}
