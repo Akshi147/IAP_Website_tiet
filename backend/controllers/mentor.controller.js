@@ -10,116 +10,70 @@ const sendEmail = require('../libs/nodemailer');
 // Register Mentor (Only Email Submission)
 module.exports.registerMentor = async (req, res) => {
     try {
-        //validation of email
+        // Validate email
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
         
-        //checking whether mentor exists or not in student model
-        const mentor = await studentModel.findOne({ mentorEmail: req.body.email });
+        // Check if mentor exists in the student model
+        const isTagged = await studentModel.findOne({ mentorEmail: req.body.email });
         
-        console.log(mentor);
-
-        if (!mentor) {
+        if (!isTagged) {
             return res.status(404).json({ 
                 success: false,
-                message: "Mentor not found. Please only register with the email that the student has tagged" 
+                message: "Mentor not found. Please register with the email tagged by a student." 
             });
         }
 
-        //mentor exists
-        console.log(mentor.mentorverified);
-        //mentor already verified
-        if (mentor.mentorverified) {
-            return res.status(400).json({ 
-                success: false,
-                message: "Mentor is already verified.Kindly Login" });
-        }
-        
+        let mentor = await mentorModel.findOne({ email: req.body.email });
 
-        //mentor not verified
-        //generate token
-        const token = mentor.generateAuthToken();
+        if (mentor) {
+            if (mentor.mentorverified) {
+                return res.status(400).json({ 
+                    success: false,
+                    message: "Mentor is already verified. Kindly Login." 
+                });
+            }
+        }
+
+        let newMentor = mentor || new mentorModel({ email: req.body.email });
+
+        if (!mentor) {
+            await newMentor.save();
+        }
+
+        // Generate token
+        const token = newMentor.generateAuthToken();
 
         // Send Email
-        await sendEmail(mentor.mentorEmail, "Set up your password", `
+        await sendEmail(req.body.email, "Set up your password", `
             <!DOCTYPE html>
             <html>
             <head>
                 <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                        margin: 0;
-                        padding: 0;
-                        background-color: #f8f8f8;
-                    }
-                    .container {
-                        width: 100%;
-                        text-align: center;
-                        padding: 20px;
-                    }
-                    .content {
-                        background-color: white;
-                        padding: 40px;
-                        margin: 20px auto;
-                        max-width: 600px;
-                        border-radius: 10px;
-                        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-                        text-align: left;
-                    }
-                    .title {
-                        font-size: 22px;
-                        font-weight: bold;
-                        color: #2b2b2b;
-                        text-align: center;
-                    }
-                    .message {
-                        font-size: 16px;
-                        color: #4d4d4d;
-                        margin-top: 10px;
-                    }
-                    .button {
-                        display: inline-block;
-                        margin-top: 20px;
-                        padding: 12px 24px;
-                        background-color: #b46dd3;
-                        color: white;
-                        text-decoration: none;
-                        font-size: 16px;
-                        border-radius: 5px;
-                        font-weight: bold;
-                        text-align: center;
-                    }
-                    .footer {
-                        margin-top: 20px;
-                        font-size: 14px;
-                        color: #777;
-                        text-align: center;
-                    }
+                    body { font-family: Arial, sans-serif; background-color: #f8f8f8; margin: 0; padding: 0; }
+                    .container { width: 100%; text-align: center; padding: 20px; }
+                    .content { background-color: white; padding: 40px; margin: 20px auto; max-width: 600px; 
+                               border-radius: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); text-align: left; }
+                    .title { font-size: 22px; font-weight: bold; color: #2b2b2b; text-align: center; }
+                    .message { font-size: 16px; color: #4d4d4d; margin-top: 10px; }
+                    .button { display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #b46dd3;
+                              color: white; text-decoration: none; font-size: 16px; border-radius: 5px; font-weight: bold; }
+                    .footer { margin-top: 20px; font-size: 14px; color: #777; text-align: center; }
                 </style>
             </head>
             <body>
                 <div class="container">
-                    <!-- University Header with Table -->
                     <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #b46dd3; color: white; text-align: center;">
-                        <tr>
-                            <td style="padding: 20px; font-size: 24px; font-weight: bold;">IAP CELL</td>
-                        </tr>
-                        <tr>
-                            <td style="font-size: 16px;">THAPAR INSTITUTE OF ENGINEERING AND TECHNOLOGY, PATIALA</td>
-                        </tr>
-                        <tr>
-                            <td style="font-size: 16px;">(DEEMED TO BE UNIVERSITY)</td>
-                        </tr>
+                        <tr><td style="padding: 20px; font-size: 24px; font-weight: bold;">IAP CELL</td></tr>
+                        <tr><td style="font-size: 16px;">THAPAR INSTITUTE OF ENGINEERING AND TECHNOLOGY, PATIALA</td></tr>
+                        <tr><td style="font-size: 16px;">(DEEMED TO BE UNIVERSITY)</td></tr>
                     </table>
-
                     <div class="content">
                         <div class="title">6 MONTH PROJECT SEMESTER</div>
-                        <p class="message">Respected Sir/Madam</p>
-                        <p class="message">Please set up you password by cicking the link below:</p>
-                        
-
+                        <p class="message">Respected Sir/Madam,</p>
+                        <p class="message">Please set up your password by clicking the link below:</p>
                         <div style="text-align: center;">
                             <a href="http://localhost:5173/mentor/setPassword?token=${token}" class="button">Set password</a>
                         </div>
@@ -127,20 +81,18 @@ module.exports.registerMentor = async (req, res) => {
                 </div>
             </body>
             </html>
-            `);
+        `);
         
         res.status(201).json({
             success: true, 
-            message: "Password setup link sent." ,
+            message: "Password setup link sent.",
             token
         });
     } catch (err) {
-        res.status(500).json({ 
-            success: false,
-            message: err.message 
-        });
+        res.status(500).json({ success: false, message: err.message });
     }
 };
+
 
 
 
@@ -167,37 +119,20 @@ module.exports.setPassword = async(req, res) => {
                 message: "Unauthorized: Invalid token"
             })
         }
+        const mentor = await mentorModel.findById(decoded._id);
 
-
-        const mentorLinked = await studentModel.findById(decoded._id);
-        
-        //mentor not found
-        if(!mentorLinked){
-            return res.status(404).json({
-                success: false,
-                message: "Mentor not found"
-            })
-        }
-        
         //mentor with that id found
         //set the password
         const hashedPassword = await mentorModel.hashPassword(password);
 
-        //mark mentor as verified
-        mentorLinked.mentorverified = true;
-        await mentorLinked.save();    //entry to DB
+        mentor.password = hashedPassword;
+        mentor.verified = true;
+        mentor.name = name;
+        mentor.designation = designation;
+        mentor.contact = contact;
+        await mentor.save();
         
-        //save entry to the 
-        const newMentor = new mentorModel({
-            password: hashedPassword,
-            email: mentorLinked.mentorEmail,
-            verified: true,
-            name: name,
-            designation: designation,
-            contact: contact
-        })
-
-        await newMentor.save();
+        
 
         res.status(200).json({
             success: true,

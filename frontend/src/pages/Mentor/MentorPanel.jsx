@@ -122,7 +122,7 @@ const MentorPanel = () => {
                           {student.semesterType}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {student.companyName}
+                          {student.companyDetails.companyName}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -130,7 +130,7 @@ const MentorPanel = () => {
                               ? 'bg-green-100 text-green-800' 
                               : 'bg-yellow-100 text-yellow-800'
                           }`}>
-                            {student.isVerified ? 'Verified' : 'Pending'}
+                            {student.phase3verified ? 'Verified' : 'Pending'}
                           </span>
                         </td>
                       </tr>
