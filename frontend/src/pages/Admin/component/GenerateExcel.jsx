@@ -25,8 +25,8 @@ const GenerateExcel = () => {
       return;
     }
 
-    // For report 8, validate faculty email
-    if (reportNumber === 8 && !facultyEmail) {
+    // For report 7, validate faculty email
+    if (reportNumber === 7 && !facultyEmail) {
       setError('Please select a faculty');
       return;
     }
@@ -34,13 +34,13 @@ const GenerateExcel = () => {
     try {
       const token = localStorage.getItem('admin-token');
       
-      // Only include faculty in payload for report 8
+      // Only include faculty in payload for report 7
       const payload = {
         year,
         branch,
         semester,
         ...(reportNumber===4 && {semesterType:'Alternate Semester'}),
-        ...(reportNumber === 8 && { faculty: facultyEmail })
+        ...(reportNumber === 7 && { faculty: facultyEmail })
       };
 
       const response = await axios.post(
@@ -58,7 +58,9 @@ const GenerateExcel = () => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `Report_${reportNumber}.xlsx`);
+      const contentDisposition = (response.headers['content-disposition']);
+      const fileName = contentDisposition.split(" ")[1].split("=")[1];
+      link.setAttribute('download', fileName);
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -90,7 +92,7 @@ const GenerateExcel = () => {
           <button
             key={faculty.email}
             onClick={() => {
-              handleGenerateReport(8, faculty.email);
+              handleGenerateReport(7, faculty.email);
               setShowFacultyDropdown(false);
             }}
             className="w-full p-3 text-left hover:bg-purple-50 border-b last:border-b-0 transition-colors"
@@ -175,12 +177,12 @@ const GenerateExcel = () => {
                   onChange={(e) => setSemester(e.target.value)}
                 >
                   <option value="">Choose one...</option>
-                  <option value="1">Semester 1</option>
+                  {/*<option value="1">Semester 1</option>
                   <option value="2">Semester 2</option>
                   <option value="3">Semester 3</option>
                   <option value="4">Semester 4</option>
                   <option value="5">Semester 5</option>
-                  <option value="6">Semester 6</option>
+                  <option value="6">Semester 6</option>*/}
                   <option value="7">Semester 7</option>
                   <option value="8">Semester 8</option>
                   <option value="ALL">All Semesters</option>
@@ -203,7 +205,7 @@ const GenerateExcel = () => {
               
               <ReportButton 
                 number="3" 
-                title="Students not Verify yet" 
+                title="Students not Verified yet" 
                 onClick={() => handleGenerateReport(3)} 
               />
               
@@ -221,7 +223,7 @@ const GenerateExcel = () => {
               
               <ReportButton 
                 number="6" 
-                title="Students getting STIPEN (with amount)" 
+                title="Students getting STIPEND (with amount)" 
                 onClick={() => handleGenerateReport(6)} 
               />
               

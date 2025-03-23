@@ -12,7 +12,13 @@ const facultyRoutes = require('./routes/faculty.routes');
 const mentorRoutes = require('./routes/mentor.routes');
 const adminRoutes = require('./routes/admin.routes');
 const freezeformRoutes = require('./routes/freezeform.routes');
-app.use(cors({ origin: '*' }));
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Expose-Headers', 'Content-Disposition');
+    next();
+});
+
+app.use(cors({ origin: '*' }, {exposedHeaders: ['Content-Disposition']}));
 app.use(express.json());
 app.use(logger('dev'));
 app.use(express.urlencoded({extended:true}));
