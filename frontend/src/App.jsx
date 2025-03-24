@@ -29,6 +29,10 @@ import {MentorProtectedRoute} from './pages/Mentor/MentorProtectedRoute';
 import MentorPanel from './pages/Mentor/MentorPanel';
 import { MentorRegister } from './pages/Mentor/MentorRegister';
 import { MentorSetPassword } from './pages/Mentor/MentorSetPassword';
+import ForgotMentorPassword from './pages/Mentor/ForgotMentorPassword.jsx';
+import ResetMentorPassword from './pages/Mentor/ResetMentorPassword.jsx';
+import FreezeAndUnfreeze from './pages/Admin/component/freezeforms.jsx';
+import StudentDashboard from './pages/Student/component/Dashboard.jsx';
 
 const App = () => {
   return (
@@ -68,6 +72,11 @@ const App = () => {
         <Route path="/generateExcel" element={
           <AdminProtectedRoute>
             <GenerateExcel />
+          </AdminProtectedRoute>
+        } />
+        <Route path="/freezeforms" element={
+          <AdminProtectedRoute>
+            <FreezeAndUnfreeze />
           </AdminProtectedRoute>
         } />
         <Route path="/adminlogin" element={<AdminLogin />} />
@@ -120,7 +129,13 @@ const App = () => {
       } />
       <Route path="/mentorregister" element={<MentorRegister />} />
       <Route path="/mentor/setPassword" element={<MentorSetPassword />} />
-      
+      <Route path='/mentor/forgot-password' element={<ForgotMentorPassword />} />
+      <Route path='/reset-mentorpassword' element={<ResetMentorPassword />} />
+      <Route path='/dashboard' element={
+          <StudentProtectedRoute>
+            <StudentDashboard />
+          </StudentProtectedRoute>
+        } />
 
       </Routes>
       

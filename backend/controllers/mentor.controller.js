@@ -27,9 +27,10 @@ module.exports.registerMentor = async (req, res) => {
         }
 
         let mentor = await mentorModel.findOne({ email: req.body.email });
+        console.log(mentor);
 
         if (mentor) {
-            if (mentor.mentorverified) {
+            if (mentor.verified) {
                 return res.status(400).json({ 
                     success: false,
                     message: "Mentor is already verified. Kindly Login." 
@@ -227,7 +228,7 @@ module.exports.forgotPassword = async(req, res) => {
         await mentor.save();
 
 
-        const resetLink = `http://localhost:5173/reset-password?token=${resetToken}`;
+        const resetLink = `http://localhost:5173/reset-mentorpassword?token=${resetToken}`;
 
         await sendEmail(mentor.email, "Reset your password", `
 <!DOCTYPE html>

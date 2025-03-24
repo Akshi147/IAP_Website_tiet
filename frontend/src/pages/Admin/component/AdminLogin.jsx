@@ -51,7 +51,7 @@ export function AdminLogin() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <input
-                  type="text"
+                  type="email"
                   placeholder="Admin Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}

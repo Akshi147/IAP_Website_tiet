@@ -10,8 +10,10 @@ export function Header({
     { name: "Student Panel", path: "/student" },
     { name: "Faculty Panel", path: "/faculty" },
     { name: "Mentor Panel", path: "/mentor" },
+    { name: "Resources", path: "/resources" },
+    
   ],
-  downloadButton = { text: "Download Files", onClick: () => {} } // Default Download Button
+  downloadButton = { text: "Download Files", onClick: () => {} }
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -20,12 +22,12 @@ export function Header({
       <div className="container mx-auto px-4">
         <nav className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="font-bold text-xl">
+          <Link to="/" className="font-bold text-xl whitespace-nowrap">
             IAP CELL
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
+          {/* Desktop Navigation (Wrapped, No Scroll, No Squeeze) */}
+          <div className="hidden md:flex flex-wrap items-center gap-4 justify-center max-w-[70%] overflow-hidden">
             {navItems.map(({ name, path }, index) => (
               <Link
                 key={index}
@@ -36,12 +38,16 @@ export function Header({
                 <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-600 transition-all duration-300 ease-in-out group-hover:w-full"></span>
               </Link>
             ))}
-            {downloadButton && (
+          </div>
+
+          {/* Download Button */}
+          {downloadButton && (
+            <div className="hidden md:block">
               <Button variant="outline" onClick={downloadButton.onClick}>
                 {downloadButton.text}
               </Button>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Mobile Menu Button */}
           <button

@@ -76,9 +76,7 @@ const StudentPanel = () => {
         <>
           <Header
             navItems={[
-              { name: "Dashboard", path: "/dashboard" },
-              { name: "Courses", path: "/courses" },
-              { name: "Profile", path: "/profile" },
+              { name: "Profile", path: "/dashboard" },
             ]}
             downloadButton={{
               text: "Log Out",
@@ -95,11 +93,9 @@ const StudentPanel = () => {
     if (studentData.verified && studentData.mentorverified && studentData.phase3verified) {
       return (
         <>
-          <Header
+         <Header
             navItems={[
-              { name: "Dashboard", path: "/dashboard" },
-              { name: "Courses", path: "/courses" },
-              { name: "Profile", path: "/profile" },
+              { name: "Profile", path: "/dashboard" },
             ]}
             downloadButton={{
               text: "Log Out",
@@ -116,11 +112,9 @@ const StudentPanel = () => {
     if (studentData.mentorverified) {
       return (
         <>
-          <Header
+         <Header
             navItems={[
-              { name: "Dashboard", path: "/dashboard" },
-              { name: "Courses", path: "/courses" },
-              { name: "Profile", path: "/profile" },
+              { name: "Profile", path: "/dashboard" },
             ]}
             downloadButton={{
               text: "Log Out",
@@ -136,17 +130,15 @@ const StudentPanel = () => {
     // Default: All documents uploaded but waiting for mentor verification
     return (
       <>
-        <Header
-          navItems={[
-            { name: "Dashboard", path: "/dashboard" },
-            { name: "Courses", path: "/courses" },
-            { name: "Profile", path: "/profile" },
-          ]}
-          downloadButton={{
-            text: "Log Out",
-            onClick: () => navigate("/student/logout"),
-          }}
-        />
+       <Header
+            navItems={[
+              { name: "Profile", path: "/dashboard" },
+            ]}
+            downloadButton={{
+              text: "Log Out",
+              onClick: () => navigate("/student/logout"),
+            }}
+          />
         <Phase2/>
         <Footer />
       </>
