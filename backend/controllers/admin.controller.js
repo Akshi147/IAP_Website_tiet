@@ -390,48 +390,62 @@ module.exports.generateExcelReport = async (req, res) => {
         const startOfYear = new Date(`${year}-01-01T00:00:00.000Z`);
         const endOfYear = new Date(`${year}-12-31T23:59:59.999Z`);
 
-        // Construct base filter
+        // Construct base filter    
+        // (PS:if semester required, then later add semesterType:semester along with year in the filter)
+        // (but now, since not accepted semester during registration)
         const filter = { createdAt: { $gte: startOfYear, $lte: endOfYear } };
         if (branch && branch !== 'ALL') filter.branch = branch;
-        if (semester && semester !== 'ALL') filter.semesterType = semester;
+        // if (semester && semester !== 'ALL') filter.semesterType = semester;
 
         // Modify filter based on report type
+        let report_name = "";
         switch (reportNumber) {
+            case 1:
+                report_name = 'Registration_Form_Data';
+                break;
             case 2:
                 filter.mentorverified = true;
+                report_name = 'Students_Verified';
                 break;
             case 3:
                 filter.mentorverified = false;
+                report_name = 'Students_Not_Verified_Yet';
                 break;
             case 4:
                 filter.semesterType = 'Alternate Semester';
+                report_name = 'Students_Alternate_Semester';
                 break;
             case 5:
-                filter.internshipType = 'PROJECT';
+                filter.semesterType = {$in: ['Project Semester-Research', 'Project Semester-Company']};
+                report_name = 'Students_Project_Semester';
                 break;
             case 6:
-                filter.stipend = { $exists: true, $ne: null };
+                filter.stipend = { $exists: true};  //if stipend == 0 -> N/A will be in the cell
+                report_name = 'Students_Getting_Stipend';
                 break;
             case 7:
                 if (!faculty) {
                     return res.status(400).json({ message: 'Faculty email is required for this report' });
                 }
                 filter.assignedFaculty = faculty;
+                report_name = 'Students_Assigned_To_Faculty';
                 break;
             case 8:
-                filter.phase2Status = 'COMPLETE';
+                filter.phase3 = true;
+                report_name = 'Students_Under_Phase2_Complete';
                 break;
             case 9:
-                filter.phase2Status = 'PENDING';
+                filter.phase3 = false;
+                report_name = 'Students_Registration_Phase2_Pending';
                 break;
         }
 
         // Define selected fields for each report type
-        let selectFields = 'rollNo name email phoneNumber';
-        if (reportNumber === 1) {
+        let selectFields = 'rollNo name email phoneNumber branch classSubgroup';
+        if (reportNumber === 1 || reportNumber === 2 || reportNumber === 3) {
             selectFields += ' branch semesterType classSubgroup trainingArrangedBy companyDetails.companyName companyDetails.companyCity';
         }
-        if (reportNumber === 7) {
+        if (reportNumber === 6) {
             selectFields += ' stipend';
         }
 
@@ -443,11 +457,11 @@ module.exports.generateExcelReport = async (req, res) => {
         const worksheet = workbook.addWorksheet('Students');
 
         // Define headers dynamically
-        const headers = ['Roll No', 'Name', 'Email', 'Phone Number'];
-        if (reportNumber === 1) {
-            headers.push('Branch', 'Semester Type', 'Class Subgroup', 'Training Arranged By', 'Company Name', 'Company City');
+        const headers = ['Roll No', 'Name', 'Email', 'Phone Number', 'Branch', 'Class Subgroup'];
+        if (reportNumber === 1 || reportNumber === 2 || reportNumber === 3) {
+            headers.push('Semester Type', 'Training Arranged By', 'Company Name', 'Company City');
         }
-        if (reportNumber === 7) {
+        if (reportNumber === 6) {
             headers.push('Stipend Amount');
         }
 
@@ -460,23 +474,26 @@ module.exports.generateExcelReport = async (req, res) => {
                 student.rollNo,
                 student.name,
                 student.email,
-                student.phoneNumber
+                student.phoneNumber,
+                student.branch,
+                student.classSubgroup
             ];
-            if (reportNumber === 1) {
+            if (reportNumber === 1 || reportNumber === 2 || reportNumber === 3) {
                 row.push(
-                    student.branch,
                     student.semesterType,
-                    student.classSubgroup,
                     student.trainingArrangedBy,
                     student.companyDetails?.companyName || 'N/A',
                     student.companyDetails?.companyCity || 'N/A'
                 );
             }
-            if (reportNumber === 7) {
+            if (reportNumber === 6) {
                 row.push(student.stipend || 'N/A');
             }
             worksheet.addRow(row);
         });
+
+
+        console.log("Report Name: ", report_name);
 
         // Set response headers
         res.setHeader(
@@ -485,7 +502,7 @@ module.exports.generateExcelReport = async (req, res) => {
         );
         res.setHeader(
             'Content-Disposition',
-            `attachment; filename=Report_${reportNumber}.xlsx`
+            `attachment; filename=Report_${report_name}.xlsx`
         );
 
         // Send Excel file
@@ -497,3 +514,4 @@ module.exports.generateExcelReport = async (req, res) => {
         res.status(500).json({ message: 'Failed to generate report' });
     }
 };
+

@@ -1,6 +1,7 @@
 const studentModel = require('../models/student.model');
 const { validationResult } = require('express-validator');
 const blacklistModel = require('../models/blacklist.model');
+const fortnightlySchema = require('../models/fortnightly.model');
 const jwt = require('jsonwebtoken')
 const sendEmail = require('../libs/nodemailer')
 const fs = require('fs');
@@ -37,6 +38,7 @@ module.exports.registerStudent = async (req, res) => {
             },
         });
         await student.save();
+        await fortnightlySchema.create({ studentId: student._id });
         const token = student.generateAuthToken();
         res.cookie('token',token);
         await sendEmail(student.email, 'Verify Yourself', `<!DOCTYPE html>
