@@ -53,9 +53,7 @@ const StudentPanel = () => {
       <>
         <Navbar
           navItems={[
-            { name: "Dashboard", path: "/dashboard" },
-            { name: "Courses", path: "/courses" },
-            { name: "Profile", path: "/profile" },
+            { name: "Profile", path: "/dashboard" },
           ]}
           downloadButton={{
             text: "Log Out",
@@ -73,16 +71,14 @@ const StudentPanel = () => {
       return (
         <>
           <Navbar
-            navItems={[
-              { name: "Dashboard", path: "/dashboard" },
-              { name: "Courses", path: "/courses" },
-              { name: "Profile", path: "/profile" },
-            ]}
-            downloadButton={{
-              text: "Log Out",
-              onClick: () => navigate("/student/logout"),
-            }}
-          />
+          navItems={[
+            { name: "Profile", path: "/dashboard" },
+          ]}
+          downloadButton={{
+            text: "Log Out",
+            onClick: () => navigate("/student/logout"),
+          }}
+        />
           <StudentDocUpload uploadedDocs={uploadedDocs} />
         </>
       );
@@ -93,16 +89,14 @@ const StudentPanel = () => {
       return (
         <>
           <Navbar
-            navItems={[
-              { name: "Dashboard", path: "/dashboard" },
-              { name: "Courses", path: "/courses" },
-              { name: "Profile", path: "/profile" },
-            ]}
-            downloadButton={{
-              text: "Log Out",
-              onClick: () => navigate("/student/logout"),
-            }}
-          />
+          navItems={[
+            { name: "Profile", path: "/dashboard" },
+          ]}
+          downloadButton={{
+            text: "Log Out",
+            onClick: () => navigate("/student/logout"),
+          }}
+        />
           <StudentDashboard />
         </>
       );
@@ -113,9 +107,7 @@ const StudentPanel = () => {
       <>
         <Navbar
           navItems={[
-            { name: "Dashboard", path: "/dashboard" },
-            { name: "Courses", path: "/courses" },
-            { name: "Profile", path: "/profile" },
+            { name: "Profile", path: "/dashboard" },
           ]}
           downloadButton={{
             text: "Log Out",

@@ -13,7 +13,7 @@ const AdminPanel = () => {
         { name: "Verify Student", path: "/admin" },
         {name:"Delete Student",path:"/deletestudent"},
         {name:"Generate Excel Sheet",path:"/generateExcel"},
-        
+        {name:"Freeze/Unfreeze Forms",path:"/freezeforms"},
         { name: "Verify Faculty", path: "/verifyfaculty" },
         { name: "Verify Mentor", path: "/mentor" },
         {name:"Change Password",path:"/adminchangepassword"}

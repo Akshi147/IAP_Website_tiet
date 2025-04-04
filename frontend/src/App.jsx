@@ -11,6 +11,8 @@ import StudentProtectedRoute from './pages/studentPanel/studentProtectedRoute';
 import StudentLogout from './pages/studentPanel/studentLogout/studentLogout';
 import ForgotStudentPassword from './pages/studentPanel/studentForgotPassword/stuForgot';
 import StudentResetPassword from './pages/studentPanel/studentResetPassword/stuResetPassword';
+import StudentDashboard from './pages/StudentPanel/stuDashboard/stuDashboard.jsx';
+
 
 import FacultyProtectedRoute from './pages/facultyPanel/facultyProtectedRoute';
 import FacultyLogin from './pages/facultyPanel/facultyLogin/facultyLogin';
@@ -25,6 +27,8 @@ import MentorLogout from './pages/mentorPanel/mentorLogout/mentorLogout';
 import MentorRegister from './pages/mentorPanel/mentorRegister/mentorRegister';
 import MentorAssignedStudents from './pages/mentorPanel/mentorAssignedStu/mentorAssignedStu';
 import MentorDetailForm from './pages/mentorPanel/mentorDetailForm/mentorDetailForm';
+import MentorForgotPassword from './pages/mentorPanel/mentorForgotPassword/mentorForgot.jsx';
+import MentorResetPassword from './pages/mentorPanel/mentorResetPass/ResetMentorPassword.jsx';
 
 import AdminProtectedRoute from './pages/adminPanel/adminProtected';
 import AdminLogout from './pages/adminPanel/adminLogout/adminLogout';
@@ -37,6 +41,8 @@ import AdminStudentUnderDocumentVerification from './pages/adminPanel/underDocVe
 import AdminStudentUnderPhase2Verification from './pages/adminPanel/underPhase2Verify/adminUnderPhase2Verify';
 import AdminDeleteStudent from './pages/adminPanel/adminDeleteStu/adminDeleteStu';
 import AdminGenerateExcel from './pages/adminPanel/adminExcelGenerate/adminExcelGenerate';
+import AdminFreezeForm from './pages/adminPanel/adminFreezeForm/adminfreezeforms.jsx';
+
 
 const App = () => {
   return (
@@ -47,6 +53,11 @@ const App = () => {
         <Route path="/student" element={
           <StudentProtectedRoute>
             <StudentPanel />
+          </StudentProtectedRoute>
+        } />
+        <Route path='/dashboard' element={
+          <StudentProtectedRoute>
+            <StudentDashboard />
           </StudentProtectedRoute>
         } />
         <Route path="/student/logout" element={
@@ -80,6 +91,8 @@ const App = () => {
         <Route path="/mentors/login" element={<MentorLogin />} />
         <Route path="/mentors/register" element={<MentorRegister />} />
         <Route path="/mentors/setPassword" element={<MentorDetailForm />} />
+        <Route path='/mentor/forgot-password' element={<MentorForgotPassword />} />
+      <Route path='/reset-mentorpassword' element={<MentorResetPassword />} />
         <Route path="/mentors/logout" element={
           <MentorProtectedRoute>
             <MentorLogout />
@@ -131,6 +144,11 @@ const App = () => {
         <Route path="/generateExcel" element={
           <AdminProtectedRoute>
             <AdminGenerateExcel />
+          </AdminProtectedRoute>
+        } />
+        <Route path="/freezeforms" element={
+          <AdminProtectedRoute>
+            <AdminFreezeForm />
           </AdminProtectedRoute>
         } />
       </Routes>

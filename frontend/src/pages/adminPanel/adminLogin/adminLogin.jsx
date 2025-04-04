@@ -49,7 +49,7 @@ const AdminLogin = () => {
             <form onSubmit={handleSubmit} className={styles.form}>
               <div className={styles.inputContainer}>
                 <input
-                  type="text"
+                  type="email"
                   placeholder="Admin Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}

@@ -22,6 +22,7 @@ const Navbar = ({
     { name: "Student Panel", path: "/login" },
     { name: "Faculty Panel", path: "/faculty" },
     { name: "Mentor Panel", path: "/mentors/login" },
+    { name: "Resources", path: "/resources" },
   ],
   downloadButton 
 }) => {
