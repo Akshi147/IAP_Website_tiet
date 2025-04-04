@@ -31,7 +31,7 @@ const StudentDashboard = () => {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
 
-        const { trainingStartDate, trainingEndDate, mentorContact, phoneNumber, mentorEmail, mentorName, stipend, phase3 } = response.data.student;
+        const { trainingStartDate, trainingEndDate, mentorContact, phoneNumber, mentorEmail, mentorName, stipend, phase3verified } = response.data.student;
         const { companyCountry, companyCity, companyName, completeAddress, landmark } = response.data.student.companyDetails;
 
         setFormData({
@@ -49,7 +49,7 @@ const StudentDashboard = () => {
           landmark: landmark || "",
         });
 
-        setIsPhase3Locked(phase3);
+        setIsPhase3Locked(phase3verified);
       } catch (error) {
         console.error("Error fetching profile data:", error);
         setErrorMessage("Failed to load profile data. Please try again.");

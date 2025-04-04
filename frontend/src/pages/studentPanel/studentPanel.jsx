@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import Navbar from "../../components/navbar/navbar";
+import { Header } from "../../components/header";
+import { Footer } from "../../components/footer";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import StudentDocUpload from "./studentDocUpload/studentDocUpload";
-import StudentDashboard from "./studentDashboardafterVerify/stuDashboardAfterVerify";
-import Verify from "./studentAccVerify/studentAccVerify";
-import StudentDocVerifyPhase from "./studentDocVerifyPhase/stuDocVerifyPhase";
-import styles from "./studentPanel.module.css"; // Import the CSS module
+import DocumentUpload from "./component/DocumentUpload";
+import Phase3 from "./component/Phase3"; // Assuming Phase3 is the final phase component
+import Verify from "./component/Verify"; // Assuming this is the Verify component
+import Phase2 from "./component/Phase2";
+import Fortnightly from "./component/Fortnightly";
 
 const StudentPanel = () => {
   const navigate = useNavigate();
@@ -41,8 +42,8 @@ const StudentPanel = () => {
 
   if (loading) {
     return (
-      <div className={styles.loadingContainer}>
-        <p className={styles.loadingText}>Loading...</p>
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold">Loading...</p>
       </div>
     );
   }
@@ -51,9 +52,11 @@ const StudentPanel = () => {
   if (studentData && !studentData.verified) {
     return (
       <>
-        <Navbar
+        <Header
           navItems={[
-            { name: "Profile", path: "/dashboard" },
+            { name: "Dashboard", path: "/dashboard" },
+            { name: "Courses", path: "/courses" },
+            { name: "Profile", path: "/profile" },
           ]}
           downloadButton={{
             text: "Log Out",
@@ -61,6 +64,7 @@ const StudentPanel = () => {
           }}
         />
         <Verify />
+        <Footer />
       </>
     );
   }
@@ -70,16 +74,40 @@ const StudentPanel = () => {
     if (!uploadedDocs.trainingLetter || !uploadedDocs.feeReceipt) {
       return (
         <>
-          <Navbar
-          navItems={[
-            { name: "Profile", path: "/dashboard" },
-          ]}
-          downloadButton={{
-            text: "Log Out",
-            onClick: () => navigate("/student/logout"),
-          }}
-        />
-          <StudentDocUpload uploadedDocs={uploadedDocs} />
+          <Header
+            navItems={[
+              { name: "Dashboard", path: "/dashboard" },
+              { name: "Courses", path: "/courses" },
+              { name: "Profile", path: "/profile" },
+            ]}
+            downloadButton={{
+              text: "Log Out",
+              onClick: () => navigate("/student/logout"),
+            }}
+          />
+          <DocumentUpload uploadedDocs={uploadedDocs} />
+          <Footer />
+        </>
+      );
+    }
+
+    // Check for Phase 4 (Fortnightly Reports) first
+    if (studentData.verified && studentData.mentorverified && studentData.phase3verified) {
+      return (
+        <>
+          <Header
+            navItems={[
+              { name: "Dashboard", path: "/dashboard" },
+              { name: "Courses", path: "/courses" },
+              { name: "Profile", path: "/profile" },
+            ]}
+            downloadButton={{
+              text: "Log Out",
+              onClick: () => navigate("/student/logout"),
+            }}
+          />
+          <Fortnightly />
+          <Footer />
         </>
       );
     }
@@ -88,16 +116,19 @@ const StudentPanel = () => {
     if (studentData.mentorverified) {
       return (
         <>
-          <Navbar
-          navItems={[
-            { name: "Profile", path: "/dashboard" },
-          ]}
-          downloadButton={{
-            text: "Log Out",
-            onClick: () => navigate("/student/logout"),
-          }}
-        />
-          <StudentDashboard />
+          <Header
+            navItems={[
+              { name: "Dashboard", path: "/dashboard" },
+              { name: "Courses", path: "/courses" },
+              { name: "Profile", path: "/profile" },
+            ]}
+            downloadButton={{
+              text: "Log Out",
+              onClick: () => navigate("/student/logout"),
+            }}
+          />
+          <Phase3 />
+          <Footer />
         </>
       );
     }
@@ -105,16 +136,19 @@ const StudentPanel = () => {
     // Default: All documents uploaded but waiting for mentor verification
     return (
       <>
-        <Navbar
+        <Header
           navItems={[
-            { name: "Profile", path: "/dashboard" },
+            { name: "Dashboard", path: "/dashboard" },
+            { name: "Courses", path: "/courses" },
+            { name: "Profile", path: "/profile" },
           ]}
           downloadButton={{
             text: "Log Out",
             onClick: () => navigate("/student/logout"),
           }}
         />
-        <StudentDocVerifyPhase />
+        <Phase2/>
+        <Footer />
       </>
     );
   }

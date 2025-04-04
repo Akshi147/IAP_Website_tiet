@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../../../components/navbar/navbar";
-import styles from './adminUnderPhase2Verify.module.css';
+import { Footer } from "../../../components/footer";
+import { Header } from "../../../components/header";
 
 const AdminStudentUnderPhase2Verification = () => {
   const [students, setStudents] = useState([]);
@@ -53,33 +53,34 @@ const AdminStudentUnderPhase2Verification = () => {
       setErrorMessage(error.response?.data?.error || "An error occurred. Please try again.");
     }
   };
-  const handleVerifys = async (rollNo) => {
-    try {
-      const response = await axios.post(
-        `http://localhost:4000/admin/unlockphase2/${rollNo}`,
-        {},
-        { headers: { Authorization: `Bearer ${localStorage.getItem("admin-token")}` } }
-      );
+  // const handleVerifys = async (rollNo) => {
+  //   try {
+  //     const response = await axios.post(
+  //       `http://localhost:4000/admin/unlockphase2/${rollNo}`,
+  //       {},
+  //       { headers: { Authorization: `Bearer ${localStorage.getItem("admin-token")}` } }
+  //     );
 
-      if (response.data.success) {
-        setStudents((prevStudents) => prevStudents.filter((student) => student.rollNo !== rollNo));
-      } else {
-        setErrorMessage("Failed to verify student document.");
-      }
-    } catch (error) {
-      setErrorMessage(error.response?.data?.error || "An error occurred. Please try again.");
-    }
-  };
+  //     if (response.data.success) {
+  //       setStudents((prevStudents) => prevStudents.filter((student) => student.rollNo !== rollNo));
+  //     } else {
+  //       setErrorMessage("Failed to verify student document.");
+  //     }
+  //   } catch (error) {
+  //     setErrorMessage(error.response?.data?.error || "An error occurred. Please try again.");
+  //   }
+  // };
 
   return (
     <>
-    <Navbar
-      navLinks={[
-      {name:"Students Under Document Verification",path:"/underdocumentverification"},
+    <Header
+      navItems={[
+        {name:"Students Under Document Verification",path:"/underdocumentverification"},
         {name:"Students In Phase 2",path:"/phase2verification"},
         { name: "Verify Student", path: "/admin" },
         {name:"Delete Student",path:"/deletestudent"},
-        {name: "Generate Excel", path: "/generateexcel" },
+        {name:"Generate Excel Sheet",path:"/generateExcel"},
+        
         { name: "Verify Faculty", path: "/verifyfaculty" },
         { name: "Verify Mentor", path: "/mentor" },
         {name:"Change Password",path:"/adminchangepassword"}
@@ -89,53 +90,53 @@ const AdminStudentUnderPhase2Verification = () => {
         onClick: () => navigate("/adminlogout"),
       }}
     />
-    <div className={styles.container}>
-        <div className={styles.card}>
-          <div className={styles.cardContent}>
-            <h2 className={styles.heading}>
-            Students Under Document Verification
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
+        <div className="px-6 py-5">
+          <h2 className="text-center text-3xl font-extrabold text-gray-900 mb-6">
+            Students Under Phase 2 Form Verification
           </h2>
 
           {errorMessage && (
-            <div className={styles.errorMessage}>❌ {errorMessage}</div>
+            <div className="mb-4 text-red-700 bg-red-100 p-3 rounded-lg text-center">❌ {errorMessage}</div>
           )}
 
           {loading ? (
-            <div className={styles.loadingContainer}>
-                <div className={styles.loader}></div>
-              </div>
+            <div className="flex justify-center py-10">
+              <div className="w-12 h-12 border-4 border-purple-500 border-dashed rounded-full animate-spin"></div>
+            </div>
           ) : students.length === 0 ? (
-            <div className={styles.noStudentsMessage}>No students under document verification.</div>
+            <div className="text-center text-gray-600 py-10">No students under document verification.</div>
           ) : (
-            <div className={styles.tableContainer}>
-                <table className={styles.table}>
-                  <thead className={styles.tableHeader}>
-                    <tr>
-                      <th className={styles.tableCell}>Student Name</th>
-                      <th className={styles.tableCell}>Email</th>
-                      <th className={styles.tableCell}>Branch</th>
-                      <th className={styles.tableCell}>Action</th>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse border border-gray-300">
+                <thead className="bg-purple-600 text-white">
+                  <tr>
+                    <th className="p-3 border">Student Name</th>
+                    <th className="p-3 border">Email</th>
+                    <th className="p-3 border">Branch</th>
+                    <th className="p-3 border">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {students.map((student) => (
                     <>
-                      <tr key={student.rollNo} className={styles.tableRow}>
-                          <td className={styles.tableCell}>{student.name}</td>
-                          <td className={styles.tableCell}>{student.email}</td>
-                          <td className={styles.tableCell}>{student.branch}</td>
-                          <td className={styles.tableCell}>
+                      <tr key={student.rollNo} className="text-center border hover:bg-purple-50 transition">
+                        <td className="p-3 border">{student.name}</td>
+                        <td className="p-3 border">{student.email}</td>
+                        <td className="p-3 border">{student.branch}</td>
+                        <td className="p-3 border">
                           <button
                             onClick={() => setExpandedStudent(expandedStudent === student.rollNo ? null : student.rollNo)}
-                            className={styles.viewMoreButton}
+                            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
                           >
                             {expandedStudent === student.rollNo ? "Hide Info" : "View More Info"}
                           </button>
                         </td>
                       </tr>
                       {expandedStudent === student.rollNo && (
-                        <tr className={styles.expandedRow}>
-                            <td colSpan="4" className={styles.expandedContent}>
+                        <tr className="bg-gray-100">
+                          <td colSpan="4" className="p-5 text-left">
                             <p><strong>Roll No:</strong> {student.rollNo}</p>
                             <p><strong>Phone:</strong> {student.phoneNumber}</p>
                             <p><strong>Semester:</strong> {student.semesterType}</p>
@@ -154,14 +155,16 @@ const AdminStudentUnderPhase2Verification = () => {
                             <p><strong>Fee Receipt:</strong> {student.feeReceipt}</p>
                             <button
                               onClick={() => handleVerify(student.rollNo)}
-                              className={styles.verifyButton}>
+                              className="mt-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+                            >
                               Verify Student
                             </button>
-                            <button
+                            {/* <button
                               onClick={() => handleVerifys(student.rollNo)}
-                              className={styles.rejectButton}>
+                              className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+                            >
                               Dont Verify And Reunlock Phase 2 Form
-                            </button>
+                            </button> */}
                           </td>
                         </tr>
                       )}
@@ -174,6 +177,7 @@ const AdminStudentUnderPhase2Verification = () => {
         </div>
       </div>
     </div>
+    <Footer/>
     </>
     
   );
