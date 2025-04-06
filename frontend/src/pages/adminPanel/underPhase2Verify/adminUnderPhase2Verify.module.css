@@ -1,71 +1,120 @@
 .container {
-    min-height: 100vh;
-    background: linear-gradient(to bottom right, #f5f3ff, #ffffff);
-    padding: 3rem 1rem;
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #faf5ff, #ffffff);
+  padding: 3rem 1rem;
+}
+
+.card {
+  max-width: 96rem;
+  margin: 0 auto;
+  background-color: #fff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.inner {
+  padding: 1.5rem;
+}
+
+.title {
+  text-align: center;
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+}
+
+.error {
+  margin-bottom: 1rem;
+  color: #b91c1c;
+  background-color: #fee2e2;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.loadingWrapper {
+  display: flex;
+  justify-content: center;
+  padding: 2.5rem 0;
+}
+
+.loader {
+  width: 3rem;
+  height: 3rem;
+  border: 4px dashed #8b5cf6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
-  
-  .card {
-    max-width: 72rem;
-    margin: 0 auto;
-    background: white;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 0.5rem;
-    overflow: hidden;
-  }
-  
-  .cardContent {
-    padding: 1.5rem;
-  }
-  
-  .heading {
-    text-align: center;
-    font-size: 1.875rem;
-    font-weight: 800;
-    color: #1f2937;
-    margin-bottom: 1.5rem;
-  }
-  
-  .errorMessage {
-    color: red;
-    background: #fee2e2;
-    padding: 0.75rem;
-    border-radius: 0.5rem;
-    text-align: center;
-  }
-  
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid #d1d5db;
-  }
-  
-  .tableHeader {
-    background: #9333ea;
-    color: white;
-  }
-  
-  .tableRow:hover {
-    background: #f3e8ff;
-  }
-  
-  .viewMoreButton, .verifyButton, .rejectButton {
-    padding: 8px 12px;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .viewMoreButton {
-    background: #1e40af;
-    color: white;
-  }
-  
-  .verifyButton {
-    background: green;
-    color: white;
-  }
-  
-  .rejectButton {
-    background: red;
-    color: white;
-  }
-  
+}
+
+.noStudents {
+  text-align: center;
+  color: #4b5563;
+  padding: 2.5rem 0;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #d1d5db;
+}
+
+.tableHead {
+  background-color: #7c3aed;
+  color: white;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  text-align: center;
+}
+
+.tableRow {
+  transition: background-color 0.2s;
+}
+
+.tableRow:hover {
+  background-color: #f5f3ff;
+}
+
+.viewMoreBtn {
+  padding: 0.5rem 1rem;
+  background-color: #2563eb;
+  color: white;
+  border-radius: 0.375rem;
+  transition: background-color 0.2s;
+}
+
+.viewMoreBtn:hover {
+  background-color: #1d4ed8;
+}
+
+.expandedRow {
+  background-color: #f3f4f6;
+}
+
+.verifyBtn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #16a34a;
+  color: white;
+  border-radius: 0.375rem;
+  transition: background-color 0.2s;
+}
+
+.verifyBtn:hover {
+  background-color: #15803d;
+}

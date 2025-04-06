@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Navbar from "../../../components/navbar/navbar";
+import styles from './adminExcelGenerate.module.css';
 
 const ReportButton = ({ number, title, onClick, dropdownContent = null }) => (
   <div className="relative h-[80px]">
@@ -135,24 +136,22 @@ const AdminGenerateExcel = () => {
       }}
     />
 
-      <div className="min-h-screen bg-gray-100 py-6 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">
-              Generate Excel Reports
-            </h2>
+<div className={styles.pageWrapper}>
+        <div className={styles.pageContainer}>
+          <div className={styles.card}>
+            <h2 className={styles.heading}>Generate Excel Reports</h2>
 
             {error && (
-              <div className="mb-4 p-3 text-red-700 bg-red-100 border border-red-400 rounded">
+              <div className={styles.errorBox}>
                 {error}
               </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className={styles.selectGrid}>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Year</label>
+                <label className={styles.label}>Year</label>
                 <select 
-                  className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={styles.select}
                   value={year}
                   onChange={(e) => setYear(e.target.value)}
                 >
@@ -164,9 +163,9 @@ const AdminGenerateExcel = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Branch</label>
+                <label className={styles.label}>Branch</label>
                 <select 
-                  className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={styles.select}
                   value={branch}
                   onChange={(e) => setBranch(e.target.value)}
                 >
@@ -180,19 +179,13 @@ const AdminGenerateExcel = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Semester</label>
+                <label className={styles.label}>Semester</label>
                 <select 
-                  className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={styles.select}
                   value={semester}
                   onChange={(e) => setSemester(e.target.value)}
                 >
                   <option value="">Choose one...</option>
-                  {/*<option value="1">Semester 1</option>
-                  <option value="2">Semester 2</option>
-                  <option value="3">Semester 3</option>
-                  <option value="4">Semester 4</option>
-                  <option value="5">Semester 5</option>
-                  <option value="6">Semester 6</option>*/}
                   <option value="7">Semester 7</option>
                   <option value="8">Semester 8</option>
                   <option value="ALL">All Semesters</option>
@@ -200,61 +193,16 @@ const AdminGenerateExcel = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ReportButton 
-                number="1" 
-                title="Registration Form Data" 
-                onClick={() => handleGenerateReport(1)} 
-              />
-              
-              <ReportButton 
-                number="2" 
-                title="Students Verified" 
-                onClick={() => handleGenerateReport(2)} 
-              />
-              
-              <ReportButton 
-                number="3" 
-                title="Students not Verified yet" 
-                onClick={() => handleGenerateReport(3)} 
-              />
-              
-              <ReportButton 
-                number="4" 
-                title="Students with ALTERNATE semester at Thapar University" 
-                onClick={() => handleGenerateReport(4)} 
-              />
-              
-              <ReportButton 
-                number="5" 
-                title="Students with PROJECT semester at software company/research institute" 
-                onClick={() => handleGenerateReport(5)} 
-              />
-              
-              <ReportButton 
-                number="6" 
-                title="Students getting STIPEND (with amount)" 
-                onClick={() => handleGenerateReport(6)} 
-              />
-              
-              <ReportButton 
-                number="7" 
-                title="Students Tagged with a particular FACULTY" 
-                onClick={() => setShowFacultyDropdown(!showFacultyDropdown)}
-                dropdownContent={<FacultyDropdown />}
-              />
-              
-              <ReportButton 
-                number="8" 
-                title="Students with registration Phase 2 COMPLETE" 
-                onClick={() => handleGenerateReport(8)} 
-              />
-              
-              <ReportButton 
-                number="9" 
-                title="Students with registration Phase 2 PENDING" 
-                onClick={() => handleGenerateReport(9)} 
-              />
+            <div className={styles.reportGrid}>
+              <ReportButton number="1" title="Registration Form Data" onClick={() => handleGenerateReport(1)} />
+              <ReportButton number="2" title="Students Verified" onClick={() => handleGenerateReport(2)} />
+              <ReportButton number="3" title="Students not Verified yet" onClick={() => handleGenerateReport(3)} />
+              <ReportButton number="4" title="Students with ALTERNATE semester at Thapar University" onClick={() => handleGenerateReport(4)} />
+              <ReportButton number="5" title="Students with PROJECT semester at software company/research institute" onClick={() => handleGenerateReport(5)} />
+              <ReportButton number="6" title="Students getting STIPEND (with amount)" onClick={() => handleGenerateReport(6)} />
+              <ReportButton number="7" title="Students Tagged with a particular FACULTY" onClick={() => setShowFacultyDropdown(!showFacultyDropdown)} dropdownContent={<FacultyDropdown />} />
+              <ReportButton number="8" title="Students with registration Phase 2 COMPLETE" onClick={() => handleGenerateReport(8)} />
+              <ReportButton number="9" title="Students with registration Phase 2 PENDING" onClick={() => handleGenerateReport(9)} />
             </div>
           </div>
         </div>

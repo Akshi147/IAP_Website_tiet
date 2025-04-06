@@ -1,32 +1,148 @@
-.container {
-    min-height: 100vh;
-    background: #f3f4f6;
-    padding: 24px;
+.pageWrapper {
+  min-height: 100vh;
+  background-color: #f3f4f6; /* bg-gray-100 */
+  padding: 1.5rem 1rem; /* py-6 px-4 */
+}
+
+.pageContainer {
+  max-width: 80rem; /* max-w-7xl */
+  margin: 0 auto;
+}
+
+.card {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+}
+
+.heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 1.5rem;
+}
+
+.errorBox {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  color: #b91c1c;
+  background-color: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: 0.375rem;
+}
+
+.selectGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .selectGrid {
+    grid-template-columns: repeat(3, 1fr);
   }
-  
-  .content {
-    max-width: 1280px;
-    margin: 0 auto;
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+.select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  outline: none;
+}
+
+.select:focus {
+  outline: 2px solid #3b82f6;
+}
+
+.reportGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .reportGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
-  
-  .card {
-    background: white;
-    border-radius: 8px;
-    padding: 24px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .heading {
-    font-size: 24px;
-    font-weight: 600;
-    color: #111827;
-  }
-  
-  .errorBox {
-    color: #b91c1c;
-    background: #fee2e2;
-    border: 1px solid #fca5a5;
-    padding: 12px;
-    border-radius: 4px;
-  }
-  
+}
+
+.reportButtonWrapper {
+  position: relative;
+  height: 80px;
+}
+
+.reportButton {
+  position: absolute;
+  inset: 0;
+  padding: 1rem;
+  background-color: #a855f7;
+  color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  text-align: left;
+  transition: background-color 0.2s;
+}
+
+.reportButton:hover {
+  background-color: #9333ea;
+}
+
+.reportButtonTitle {
+  font-size: 1.125rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 0.25rem;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  z-index: 50;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.dropdownItem {
+  width: 100%;
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: white;
+  transition: background-color 0.2s;
+}
+
+.dropdownItem:hover {
+  background-color: #faf5ff;
+}
+
+.dropdownItem:last-child {
+  border-bottom: none;
+}
+
+.facultyName {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.facultyEmail {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
