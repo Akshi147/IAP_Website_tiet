@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { Header } from "../../components/header";
-import { Footer } from "../../components/footer";
+import Navbar from "./../../components/navbar/navbar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import DocumentUpload from "./component/DocumentUpload";
-import Phase3 from "./component/Phase3"; // Assuming Phase3 is the final phase component
-import Verify from "./component/Verify"; // Assuming this is the Verify component
-import Phase2 from "./component/Phase2";
-import Fortnightly from "./component/Fortnightly";
+import StudentDocUpload from "./studentDocUpload/studentDocUpload";
+import StudentDashboard from "./studentDashboardafterVerify/stuDashboardAfterVerify";
+import Verify from "./studentAccVerify/studentAccVerify";
+import StudentDocVerifyPhase from "./studentDocVerifyPhase/stuDocVerifyPhase";
+import StudentFortnightlyReports from "./stufortnightly/stufortnightlyform";
 
 const StudentPanel = () => {
   const navigate = useNavigate();
@@ -52,7 +51,7 @@ const StudentPanel = () => {
   if (studentData && !studentData.verified) {
     return (
       <>
-        <Header
+        <Navbar
           navItems={[
             { name: "Dashboard", path: "/dashboard" },
             { name: "Courses", path: "/courses" },
@@ -64,7 +63,6 @@ const StudentPanel = () => {
           }}
         />
         <Verify />
-        <Footer />
       </>
     );
   }
@@ -74,7 +72,7 @@ const StudentPanel = () => {
     if (!uploadedDocs.trainingLetter || !uploadedDocs.feeReceipt) {
       return (
         <>
-          <Header
+          <Navbar
             navItems={[
               { name: "Dashboard", path: "/dashboard" },
               { name: "Courses", path: "/courses" },
@@ -85,8 +83,8 @@ const StudentPanel = () => {
               onClick: () => navigate("/student/logout"),
             }}
           />
-          <DocumentUpload uploadedDocs={uploadedDocs} />
-          <Footer />
+          <StudentDocUpload uploadedDocs={uploadedDocs} />
+
         </>
       );
     }
@@ -95,7 +93,7 @@ const StudentPanel = () => {
     if (studentData.verified && studentData.mentorverified && studentData.phase3verified) {
       return (
         <>
-          <Header
+          <Navbar
             navItems={[
               { name: "Dashboard", path: "/dashboard" },
               { name: "Courses", path: "/courses" },
@@ -106,8 +104,8 @@ const StudentPanel = () => {
               onClick: () => navigate("/student/logout"),
             }}
           />
-          <Fortnightly />
-          <Footer />
+          <StudentFortnightlyReports />
+
         </>
       );
     }
@@ -116,7 +114,7 @@ const StudentPanel = () => {
     if (studentData.mentorverified) {
       return (
         <>
-          <Header
+          <Navbar
             navItems={[
               { name: "Dashboard", path: "/dashboard" },
               { name: "Courses", path: "/courses" },
@@ -127,8 +125,8 @@ const StudentPanel = () => {
               onClick: () => navigate("/student/logout"),
             }}
           />
-          <Phase3 />
-          <Footer />
+          <StudentDashboard />
+
         </>
       );
     }
@@ -136,7 +134,7 @@ const StudentPanel = () => {
     // Default: All documents uploaded but waiting for mentor verification
     return (
       <>
-        <Header
+        <Navbar
           navItems={[
             { name: "Dashboard", path: "/dashboard" },
             { name: "Courses", path: "/courses" },
@@ -147,8 +145,7 @@ const StudentPanel = () => {
             onClick: () => navigate("/student/logout"),
           }}
         />
-        <Phase2/>
-        <Footer />
+        <StudentDocVerifyPhase />
       </>
     );
   }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { LockClosedIcon, CheckIcon } from "@heroicons/react/24/outline";
-import styles from "./StudentFortnightlyReports.module.css";
+import styles from "./stuFortnightlyform.module.css";
 
 const StudentFortnightlyReports = () => {
   const [reports, setReports] = useState({});

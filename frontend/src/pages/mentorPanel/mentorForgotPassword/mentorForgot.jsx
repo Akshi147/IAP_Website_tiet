@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import styles from "./MmntorForgot.module.css";
+import styles from "./MentorForgot.module.css";
 
 const MentorForgotPassword = () => {
   const [email, setEmail] = useState("");

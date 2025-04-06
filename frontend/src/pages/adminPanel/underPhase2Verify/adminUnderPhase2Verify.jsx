@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Footer } from "../../../components/footer";
-import { Header } from "../../../components/header";
+import Navbar from "./../../../components/navbar/navbar";
 import styles from "./adminUnderPhase2Verify.module.css";
 
 const AdminStudentUnderPhase2Verification = () => {
@@ -57,7 +56,7 @@ const AdminStudentUnderPhase2Verification = () => {
 
   return (
     <>
-      <Header
+      <Navbar
         navItems={[
           { name: "Students Under Document Verification", path: "/underdocumentverification" },
           { name: "Students In Phase 2", path: "/phase2verification" },
@@ -159,7 +158,6 @@ const AdminStudentUnderPhase2Verification = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

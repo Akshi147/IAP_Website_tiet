@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./StudentResetPassword.module.css";
+import styles from "./stuResetPassword.module.css";
 
 const StudentResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
