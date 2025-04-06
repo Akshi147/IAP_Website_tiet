@@ -71,7 +71,7 @@ const MentorDetailForm = () => {
 
     try {
       await axios.post(
-        `http://localhost:4000/mentors/setPassword`,
+        `http://localhost:4000/mentors/setPassword/${token}`,
         {
           token: token,
           name: formData.name,

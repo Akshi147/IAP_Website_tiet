@@ -76,7 +76,7 @@ module.exports.registerMentor = async (req, res) => {
                         <p class="message">Respected Sir/Madam,</p>
                         <p class="message">Please set up your password by clicking the link below:</p>
                         <div style="text-align: center;">
-                            <a href="http://localhost:5173/mentor/setPassword?token=${token}" class="button">Set password</a>
+                            <a href="http://localhost:5173/mentors/setPassword?token=${token}" class="button">Set password</a>
                         </div>
                     </div>
                 </div>
