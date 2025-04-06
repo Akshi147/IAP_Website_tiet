@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./StudentResetPassword.module.css";
 
 const StudentResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -8,7 +9,6 @@ const StudentResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Extract token from URL
   const token = new URLSearchParams(window.location.search).get("token");
 
   useEffect(() => {
@@ -39,34 +39,34 @@ const StudentResetPassword = () => {
         setError(data.message || "Something went wrong. Try again.");
       }
     } catch (err) {
-      setError(err || "Server error. Please try again later.");
+      setError(err.message || "Server error. Please try again later.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-6">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-2xl font-semibold text-center">Reset Password</h1>
-        <p className="text-gray-600 text-center mb-4">Enter your new password</p>
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <h1 className={styles.title}>Reset Password</h1>
+        <p className={styles.subtitle}>Enter your new password</p>
 
-        {message && <div className="bg-green-100 text-green-600 p-3 rounded-md">{message}</div>}
-        {error && <div className="bg-red-100 text-red-600 p-3 rounded-md">{error}</div>}
+        {message && <div className={styles.successMessage}>{message}</div>}
+        {error && <div className={styles.errorMessage}>{error}</div>}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className={styles.form}>
           <input
             type="password"
             placeholder="New Password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            className="w-full px-4 py-3 border rounded-md focus:ring-2 focus:ring-purple-500"
+            className={styles.input}
             required
           />
 
           <button
             type="submit"
-            className="w-full bg-purple-600 text-white py-3 rounded-md font-semibold hover:bg-purple-700 flex justify-center items-center"
+            className={styles.button}
             disabled={isLoading}
           >
             {isLoading ? "Resetting..." : "Reset Password"}

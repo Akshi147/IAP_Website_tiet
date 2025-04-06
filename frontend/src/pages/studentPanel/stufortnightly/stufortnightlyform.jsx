@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { LockClosedIcon, CheckIcon } from "@heroicons/react/24/outline";
+import styles from "./StudentFortnightlyReports.module.css";
 
 const StudentFortnightlyReports = () => {
   const [reports, setReports] = useState({});
@@ -53,51 +54,48 @@ const StudentFortnightlyReports = () => {
     }));
   };
 
-  if (loading) return (
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-    </div>
-  );
+  if (loading)
+    return (
+      <div className={styles.loadingWrapper}>
+        <div className={styles.spinner}></div>
+      </div>
+    );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="bg-gradient-to-r from-purple-600 to-indigo-800 rounded-2xl p-8 shadow-2xl mb-8 text-white">
-        <h1 className="text-4xl font-bold text-white text-center mb-4">
-          Fortnightly Reflection Reports
-        </h1>
-        <p className="text-blue-100 text-center text-lg opacity-90">
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>Fortnightly Reflection Reports</h1>
+        <p className={styles.subtitle}>
           Submit and manage your bi-weekly progress reports with confidence
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className={styles.reportsGrid}>
         {Object.entries(reports).map(([period, data]) => (
           <div
             key={period}
-            className={`relative bg-white rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl ${
-              !data.isUnlocked ? "opacity-75" : ""
+            className={`${styles.reportCard} ${
+              !data.isUnlocked ? styles.lockedCard : ""
             }`}
           >
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="text-xl font-semibold text-gray-800">
-                  {period}
-                </h3>
+            <div className={styles.cardContent}>
+              <div className={styles.cardHeader}>
+                <h3 className={styles.cardTitle}>{period}</h3>
                 <span
-                  className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                  className={`${styles.statusBadge} ${
                     data.isUnlocked
-                      ? "bg-green-100 text-green-800"
-                      : "bg-gray-100 text-gray-600"
+                      ? styles.editable
+                      : styles.locked
                   }`}
                 >
                   {data.isUnlocked ? (
                     <>
-                      <CheckIcon className="w-4 h-4 mr-1" />
+                      <CheckIcon className={styles.icon} />
                       Editable
                     </>
                   ) : (
                     <>
-                      <LockClosedIcon className="w-4 h-4 mr-1" />
+                      <LockClosedIcon className={styles.icon} />
                       Locked
                     </>
                   )}
@@ -105,11 +103,9 @@ const StudentFortnightlyReports = () => {
               </div>
 
               <textarea
-                className={`w-full px-4 py-3 border ${
-                  data.isUnlocked
-                    ? "border-blue-200 focus:ring-2 focus:ring-blue-500"
-                    : "border-gray-200 bg-gray-50"
-                } rounded-lg transition-all duration-200 resize-none`}
+                className={`${styles.textarea} ${
+                  data.isUnlocked ? styles.textareaEditable : styles.textareaLocked
+                }`}
                 rows="4"
                 value={data.report}
                 onChange={(e) => handleChange(period, e.target.value)}
@@ -121,29 +117,27 @@ const StudentFortnightlyReports = () => {
                 }
               />
 
-              <div className="mt-4 flex justify-end space-x-3">
+              <div className={styles.buttonContainer}>
                 <button
                   onClick={() => {
                     setSelectedPeriod(period);
                     setShowConfirmation(true);
                   }}
                   disabled={!data.isUnlocked || submitting}
-                  className={`inline-flex items-center px-6 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white transition-colors duration-200 ${
-                    data.isUnlocked
-                      ? "bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                      : "bg-gray-400 cursor-not-allowed"
+                  className={`${styles.submitButton} ${
+                    !data.isUnlocked ? styles.disabledButton : ""
                   }`}
                 >
                   {submitting && selectedPeriod === period ? (
                     <>
                       <svg
-                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        className={styles.spinnerIcon}
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                       >
                         <circle
-                          className="opacity-25"
+                          className={styles.circle1}
                           cx="12"
                           cy="12"
                           r="10"
@@ -151,7 +145,7 @@ const StudentFortnightlyReports = () => {
                           strokeWidth="4"
                         ></circle>
                         <path
-                          className="opacity-75"
+                          className={styles.circle2}
                           fill="currentColor"
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         ></path>
@@ -168,27 +162,24 @@ const StudentFortnightlyReports = () => {
         ))}
       </div>
 
-      {/* Confirmation Modal */}
       {showConfirmation && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl">
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">
-              Confirm Submission
-            </h3>
-            <p className="text-gray-600 mb-6">
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal}>
+            <h3 className={styles.modalTitle}>Confirm Submission</h3>
+            <p className={styles.modalMessage}>
               Are you sure you want to submit this report? Once submitted, you
               won&apos;t be able to make further changes.
             </p>
-            <div className="flex justify-end space-x-4">
+            <div className={styles.modalActions}>
               <button
                 onClick={() => setShowConfirmation(false)}
-                className="px-6 py-2 text-gray-600 hover:text-gray-800 font-medium transition-colors"
+                className={styles.cancelButton}
               >
                 Cancel
               </button>
               <button
                 onClick={() => handleSubmit(selectedPeriod)}
-                className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
+                className={styles.confirmButton}
               >
                 Confirm Submit
               </button>
