@@ -29,4 +29,10 @@ app.use('/mentors',mentorRoutes);
 app.use('/admin',adminRoutes);
 app.use('/freezeform',freezeformRoutes);
 
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
 module.exports =app;
