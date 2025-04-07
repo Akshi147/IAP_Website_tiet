@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import Navbar from "../../../components/navbar/navbar";
+// import { useNavigate } from "react-router-dom";
+// import Navbar from "../../../components/navbar/navbar";
 import Hero from "../../../components/hero/hero";
 import styles from "./mentorAssignedStu.module.css"; // Importing the CSS module
 
 const MentorAssignedStudents = () => {
   const [students, setStudents] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const MentorAssignedStudents = () => {
 
   return (
     <>
-      <Navbar
+      {/* <Navbar
               navItems={[
                 { name: "Dashboard", path: "/mentors" },
                 { name: "Profile", path: "/mentors/profile" },
@@ -49,7 +49,7 @@ const MentorAssignedStudents = () => {
                   navigate("/mentors/login");
                 },
               }}
-            />
+            /> */}
       <Hero />
       <div className={styles.container}>
         <h1 className={styles.heading}>Assigned Students</h1>
