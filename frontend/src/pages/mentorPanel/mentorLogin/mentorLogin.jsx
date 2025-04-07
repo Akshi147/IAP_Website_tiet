@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link} from "react-router-dom";
+import { Link,useNavigate} from "react-router-dom";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Navbar from "../../../components/navbar/navbar";
 import styles from "./mentorLogin.module.css";
 
 const MentorLogin = () => {
+  const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
     email: "",
@@ -28,9 +29,7 @@ const MentorLogin = () => {
     setErrorMessage("");
   
     try {
-      const response = await axios.post("http://localhost:4000/mentors/login", formData, {
-        withCredentials: true,
-      });
+      const response = await axios.post("http://localhost:4000/mentors/login", formData);
   
       if (response.status === 200) {
         console.log("✅ Login successful. Storing token...");
@@ -39,7 +38,7 @@ const MentorLogin = () => {
         localStorage.setItem("mentor-token", response.data.token);
   
         // ✅ Navigate **after** storing token
-        window.location.href = "/mentors";
+        navigate("/mentors");
       }
     } catch (error) {
       setErrorMessage(error.response?.data?.message || "Login failed. Please check your credentials.");

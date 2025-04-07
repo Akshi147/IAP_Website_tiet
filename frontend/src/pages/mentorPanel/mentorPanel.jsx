@@ -28,7 +28,7 @@ const MentorPanel = () => {
 
         // ✅ Avoid multiple fetch calls
         if (!hasFetched) {
-          const profileResponse = await axios.get("http://localhost:4000/mentors/profile", {
+          const profileResponse = await axios.get("http://localhost:4000/mentors/getAssignedStudents", {
             headers: { Authorization: `Bearer ${token}` },
           });
 

@@ -15,17 +15,25 @@ const MentorAssignedStudents = () => {
     const fetchAssignedStudents = async () => {
       try {
         const token = localStorage.getItem("mentor-token");
-        const response = await axios.get("http://localhost:4000/mentors/getAssignedStudents",{
+        const response = await axios.get("http://localhost:4000/mentors/getAssignedStudents", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setStudents(response.data.students);
+  
+        if (response.data && response.data.success) {
+          setStudents(response.data.studentsAssigned);
+        } else {
+          setStudents([]);
+          setErrorMessage("No students found.");
+        }
       } catch (error) {
-        setErrorMessage(error || "Failed to load students.");
+        setErrorMessage(error.message || "Failed to load students.");
       }
     };
-
+  
     fetchAssignedStudents();
   }, []);
+  
+  
 
   return (
     <>
@@ -37,7 +45,7 @@ const MentorAssignedStudents = () => {
               downloadButton={{
                 text: "Log Out",
                 onClick: () => {
-                  localStorage.removeItem("token"); // ✅ Clears token on logout
+                  localStorage.removeItem("mentor-token"); // ✅ Clears token on logout
                   navigate("/mentors/login");
                 },
               }}

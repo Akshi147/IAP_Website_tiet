@@ -21,7 +21,7 @@ import FacultyRegister from './pages/facultyPanel/facultyRegister/facultyRegiste
 import FacultyPanel from './pages/facultyPanel/facultyPanel';
 
 import MentorPanel from './pages/mentorPanel/mentorPanel';
-import MentorProtectedRoute from './pages/mentorPanel/mentorProtectedRoute';
+import {MentorProtectedRoute} from './pages/mentorPanel/mentorProtectedRoute';
 import MentorLogin from './pages/mentorPanel/mentorLogin/mentorLogin';
 import MentorLogout from './pages/mentorPanel/mentorLogout/mentorLogout';
 import MentorRegister from './pages/mentorPanel/mentorRegister/mentorRegister';

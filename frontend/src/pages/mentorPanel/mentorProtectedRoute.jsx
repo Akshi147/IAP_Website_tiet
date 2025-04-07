@@ -1,56 +1,11 @@
-import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Navigate } from 'react-router-dom';
 
-const MentorProtectedRoute = ({ children }) => {
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
-  const token = localStorage.getItem("mentor-token");
-
-  useEffect(() => {
-    if (!token) {
-      setIsLoading(false);
-      navigate("/mentors/login"); // Redirect to login if no token
-      return;
-    }
-
-    const verifyMentor = async () => {
-      try {
-        const response = await axios.get("http://localhost:4000/mentors/profile", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        const mentor = response.data.mentor;
-
-        if (!mentor) {
-          throw new Error("Unauthorized: No mentor data found");
-        }
-      } catch (error) {
-        console.error("Error verifying mentor:", error);
-        localStorage.removeItem("mentor-token");
-        navigate("/mentors/login");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    verifyMentor();
-  }, [navigate]); // Prevent unnecessary re-renders
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-lg font-semibold">Verifying mentor access...</p>
-      </div>
-    );
+export const MentorProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem('mentor-token');
+  
+  if (!token) {
+    return <Navigate to="/mentors/login" replace />;
   }
 
-  return <>{children}</>;
-};
-
-MentorProtectedRoute.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-export default MentorProtectedRoute;
+  return children;
+}; 
