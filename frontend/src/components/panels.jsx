@@ -8,80 +8,89 @@ export function Panels() {
 
   const panels = [
     {
-      title: "Student Panel",
-      subtitle: "Student Access",
-      description: "Access your project workspace and submissions",
+      title: "Student Portal",
+      subtitle: "Academic Management",
+      description: "Access course materials, schedules, and assignment submissions",
       icon: GraduationCap,
       features: [
-        { icon: Book, text: "View Course Materials" },
+        { icon: Book, text: "Course Materials" },
         { icon: Calendar, text: "Schedule Management" },
-        { icon: FileText, text: "Submit Assignments" },
+        { icon: FileText, text: "Assignment Submission" },
       ],
       path: "/student",
     },
     {
-      title: "Faculty Panel",
-      subtitle: "Faculty Access",
-      description: "Review and evaluate student projects",
+      title: "Faculty Portal",
+      subtitle: "Academic Oversight",
+      description: "Evaluate submissions and monitor student progress",
       icon: Users,
       features: [
-        { icon: FileCheck, text: "Grade Submissions" },
-        { icon: Clock, text: "Track Progress" },
-        { icon: UserPlus, text: "Manage Students" },
+        { icon: FileCheck, text: "Grading System" },
+        { icon: Clock, text: "Progress Tracking" },
+        { icon: UserPlus, text: "Student Roster" },
       ],
       path: "/faculty",
     },
     {
-      title: "Mentor Panel",
-      subtitle: "Mentor Access",
-      description: "Guide and support assigned students",
+      title: "Mentor Portal",
+      subtitle: "Student Guidance",
+      description: "Support student development and review progress",
       icon: User,
       features: [
-        { icon: Users, text: "Student Mentoring" },
-        { icon: Calendar, text: "Schedule Meetings" },
-        { icon: FileText, text: "Review Progress" },
+        { icon: Users, text: "Mentorship Program" },
+        { icon: Calendar, text: "Meeting Coordination" },
+        { icon: FileText, text: "Progress Review" },
       ],
       path: "/mentor",
     },
   ];
 
   return (
-    <div className="grid md:grid-cols-3 gap-8">
-      {panels.map((panel, index) => (
-        <Card key={index} className="relative overflow-hidden bg-gradient-to-r from-purple-600 to-blue-500">
-          <CardContent className="p-6">
-            <div className="flex flex-col items-center space-y-4">
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg">
-                <panel.icon className="w-8 h-8 text-purple-600" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-1">{panel.title}</h3>
-              <p className="text-gray-200 mb-4">{panel.subtitle}</p>
-              <p className="text-gray-300">{panel.description}</p>
-            </div>
-
-            <div className="space-y-6">
-              {panel.features.map((feature, i) => (
-                <div key={i} className="flex flex-col items-center space-y-2">
-                  <feature.icon className="w-8 h-8 text-blue-200" />
-                  <p className="text-gray-200">{feature.text}</p>
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="grid md:grid-cols-3 gap-6">
+        {panels.map((panel, index) => (
+          <Card key={index} className="group relative hover:shadow-lg transition-shadow duration-200">
+            <CardContent className="p-8">
+              <div className="flex flex-col space-y-6">
+                {/* Header Section */}
+                <div className="flex items-start space-x-4">
+                  <div className="p-3 bg-blue-50 rounded-lg">
+                    <panel.icon className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">{panel.title}</h3>
+                    <p className="text-sm text-gray-500">{panel.subtitle}</p>
+                  </div>
                 </div>
-              ))}
-            </div>
 
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={() => navigate(panel.path)}
-              className="mt-6 px-6 py-3 bg-white text-purple-600 rounded-lg shadow-md hover:bg-opacity-90 transition-all duration-300 hover:shadow-lg
-hover:transform hover:-translate-y-1"
-            >
-              Goto Panel
-            </Button>
-          </CardContent>
+                {/* Description */}
+                <p className="text-gray-600 text-sm leading-relaxed">
+                  {panel.description}
+                </p>
 
-          <div className="absolute -top-16 -right-4 w-12 h-12 bg-white rounded-full shadow-xl opacity-30 transform -rotate-45" />
-        </Card>
-      ))}
+                {/* Features List */}
+                <div className="space-y-4 border-t pt-4">
+                  {panel.features.map((feature, i) => (
+                    <div key={i} className="flex items-center space-x-3">
+                      <feature.icon className="w-5 h-5 text-gray-400" />
+                      <span className="text-sm text-gray-600">{feature.text}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Action Button */}
+                <Button
+                  variant="outline"
+                  className="mt-4 w-full border-blue-600 text-blue-600 hover:bg-blue-50 hover:text-blue-700"
+                  onClick={() => navigate(panel.path)}
+                >
+                  Access Portal
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }

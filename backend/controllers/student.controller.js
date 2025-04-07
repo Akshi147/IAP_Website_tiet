@@ -458,7 +458,7 @@ module.exports.completeVerify = async (req, res) => {
         }
 
         // Update student fields
-        Object.assign(student, updatedData, { mentorverified: true });
+        Object.assign(student, updatedData, { mentorverified: !student.mentorverified });
 
         // Save updated student
         await student.save();

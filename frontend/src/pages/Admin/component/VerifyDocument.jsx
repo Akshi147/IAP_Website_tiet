@@ -11,6 +11,7 @@ const StudentVerification = () => {
   const [isVerifying, setIsVerifying] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingFileType, setProcessingFileType] = useState(null);
+  const [isVerified, setIsVerified] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     rollNo: "",
@@ -67,6 +68,7 @@ const StudentVerification = () => {
         );
 
         if (response.data?.student) {
+          setIsVerified(response.data.student.mentorverified);
           setFormData({
             name: response.data.student.name,
             rollNo: response.data.student.rollNo,
@@ -285,9 +287,24 @@ const StudentVerification = () => {
                   </div>
 
                   <div className="mt-6 text-center">
-                  <button type="button" onClick={()=>handleVerify(formData.rollNo)} disabled={isVerifying} className="w-full sm:w-auto px-6 py-3 text-white bg-purple-600 hover:bg-purple-700 rounded-md">
-                    {isVerifying ? "Verifying..." : "Verify"}
-                  </button>
+                  <button
+  type="button"
+  onClick={() => handleVerify(formData.rollNo)}
+  disabled={isVerifying || isVerified}
+  className="w-full sm:w-auto px-6 py-3 text-white bg-purple-600 hover:bg-purple-700 rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed"
+>
+  {isVerifying ? "Verifying..." : isVerified ? "Verified" : "Verify"}
+</button>
+{isVerified && (
+    <button
+      type="button"
+      onClick={() => handleVerify(formData.rollNo)}
+      className="px-6 py-3 text-white bg-red-600 hover:bg-red-700 rounded-md"
+    >
+      Unverify
+    </button>
+  )}
+
                 </div>
                 </form>
               )}
