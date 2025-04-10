@@ -5,8 +5,8 @@ const mentorController = require("../controllers/mentor.controller");
 const {authMentor} = require("../middlewares/auth.middleware");
 const crypto = require("crypto");
 
-console.log(mentorController);
-console.log(authMentor);
+// console.log(mentorController);
+// console.log(authMentor);
 
 router.post("/register", [
     body("email")
