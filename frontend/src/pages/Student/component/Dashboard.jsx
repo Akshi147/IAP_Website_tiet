@@ -155,15 +155,15 @@ const StudentDashboard = () => {
           </div>
 
           {allVerified && (
-            <div className="mt-8 bg-indigo-50 p-6 rounded-lg border border-indigo-200">
-              <div className="flex items-center gap-4">
-                <ClockIcon className="w-8 h-8 text-indigo-600" />
-                <div>
-                  <h3 className="text-lg font-semibold text-indigo-700">Fortnightly Reports</h3>
-                  <p className="text-indigo-600">Submit your fortnightly training reports</p>
-                </div>
-              </div>
-            </div>
+           <div className="mt-8 bg-yellow-50 p-6 rounded-lg border border-yellow-200">
+           <div className="flex items-center gap-4">
+             <ClockIcon className="w-8 h-8 text-yellow-600" />
+             <div>
+               <h3 className="text-lg font-semibold text-yellow-700">Fortnightly Reports</h3>
+               <p className="text-yellow-600">Submit your fortnightly training reports</p>
+             </div>
+           </div>
+         </div>
           )}
         </div>
       </div>

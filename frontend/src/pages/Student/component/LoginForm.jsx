@@ -4,12 +4,13 @@ import { Header } from "../../../components/header";
 import { Footer } from "../../../components/footer";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Book, GraduationCap, FileText } from "lucide-react";
 
 export function LoginForm() {
   const navigate = useNavigate();
   const [rollNo, setRollNo] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); // Error message state
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +26,6 @@ export function LoginForm() {
         navigate('/student');
       }
     } catch (error) {
-      // Set error message
       setErrorMessage(error.response.data.message);
     }
   };
@@ -33,15 +33,30 @@ export function LoginForm() {
   return (
     <>
       <Header />
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-purple-50 to-white px-6">
-        <div className="w-full max-w-md">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-6 relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 z-0 opacity-10">
+          <div className="absolute -top-20 -left-20 w-96 h-96 bg-purple-100 rounded-full mix-blend-multiply blur-xl" />
+          <div className="absolute top-1/3 right-0 w-64 h-64 bg-blue-100 rounded-full mix-blend-multiply blur-xl" />
+          <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-indigo-100 rounded-full mix-blend-multiply blur-xl" />
+        </div>
+
+        {/* Academic Icons Pattern */}
+        <div className="absolute inset-0 z-0 flex items-center justify-center opacity-5">
+          <div className="grid grid-cols-3 gap-24 rotate-12">
+            <Book className="w-24 h-24 text-purple-200" />
+            <GraduationCap className="w-24 h-24 text-blue-200" />
+            <FileText className="w-24 h-24 text-indigo-200" />
+          </div>
+        </div>
+
+        <div className="w-full max-w-md relative z-10">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-semibold mb-2">Welcome to Project Semester</h1>
+            <h1 className="text-2xl font-semibold mb-2 text-gray-800">Welcome to Project Semester</h1>
             <p className="text-gray-600">Sign in to access your account</p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-xl p-8">
-            {/* Error Message Alert */}
+          <div className="bg-white rounded-2xl shadow-xl p-8 backdrop-blur-sm">
             {errorMessage && (
               <div className="mb-4 p-4 bg-red-100 text-red-600 border border-red-300 rounded-lg">
                 <p>{errorMessage}</p>
