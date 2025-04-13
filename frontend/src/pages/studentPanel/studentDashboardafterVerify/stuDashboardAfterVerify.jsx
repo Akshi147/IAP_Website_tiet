@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./stuDashboardAfterVerify.module.css";
 
-const StudentDashboard = () => {
+const StudentMentorDetailForm = () => {
   const [formData, setFormData] = useState({
     mentorName: "",
     mentorEmail: "",
@@ -189,4 +189,4 @@ const StudentDashboard = () => {
   );
 };
 
-export default StudentDashboard;
+export default StudentMentorDetailForm;
