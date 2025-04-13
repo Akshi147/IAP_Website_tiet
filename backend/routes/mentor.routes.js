@@ -33,9 +33,11 @@ router.post("/forgotpassword", mentorController.forgotPassword);
 
 router.post("/resetpassword", mentorController.resetPassword);
 
-router.get("/getAbetForm/:mentorId",  mentorController.getAbetForm);
-router.post("/submitAbetForm/:mentorId", mentorController.submitAbetForm);
+router.get("/getAbetForm/:mentorId", authMentor, mentorController.getAbetForm);
+router.post("/submitAbetForm/:mentorId", authMentor, mentorController.submitAbetForm);
 
 // router.post('/setDetails', authMentor, mentorController.setMentorDetails);
 
+router.get("/getFeedbackForm/:mentorId", authMentor, mentorController.getFeedBackForm);
+router.post ("/submitFeedbackForm/:mentorId", authMentor, mentorController.submitFeedBackForm);
 module.exports = router;
