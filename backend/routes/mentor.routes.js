@@ -40,4 +40,8 @@ router.post("/submitAbetForm/:mentorId", authMentor, mentorController.submitAbet
 
 router.get("/getFeedbackForm/:mentorId", authMentor, mentorController.getFeedBackForm);
 router.post ("/submitFeedbackForm/:mentorId", authMentor, mentorController.submitFeedBackForm);
+
+
+router.get("/breifProgressReport/:studentId", mentorController.getBriefProgressReport);
+router.post("/submitBriefProgressReport/:studentId", mentorController.submitBriefProgressReport);
 module.exports = router;

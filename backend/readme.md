@@ -134,3 +134,56 @@ the response will come like this
         "updatedAt": "2025-04-13T10:15:11.956Z"
     }
 }
+
+
+
+breif progress report form in mentor,
+to get details send get request to:
+http://localhost:4000/mentors/breifProgressReport/:studentId
+
+response should look like this if report is filled by industrial mentor
+{
+    "success": true,
+    "data": {
+        "rollNumber": "102317050",
+        "studentName": "Pratham Poudel",
+        "companyName": "Chandrauta Hospital Pvt.Ltd",
+        "companyAddress": "Shivraj,Kapilvastu",
+        "dateOfVisit": "2025-02-21T12:37:14.996Z",
+        "progressReport": {
+            "_id": "67fbeafcdf03887ebc59ed40",
+            "student": "67b8737a42fbf3b8f43c47ad",
+            "topicOfProject": "ERP Development",
+            "typeOfProject": "Software Development",
+            "assignment1Details": "Build frontend",
+            "assignment1Status": "On Going",
+            "assignment2Details": "Setup backend",
+            "assignment2Status": "Pending",
+            "assignment3Details": "Deploy to server",
+            "assignment3Status": "Choose One...",
+            "hrName": "John Doe",
+            "hrContactNumber": "9876543210",
+            "hrEmailId": "john.doe@example.com",
+            "remarksByIndustryCoordinator": "Good progress so far.",
+            "__v": 0
+        }
+    }
+}
+
+to send post request to to submit breief report of mentor
+send post request to http://localhost:4000/mentors/submitBriefProgressReport/:studentID
+with the payload :
+{
+  "topicOfProject": "ERP Development",
+  "typeOfProject": "Software Development",
+  "assignment1Details": "Build frontend",
+  "assignment1Status": "On Going",
+  "assignment2Details": "Setup backend",
+  "assignment2Status": "Pending",
+  "assignment3Details": "Deploy to server",
+  "assignment3Status": "Choose One...",
+  "hrName": "John Doe",
+  "hrContactNumber": "9876543210",
+  "hrEmailId": "john.doe@example.com",
+  "remarksByIndustryCoordinator": "Good progress so far."
+}

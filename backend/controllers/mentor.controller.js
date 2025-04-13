@@ -9,6 +9,7 @@ const blacklistModel = require("../models/blacklist.model");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendEmail = require("../libs/nodemailer");
+const BriefProgressReport = require("../models/BreifProgressReport.model");
 
 // Register Mentor (Only Email Submission)
 module.exports.registerMentor = async (req, res) => {
@@ -560,3 +561,60 @@ module.exports.submitFeedBackForm = async (req, res) => {
     });
   }
 };
+
+module.exports.getBriefProgressReport = async (req, res) => {
+    const { studentId } = req.params;
+
+    try {
+      const student = await studentModel.findById(studentId);
+      if (!student) {
+        return res.status(404).json({
+          success: false,
+          message: "Student not found",
+        });
+      }
+  
+      const report = await BriefProgressReport.findOne({ student: studentId });
+  
+      return res.status(200).json({
+        success: true,
+        data: {
+          rollNumber: student.rollNo,
+          studentName: student.name,
+          companyName: student.companyDetails.companyName          ,
+          companyAddress: student.companyDetails.companyCity,
+          dateOfVisit: student.createdAt,
+          progressReport: report || null, // can be null if not filled yet
+        }
+      });
+    } catch (err) {
+      console.error("Error fetching report:", err);
+      return res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+
+module.exports.submitBriefProgressReport = async (req, res) => {
+    const { studentId } = req.params;
+
+    try {
+      // Check if report already exists for student
+      let report = await BriefProgressReport.findOne({ student: studentId });
+  
+      if (report) {
+        // Update if exists
+        report.set(req.body);
+        await report.save();
+        return res.status(200).json({ message: "Report updated", report });
+      }
+  
+      // Else, create new
+      const newReport = new BriefProgressReport({ ...req.body, student: studentId });
+      await newReport.save();
+      return res.status(201).json({ message: "Report created", report: newReport });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Server error" });
+    }
+};
+
+
