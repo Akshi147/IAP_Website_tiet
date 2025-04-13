@@ -12,6 +12,7 @@ const facultyRoutes = require('./routes/faculty.routes');
 const mentorRoutes = require('./routes/mentor.routes');
 const adminRoutes = require('./routes/admin.routes');
 const freezeformRoutes = require('./routes/freezeform.routes');
+const seedAbetQuestions = require('./utils/seedAbetQuestions');
 
 app.use((req, res, next) => {
     res.header('Access-Control-Expose-Headers', 'Content-Disposition');
@@ -26,6 +27,7 @@ app.use(express.json());
 app.use(logger('dev'));
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
+seedAbetQuestions();
 app.use('/students',studentRoutes);
 app.use('/faculty',facultyRoutes);
 app.use('/mentors',mentorRoutes);

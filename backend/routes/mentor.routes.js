@@ -33,6 +33,9 @@ router.post("/forgotpassword", mentorController.forgotPassword);
 
 router.post("/resetpassword", mentorController.resetPassword);
 
+router.get("/getAbetForm/:mentorId",  mentorController.getAbetForm);
+router.post("/submitAbetForm/:mentorId", mentorController.submitAbetForm);
+
 // router.post('/setDetails', authMentor, mentorController.setMentorDetails);
 
 module.exports = router;

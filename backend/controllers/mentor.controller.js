@@ -1,10 +1,13 @@
 const mentorModel = require('../models/mentor.model');
+const FeedbackABET = require('../models/feedbackMentorAbet.model');
+const AbetQuestion = require('../models/abetQuestion.model');
 const studentModel = require("../models/student.model");
 const { validationResult } = require('express-validator');
 const blacklistModel = require('../models/blacklist.model');
 const jwt = require('jsonwebtoken')
 const crypto = require("crypto");
 const sendEmail = require('../libs/nodemailer');
+
 
 
 // Register Mentor (Only Email Submission)
@@ -407,4 +410,70 @@ module.exports.getAssignedStudents = async(req, res) => {
         });
     }
 }
+
+module.exports.getAbetForm = async(req, res) => {
+    try {
+        const { mentorId } = req.params;
+    
+        const questions = await AbetQuestion.find();
+        const feedback = await FeedbackABET.findOne({ mentor: mentorId }).populate('responses.question');
+    
+        const responseMap = {};
+        if (feedback) {
+          feedback.responses.forEach(r => {
+            responseMap[r.question._id.toString()] = r.levelOfAttainment;
+          });
+        }
+    
+        const formattedQuestions = questions.map(q => ({
+          _id: q._id,
+          text: q.text,
+          selectedValue: responseMap[q._id.toString()] || null
+        }));
+    
+        res.status(200).json({
+          mentorId,
+          suggestedCourse: feedback?.suggestedCourse || '',
+          overallSatisfaction: feedback?.overallSatisfaction || '',
+          questions: formattedQuestions
+        });
+      } catch (err) {
+        console.error('GET Error:', err);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+}
+
+module.exports.submitAbetForm = async(req, res) => {
+    try {
+        const { mentorId } = req.params;
+        const { levels, suggestedCourse, overallSatisfaction } = req.body;
+    
+        if (!levels || typeof levels !== 'object') {
+          return res.status(400).json({ error: 'Levels object is required' });
+        }
+    
+        const responses = Object.entries(levels).map(([questionId, level]) => ({
+          question: questionId,
+          levelOfAttainment: parseInt(level)
+        }));
+    
+        const feedback = await FeedbackABET.findOneAndUpdate(
+          { mentor: mentorId },
+          {
+            mentor: mentorId,
+            responses,
+            suggestedCourse,
+            overallSatisfaction
+          },
+          { upsert: true, new: true }
+        );
+    
+        res.status(200).json({ message: 'Feedback submitted successfully', feedback });
+      } catch (err) {
+        console.error('POST Error:', err);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+}
+
+
 
