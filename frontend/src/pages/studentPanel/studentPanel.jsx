@@ -3,7 +3,7 @@ import Navbar from "./../../components/navbar/navbar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import StudentDocUpload from "./studentDocUpload/studentDocUpload";
-import StudentDashboard from "./studentDashboardafterVerify/stuDashboardAfterVerify";
+import StudentMentorDetailForm from "./studentDashboardafterVerify/stuDashboardAfterVerify";
 import Verify from "./studentAccVerify/studentAccVerify";
 import StudentDocVerifyPhase from "./studentDocVerifyPhase/stuDocVerifyPhase";
 import StudentFortnightlyReports from "./stufortnightly/stufortnightlyform";
@@ -67,7 +67,7 @@ const StudentPanel = () => {
     );
   }
 
-  // If the student is verified, but some documents are missing
+  // If the student mail is verified, but some documents are missing
   if (studentData && studentData.verified) {
     if (!uploadedDocs.trainingLetter || !uploadedDocs.feeReceipt) {
       return (
@@ -110,7 +110,7 @@ const StudentPanel = () => {
       );
     }
 
-    // If both documents are uploaded and mentor is verified
+    // If both documents are uploaded and admin is verified
     if (studentData.mentorverified) {
       return (
         <>
@@ -125,13 +125,13 @@ const StudentPanel = () => {
               onClick: () => navigate("/student/logout"),
             }}
           />
-          <StudentDashboard />
+          <StudentMentorDetailForm />
 
         </>
       );
     }
 
-    // Default: All documents uploaded but waiting for mentor verification
+    // Default: All documents uploaded but waiting for admin verification
     return (
       <>
         <Navbar
