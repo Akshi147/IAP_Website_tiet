@@ -4,10 +4,9 @@ import { Footer } from "../../components/footer";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import DocumentUpload from "./component/DocumentUpload";
-import Phase3 from "./component/Phase3"; // Assuming Phase3 is the final phase component
-import Verify from "./component/Verify"; // Assuming this is the Verify component
-import Phase2 from "./component/Phase2";
-import Fortnightly from "./component/Fortnightly";
+import Phase3 from "./component/Phase3";
+import Verify from "./component/Verify";
+import VerifyDocumentemail from "./component/VerifyEmailDocument";
 
 const StudentPanel = () => {
   const navigate = useNavigate();
@@ -48,16 +47,12 @@ const StudentPanel = () => {
     );
   }
 
-  // Check if the student is not verified
+  // Check if the student is not verified - show only Verify component with logout button
   if (studentData && !studentData.verified) {
     return (
       <>
         <Header
-          navItems={[
-            { name: "Dashboard", path: "/dashboard" },
-            { name: "Courses", path: "/courses" },
-            { name: "Profile", path: "/profile" },
-          ]}
+          navItems={[]}
           downloadButton={{
             text: "Log Out",
             onClick: () => navigate("/student/logout"),
@@ -70,76 +65,67 @@ const StudentPanel = () => {
   }
 
   // If the student is verified, but some documents are missing
-  if (studentData && studentData.verified) {
-    if (!uploadedDocs.trainingLetter || !uploadedDocs.feeReceipt) {
-      return (
-        <>
-          <Header
-            navItems={[
-              { name: "Profile", path: "/dashboard" },
-            ]}
-            downloadButton={{
-              text: "Log Out",
-              onClick: () => navigate("/student/logout"),
-            }}
-          />
-          <DocumentUpload uploadedDocs={uploadedDocs} />
-          <Footer />
-        </>
-      );
-    }
-
-    // Check for Phase 4 (Fortnightly Reports) first
-    if (studentData.verified && studentData.mentorverified && studentData.phase3verified) {
-      return (
-        <>
-         <Header
-            navItems={[
-              { name: "Profile", path: "/dashboard" },
-            ]}
-            downloadButton={{
-              text: "Log Out",
-              onClick: () => navigate("/student/logout"),
-            }}
-          />
-          <Fortnightly />
-          <Footer />
-        </>
-      );
-    }
-
-    // If both documents are uploaded and mentor is verified
-    if (studentData.mentorverified) {
-      return (
-        <>
-         <Header
-            navItems={[
-              { name: "Profile", path: "/dashboard" },
-            ]}
-            downloadButton={{
-              text: "Log Out",
-              onClick: () => navigate("/student/logout"),
-            }}
-          />
-          <Phase3 />
-          <Footer />
-        </>
-      );
-    }
-
-    // Default: All documents uploaded but waiting for mentor verification
+  if (studentData && studentData.verified && (!uploadedDocs.trainingLetter || !uploadedDocs.feeReceipt)) {
     return (
       <>
-       <Header
-            navItems={[
-              { name: "Profile", path: "/dashboard" },
-            ]}
-            downloadButton={{
-              text: "Log Out",
-              onClick: () => navigate("/student/logout"),
-            }}
-          />
-        <Phase2/>
+        <Header
+          navItems={[
+            { name: "Profile", path: "/dashboard" },
+          ]}
+          downloadButton={{
+            text: "Log Out",
+            onClick: () => navigate("/student/logout"),
+          }}
+        />
+        <DocumentUpload uploadedDocs={uploadedDocs} />
+        <Footer />
+      </>
+    );
+  }
+
+  // If both documents are uploaded but mentor is not yet verified
+  if (studentData && studentData.verified && uploadedDocs.trainingLetter && uploadedDocs.feeReceipt && !studentData.mentorverified) {
+    return (
+      <>
+        <Header
+          navItems={[
+            { name: "Profile", path: "/dashboard" },
+          ]}
+          downloadButton={{
+            text: "Log Out",
+            onClick: () => navigate("/student/logout"),
+          }}
+        />
+        <VerifyDocumentemail />
+        <Footer />
+      </>
+    );
+  }
+
+  // If both documents are uploaded and mentor is verified - show Phase3 with full navbar
+  if (studentData && studentData.verified && uploadedDocs.trainingLetter && uploadedDocs.feeReceipt && studentData.mentorverified) {
+    return (
+      <>
+        <Header
+          navItems={[
+            { name: "Profile", path: "/dashboard" },
+            { name: "Faculty Assigned", path: "/faculty-assigned" },
+            { name: "Upload Report and PPT", path: "/upload-report" },
+            { name: "STU INPUT FORM", path: "/student-input" },
+            { name: "EVALUATION SCHEDULE", path: "/evaluation-schedule" },
+            { name: "FEEDBACK", path: "/feedback" },
+            { name: "FORTNIGHTLY REFLECTION", path: "/fortnightly" },
+            { name: "FEEDBACK(ABET)", path: "/abet-feedback" },
+            { name: "FUTURE PLANS", path: "/future-plans" },
+            { name: "OVERALL PROGRESS", path: "/overall-progress" },
+            { name: "CHANGE PASSWORD", path: "/change-password" },
+          ]}
+          downloadButton={{
+            text: "Log Out",
+            onClick: () => navigate("/student/logout"),
+          }}
+        />
+        <Phase3 />
         <Footer />
       </>
     );

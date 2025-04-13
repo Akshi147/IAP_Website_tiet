@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { LockClosedIcon, CheckIcon } from "@heroicons/react/24/outline";
+import { Header } from "../../../components/header";
 
 const FortnightlyReports = () => {
   const [reports, setReports] = useState({});
@@ -60,6 +61,27 @@ const FortnightlyReports = () => {
   );
 
   return (
+
+    <>
+    <Header
+          navItems={[
+            { name: "Profile", path: "/dashboard" },
+            { name: "Faculty Assigned", path: "/faculty-assigned" },
+            { name: "Upload Report and PPT", path: "/upload-report" },
+            { name: "STU INPUT FORM", path: "/student-input" },
+            { name: "EVALUATION SCHEDULE", path: "/evaluation-schedule" },
+            { name: "FEEDBACK", path: "/feedback" },
+            { name: "FORTNIGHTLY REFLECTION", path: "/fortnightly" },
+            { name: "FEEDBACK(ABET)", path: "/abet-feedback" },
+            { name: "FUTURE PLANS", path: "/future-plans" },
+            { name: "OVERALL PROGRESS", path: "/overall-progress" },
+            { name: "CHANGE PASSWORD", path: "/change-password" },
+          ]}
+          downloadButton={{
+            text: "Log Out",
+            onClick: () => navigate("/student/logout"),
+          }}
+        />
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="bg-gradient-to-r from-purple-600 to-indigo-800 rounded-2xl p-8 shadow-2xl mb-8 text-white">
         <h1 className="text-4xl font-bold text-white text-center mb-4">
@@ -197,6 +219,8 @@ const FortnightlyReports = () => {
         </div>
       )}
     </div>
+    </>
+    
   );
 };
 

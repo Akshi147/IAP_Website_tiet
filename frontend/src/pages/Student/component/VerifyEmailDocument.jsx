@@ -1,4 +1,4 @@
-const Phase2 = () => {
+const VerifyDocumentemail = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
@@ -31,6 +31,6 @@ const Phase2 = () => {
     )
   }
   
-  export default Phase2
+  export default VerifyDocumentemail
   
   

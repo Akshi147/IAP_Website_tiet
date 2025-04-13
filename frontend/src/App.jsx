@@ -33,6 +33,7 @@ import ForgotMentorPassword from './pages/Mentor/ForgotMentorPassword.jsx';
 import ResetMentorPassword from './pages/Mentor/ResetMentorPassword.jsx';
 import FreezeAndUnfreeze from './pages/Admin/component/freezeforms.jsx';
 import StudentDashboard from './pages/Student/component/Dashboard.jsx';
+import Fortnightly from './pages/Student/component/Fortnightly.jsx';
 
 const App = () => {
   return (
@@ -42,6 +43,11 @@ const App = () => {
         <Route path="/student" element={
           <StudentProtectedRoute>
             <StudentPanel />
+          </StudentProtectedRoute>
+        } />
+        <Route path="/fortnightly" element={
+          <StudentProtectedRoute>
+            <Fortnightly />
           </StudentProtectedRoute>
         } />
         <Route path="/student/logout" element={
