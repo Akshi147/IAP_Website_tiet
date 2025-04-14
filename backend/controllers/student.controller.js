@@ -11,6 +11,9 @@ const crypto = require("crypto");
 const AbetQuestionStudent = require("../models/abetQuestionStudent.model");
 const FeedbackStudentAbet = require("../models/feedbackStudentAbet.model");
 
+const FeedbackQuestionStudent = require("../models/feedbackQuestionStudent.model");
+const FeedbackStudent = require("../models/feedbackStudent.model");
+
 module.exports.registerStudent = async (req, res) => {
   try {
     console.log(req.body);
@@ -858,3 +861,98 @@ module.exports.submitFeedbackFormAbet = async (req, res) => {
     });
   }
 };
+
+
+
+
+module.exports.getFeedbackForm = async (req, res) => {
+  try{
+      const {studentId} = req.params;
+      const questions = await FeedbackQuestionStudent.find();
+
+
+      const feedback = await FeedbackStudent.findOne({
+          student: studentId,
+      })
+      .populate("responses.question") 
+      .populate("collabContact.question"); 
+  
+
+      console.log(feedback);
+
+      const responseMap = {};
+
+      //have to extra put the collabContact question
+      if(feedback){
+          feedback.responses.forEach((r) => {
+              responseMap[r.question._id.toString()] = r.answer;
+          })
+
+          //have to extra put the collabContact question
+          responseMap[feedback.collabContact.question._id] = feedback?.collabContact?.answer || null
+      }
+
+      const formattedQuestions = questions.map((q) => ({
+          _id: q._id,
+          text: q.text,
+          answer: responseMap[q._id.toString()] || null,
+      }));
+
+      res.status(200).json({
+          studentId,
+          questions: formattedQuestions
+      })
+  }catch(err){
+      console.error("GET ERROR", err);
+      res.status(500).json({
+          success: false,
+          message: "Internal server error",
+      });
+  }
+}
+
+
+module.exports.submitFeedbackForm = async (req, res) => {
+  try{
+      const {studentId} = req.params;
+      const {answers, collabContact} = req.body;
+
+      if(!answers || typeof answers !== "object"){
+          return res.status(400).json({error: "Answers object is required"});
+      }
+
+      if(!collabContact || typeof collabContact !== "object"){
+          return res.status(400).json({error: "CollabContact object is required"});
+      }
+
+      const responses = Object.entries(answers).map(([questionId, answer]) => ({
+          question: questionId,
+          answer: answer,
+      }));
+
+      const feedback = await FeedbackStudent.findOneAndUpdate(
+          {student: studentId},
+          {
+              student: studentId,
+              responses,
+              collabContact: {
+                question: collabContact.question,
+                answer: collabContact.answer,
+              }
+          },
+          {upsert: true, new: true}
+      )
+
+      res.status(200).json({
+          success: true,
+          message: "Feedback submitted successfully",
+          feedback,
+      });
+  }catch(err){
+      console.error("POST ERROR", err);
+      res.status(500).json({
+          success: false,
+          message: "Internal server error",
+      });
+  }
+}
