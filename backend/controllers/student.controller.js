@@ -850,6 +850,14 @@ module.exports.submitFeedbackFormAbet = async (req, res) => {
         {upsert: true, new: true}
     );
 
+    // update progress of submit feedback form in student model
+    await studentModel.findByIdAndUpdate(
+        {_id: studentId},
+        {"overallProgress.feedbackFormAbetStudent": "Done"},
+        {new: true}
+    )
+
+
     res.status(200).json({
         success: true,
         message: "Feedback Abet submitted successfully",
@@ -1002,6 +1010,7 @@ module.exports.getFuturePlan = async(req, res) => {
   }
 }
 
+
 module.exports.submitFuturePlan = async(req, res) => {
   try{
     const {studentId} = req.params;
@@ -1053,6 +1062,29 @@ module.exports.submitFuturePlan = async(req, res) => {
     
   }catch(err){
     console.error("POST ERROR", err);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+}
+
+
+module.exports.getOverallProgress = async(req, res) => {
+  try{
+    const {studentId} = req.params;
+    
+    const overallProgressData = await studentModel.findById(studentId).select("overallProgress"); 
+    console.log(overallProgressData);
+
+    return res.status(200).json({
+      success: true,
+      message: "Overall progress retrieved successfully",
+      studentId: studentId,
+      overallProgress: overallProgressData.overallProgress,      
+    })
+  }catch(err){ 
+    console.error("GET ERROR", err);
     res.status(500).json({
       success: false,
       message: "Internal server error",

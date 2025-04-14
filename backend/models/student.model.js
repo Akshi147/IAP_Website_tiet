@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const { phase3 } = require("../controllers/student.controller");
+const fortnightlyModel = require("./fortnightly.model");
 
 const StudentSchema = new mongoose.Schema({
     name: { type: String, required: true},
@@ -60,8 +61,94 @@ const StudentSchema = new mongoose.Schema({
     phase3verified:{type:Boolean,default:false},
     resetPasswordToken: { type: String, default: null },
     resetPasswordExpires: { type: Date, default: null },
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    
+    overallProgress: {
+        goalReportUploaded: {
+            type: String,
+            enum: ["Pending", "Done"],
+            default: "Pending"
+        },
+        midWayReportUploaded: {
+            type: String,
+            enum: ["Pending", "Done"],
+            default: "Pending"
+        },
+        projectPresentationUploaded: {
+            type: String,
+            enum: ["Pending", "Done"],
+            default: "Pending"
+        },
+        projectReportFileUploaded: {
+            type: String,
+            enum: ["Pending", "Done"],
+            default: "Pending"
+        },
+        stuInputFormFilledByStudent: {
+            type: String,
+            enum: ["Pending", "Done"],
+            default: "Pending"
+        },
+        fortnightlyReportByStudent: {
+            type: String,
+            enum: ["Pending", "Done"],
+            default: "Pending"
+        },
+        fortnightlyReportByFacultyMentor: {
+            type: String,
+            enum: ["Pending", "Done"],
+            default: "Pending"
+        },
+        commentsGivenByFacultyCoordinator: {
+            type: String,
+            enum: ["Pending", "Done"],
+            default: "Pending"
+        },
+        facultyGivenMarksForGoalReport: {
+            type: String,
+            enum: ["Pending", "Done"],
+            default: "Pending"
+        },
+        facultyGivenMarksForMidwayReport: {
+            type: String,
+            enum: ["Pending", "Done"],
+            default: "Pending"
+        },
+        industrialMentorFilledAssignmentDetails: {
+            type: String,
+            enum: ["Pending", "Done"],
+            default: "Pending"
+        },
+
+        industrialMentorGivenMarks: {
+            type: String,
+            enum: ["Pending", "Done"],
+            default: "Pending"
+        },
+        feedbackFormByStudent: {
+            type: String,
+            enum: ["Pending", "Done"],
+            default: "Pending"
+        },
+        feedbackFormAbetStudent: {
+            type: String,
+            enum: ["Pending", "Done"],
+            default: "Pending"
+        },
+        feedbackFormAbetIndustrialMentor: {
+            type: String,
+            enum: ["Pending", "Done"],
+            default: "Pending"
+        },
+        futurePlans: {
+            type: String,
+            enum: ["Pending", "Done"],
+            default: "Pending"
+        }
+    }
 });
+
+
 StudentSchema.methods.generateResetToken = function () {
     const resetToken = crypto.randomBytes(32).toString("hex");
     this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
