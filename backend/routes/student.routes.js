@@ -28,7 +28,7 @@ router.get('/logout',authStudent,studentController.logoutStudent);
 router.get('/profile',authStudent,studentController.getStudentProfile);
 router.post('/uploadfile',authStudent,upload.single('trainingLetter'),studentController.uploadFile);
 router.post('/uploadfiles',authStudent,upload.single('feeReceipt'),studentController.uploadFiles);
-router.post('/uploadgoalreport',authStudent,upload.single('GoalReport'),studentController.uploadGoalReport);
+router.post('/uploadgoalreport',authStudent,upload.single('GoalReport'),studentController.uploadGoalReport); ///// ye YAHAN YE FUNCTION MISSING H STUDENT ROUTE MEIN
 router.post('/uploadmidwayreport',authStudent,upload.single('MidwayReport'),studentController.uploadMidwayReport);
 router.post('/uploadreportfile',authStudent,upload.single('ReportFile'),studentController.uploadReportFile);
 router.post('/uploadprojectpresentation',authStudent,upload.single('ProjectPresentation'),studentController.uploadProjectPresentation);

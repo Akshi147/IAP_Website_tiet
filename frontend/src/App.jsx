@@ -12,6 +12,7 @@ import StudentLogout from './pages/studentPanel/studentLogout/studentLogout';
 import ForgotStudentPassword from './pages/studentPanel/studentForgotPassword/stuForgot';
 import StudentResetPassword from './pages/studentPanel/studentResetPassword/stuResetPassword';
 import StudentDashboard from './pages/StudentPanel/stuDashboard/stuDashboard.jsx';
+import StudentFortnightlyReports from './pages/studentPanel/stufortnightly/stufortnightlyform.jsx';
 
 
 import FacultyProtectedRoute from './pages/facultyPanel/facultyProtectedRoute';
@@ -69,6 +70,11 @@ const App = () => {
         <Route path="/register" element={<StudentRegisterForm />} />
         <Route path="/forgotstudentpassword" element={<ForgotStudentPassword />} />
         <Route path="/reset-password" element={<StudentResetPassword />} />
+        <Route path='/fortnightly' element={
+          <StudentProtectedRoute>
+            <StudentFortnightlyReports />
+          </StudentProtectedRoute>
+        } />
 
         <Route path="/faculty/logout" element={
           <FacultyProtectedRoute>

@@ -6,7 +6,6 @@ import StudentDocUpload from "./studentDocUpload/studentDocUpload";
 import StudentMentorDetailForm from "./studentDashboardafterVerify/stuDashboardAfterVerify";
 import Verify from "./studentAccVerify/studentAccVerify";
 import StudentDocVerifyPhase from "./studentDocVerifyPhase/stuDocVerifyPhase";
-import StudentFortnightlyReports from "./stufortnightly/stufortnightlyform";
 
 const StudentPanel = () => {
   const navigate = useNavigate();
@@ -54,8 +53,6 @@ const StudentPanel = () => {
         <Navbar
           navItems={[
             { name: "Dashboard", path: "/dashboard" },
-            { name: "Courses", path: "/courses" },
-            { name: "Profile", path: "/profile" },
           ]}
           downloadButton={{
             text: "Log Out",
@@ -68,15 +65,12 @@ const StudentPanel = () => {
   }
 
   // If the student mail is verified, but some documents are missing
-  if (studentData && studentData.verified) {
-    if (!uploadedDocs.trainingLetter || !uploadedDocs.feeReceipt) {
+  if (studentData && studentData.verified && (!uploadedDocs.trainingLetter || !uploadedDocs.feeReceipt)) {
       return (
         <>
           <Navbar
             navItems={[
               { name: "Dashboard", path: "/dashboard" },
-              { name: "Courses", path: "/courses" },
-              { name: "Profile", path: "/profile" },
             ]}
             downloadButton={{
               text: "Log Out",
@@ -84,41 +78,27 @@ const StudentPanel = () => {
             }}
           />
           <StudentDocUpload uploadedDocs={uploadedDocs} />
-
-        </>
-      );
-    }
-
-    // Check for Phase 4 (Fortnightly Reports) first
-    if (studentData.verified && studentData.mentorverified && studentData.phase3verified) {
-      return (
-        <>
-          <Navbar
-            navItems={[
-              { name: "Dashboard", path: "/dashboard" },
-              { name: "Courses", path: "/courses" },
-              { name: "Profile", path: "/profile" },
-            ]}
-            downloadButton={{
-              text: "Log Out",
-              onClick: () => navigate("/student/logout"),
-            }}
-          />
-          <StudentFortnightlyReports />
-
         </>
       );
     }
 
     // If both documents are uploaded and admin is verified
-    if (studentData.mentorverified) {
+    if (studentData && studentData.verified && uploadedDocs.trainingLetter && uploadedDocs.feeReceipt && studentData.mentorverified) {
       return (
         <>
           <Navbar
             navItems={[
               { name: "Dashboard", path: "/dashboard" },
-              { name: "Courses", path: "/courses" },
-              { name: "Profile", path: "/profile" },
+              {name: "Faculty Assigned", path: "faculty-assigned"},
+              { name: "Upload Report and PPT", path: "/upload-report" },
+              { name: "Stu Input Form", path: "/student-input" },
+              { name: "Evaluation Schedule", path: "/evaluation-schedule" },
+              { name: "Feedback", path: "/feedback" },
+              { name: "Fortinightly Reflection", path: "/fortnightly" },
+              { name: "Feedback(ABET)", path: "/abet-feedback" },
+              { name: "Future Plans", path: "/future-plans" },
+              { name: "Overall progress", path: "/overall-progress" },
+              { name: "Change Password", path: "/change-password" },
             ]}
             downloadButton={{
               text: "Log Out",
@@ -132,6 +112,7 @@ const StudentPanel = () => {
     }
 
     // Default: All documents uploaded but waiting for admin verification
+    if (studentData && studentData.verified && uploadedDocs.trainingLetter && uploadedDocs.feeReceipt && !studentData.mentorverified){
     return (
       <>
         <Navbar
@@ -149,8 +130,6 @@ const StudentPanel = () => {
       </>
     );
   }
-
-  return null;
 };
 
 export default StudentPanel;

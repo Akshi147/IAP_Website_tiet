@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { LockClosedIcon, CheckIcon } from "@heroicons/react/24/outline";
 import styles from "./stuFortnightlyform.module.css";
+import Navbar from "../../../components/navbar/navbar";
 
 const StudentFortnightlyReports = () => {
   const [reports, setReports] = useState({});
@@ -11,6 +13,7 @@ const StudentFortnightlyReports = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("");
 
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -62,6 +65,26 @@ const StudentFortnightlyReports = () => {
     );
 
   return (
+    <>
+    <Navbar
+       navItems={[
+             { name: "Profile", path: "/dashboard" },
+             { name: "Faculty Assigned", path: "/faculty-assigned" },
+             { name: "Upload Report and PPT", path: "/upload-report" },
+             { name: "STU INPUT FORM", path: "/student-input" },
+             { name: "EVALUATION SCHEDULE", path: "/evaluation-schedule" },
+             { name: "FEEDBACK", path: "/feedback" },
+             { name: "FORTNIGHTLY REFLECTION", path: "/fortnightly" },
+             { name: "FEEDBACK(ABET)", path: "/abet-feedback" },
+             { name: "FUTURE PLANS", path: "/future-plans" },
+             { name: "OVERALL PROGRESS", path: "/overall-progress" },
+             { name: "CHANGE PASSWORD", path: "/change-password" },
+           ]}
+           downloadButton={{
+             text: "Log Out",
+             onClick: () => navigate("/student/logout"),
+           }}
+         />
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Fortnightly Reflection Reports</h1>
@@ -188,6 +211,7 @@ const StudentFortnightlyReports = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
