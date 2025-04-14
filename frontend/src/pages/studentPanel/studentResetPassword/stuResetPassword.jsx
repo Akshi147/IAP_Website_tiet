@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./stuResetPassword.module.css";
+import Navbar from "../../../components/navbar/navbar";
 
 const StudentResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -46,6 +47,27 @@ const StudentResetPassword = () => {
   };
 
   return (
+    <>
+    <Navbar
+            navItems={[
+              { name: "Dashboard", path: "/dashboard" },
+              {name: "Phase 2", path: "/student"},
+              {name: "Faculty Assigned", path: "faculty-assigned"},
+              { name: "Upload Report and PPT", path: "/getFileUploadInfo" },
+              { name: "Stu Input Form", path: "/student-input" },
+              { name: "Evaluation Schedule", path: "/evaluation-schedule" },
+              { name: "Feedback", path: "/feedback" },
+              { name: "Fortinightly Reflection", path: "/fortnightly" },
+              { name: "Feedback(ABET)", path: "/abet-feedback" },
+              { name: "Future Plans", path: "/future-plans" },
+              { name: "Overall progress", path: "/overall-progress" },
+              { name: "Change Password", path: "/reset-password" },
+              ]}
+              downloadButton={{
+                text: "Log Out",
+                onClick: () => navigate("/student/logout"),
+              }}
+          />
     <div className={styles.container}>
       <div className={styles.card}>
         <h1 className={styles.title}>Reset Password</h1>
@@ -74,6 +96,7 @@ const StudentResetPassword = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 

@@ -133,20 +133,6 @@ const StudentMentorDetailForm = () => {
               {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
               {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
 
-              {showConfirmation && (
-                <div className={styles.warningMessage}>
-                  ⚠️ Please recheck your details! This is the final time you can edit.
-                  <div className={styles.divv}>
-                    <button onClick={() => setShowConfirmation(false)} className={styles.cancelButton}>
-                      Cancel
-                    </button>
-                    <button onClick={handleSubmit} className={styles.confirmButton} disabled={isSubmitting}>
-                      Confirm & Submit
-                    </button>
-                  </div>
-                </div>
-              )}
-
               <form onSubmit={handleSubmit} className={styles.formContainer}>
                 <div className={styles.inputGrid}>
                   {[
@@ -170,16 +156,10 @@ const StudentMentorDetailForm = () => {
                 </div>
 
                 <div className={styles.buttonContainer}>
-                  <button type="submit" disabled={isPhase3Locked || isSubmitting} className={`${styles.button} ${isPhase3Locked || isSubmitting ? styles.disabled : styles.active}`}>
-                    Update
+                  <button onClick={handleSubmit} className={styles.confirmButton} disabled={isSubmitting}>
+                    Submit
                   </button>
                 </div>
-
-                {isPhase3Locked && (
-                  <div className={styles.lockedMessage}>
-                    🚫 You can no longer edit this form because it is locked.
-                  </div>
-                )}
               </form>
             </div>
           </div>

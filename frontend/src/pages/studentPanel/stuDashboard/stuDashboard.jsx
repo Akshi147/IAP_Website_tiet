@@ -58,25 +58,25 @@ const StudentDashboard = () => {
     {
       title: 'Email Verification',
       completed: studentData.verified,
-      icon: <CheckCircleIcon className="w-6 h-6" />,
+      icon: <CheckCircleIcon className={styles.widthh} />,
       description: 'Verify your email address to continue',
     },
     {
       title: 'Document Submission',
       completed: studentData.trainingLetter && studentData.feeReceipt,
-      icon: <DocumentTextIcon className="w-6 h-6" />,
+      icon: <DocumentTextIcon className={styles.widthh} />,
       description: 'Submit Training Letter and Fee Receipt',
     },
     {
       title: 'Document Verification',
       completed: studentData.mentorverified,
-      icon: <UserCircleIcon className="w-6 h-6" />,
+      icon: <UserCircleIcon className={styles.widthh} />,
       description: 'Waiting for Admin approval',
     },
     {
       title: 'Phase 2 Verification',
       completed: studentData.phase3verified,
-      icon: <ShieldCheckIcon className="w-6 h-6" />,
+      icon: <ShieldCheckIcon className={styles.widthh} />,
       description: 'Final phase verification',
     },
   ];
@@ -145,7 +145,7 @@ const StudentDashboard = () => {
           </div>
 
           {/* Verification Progress */}
-          <div className={`${styles.card} ${styles.verificationSection}`}>
+          <div className={styles.card}>
             <h2 className={styles.sectionTitle}>Verification Status</h2>
             <div className={styles.statusGrid}>
               {checkpoints.map((checkpoint, index) => (

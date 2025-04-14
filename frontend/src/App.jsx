@@ -13,7 +13,14 @@ import ForgotStudentPassword from './pages/studentPanel/studentForgotPassword/st
 import StudentResetPassword from './pages/studentPanel/studentResetPassword/stuResetPassword';
 import StudentDashboard from './pages/StudentPanel/stuDashboard/stuDashboard.jsx';
 import StudentFortnightlyReports from './pages/studentPanel/stufortnightly/stufortnightlyform.jsx';
-
+import StudentAssignedFaculty from './pages/studentPanel/studentAssignedFaculty/stuAssignedFaculty.jsx';
+import StudentUploadReportStatus from './pages/studentPanel/stuUploadReport/stuUploadReport.jsx';
+import StudentInputForm from './pages/studentPanel/StuInputForm/stuInputForm.jsx';
+import StudentEvalSchedule from './pages/studentPanel/StuEvalSchedule/StuEvalSchedule.jsx';
+import StudentFeedback from './pages/studentPanel/StuFeedback/stuFeedback.jsx';
+import StudentFuturePlan from './pages/studentPanel/StuFuturePlan/stuFuturePlan.jsx';
+import StudentFeedbackABET from './pages/studentPanel/stuFeedbackABET/stuFeedbackABET.jsx';
+import StudentOverallProgress from './pages/studentPanel/StudentOverallProgress/stuOverallProgress.jsx';
 
 import FacultyProtectedRoute from './pages/facultyPanel/facultyProtectedRoute';
 import FacultyLogin from './pages/facultyPanel/facultyLogin/facultyLogin';
@@ -75,6 +82,47 @@ const App = () => {
             <StudentFortnightlyReports />
           </StudentProtectedRoute>
         } />
+        <Route path='/faculty-assigned' element={
+          <StudentProtectedRoute>
+            <StudentAssignedFaculty />
+          </StudentProtectedRoute>
+        } />
+        <Route path='/getFileUploadInfo' element={
+          <StudentProtectedRoute>
+            <StudentUploadReportStatus />
+          </StudentProtectedRoute>
+        } />
+        <Route path='/student-input' element={
+          <StudentProtectedRoute>
+            <StudentInputForm />
+          </StudentProtectedRoute>
+        } />
+        <Route path= '/evaluation-schedule' element={
+          <StudentProtectedRoute>
+            <StudentEvalSchedule />
+          </StudentProtectedRoute>
+        } />
+        <Route path='/feedback' element={
+          <StudentProtectedRoute>
+            <StudentFeedback />
+          </StudentProtectedRoute>
+        } />
+        <Route path='/abet-feedback' element={
+          <StudentProtectedRoute>
+            <StudentFeedbackABET />
+          </StudentProtectedRoute>
+        } />
+        <Route path='/future-plans' element={
+          <StudentProtectedRoute>
+            <StudentFuturePlan />
+          </StudentProtectedRoute>
+        } />
+        <Route path='/overall-progress' element={
+          <StudentProtectedRoute>
+            <StudentOverallProgress />
+          </StudentProtectedRoute>
+        } />
+
 
         <Route path="/faculty/logout" element={
           <FacultyProtectedRoute>
@@ -88,6 +136,7 @@ const App = () => {
             <FacultyPanel />
           </FacultyProtectedRoute>
         } />
+
 
         <Route path="/mentors" element={
           <MentorProtectedRoute>
@@ -109,6 +158,7 @@ const App = () => {
             <MentorAssignedStudents />
           </MentorProtectedRoute>
         } />
+        
 
         <Route path="/admin/verifyStudentDocument/:rollNumber" element={
           <AdminProtectedRoute>

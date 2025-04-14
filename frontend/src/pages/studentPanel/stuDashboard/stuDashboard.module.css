@@ -1,12 +1,19 @@
 /* Container and Layout */
 .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
     min-height: 100vh;
     background-color: #f9fafb; /* Tailwind: bg-gray-50 */
-    padding: 2rem;
   }
   
   .wrapper {
-    max-width: 80rem; /* Tailwind: max-w-7xl */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 80%;
     margin: 0 auto;
   }
   
@@ -116,11 +123,6 @@
     text-align: center;
   }
   
-  /* Verification Section */
-  .verificationSection {
-    margin-top: 2rem;
-  }
-  
   .statusGrid {
     display: grid;
     gap: 1rem;
@@ -211,4 +213,8 @@
   .fortnightDesc {
     color: #4338ca; /* text-indigo-600 */
   }
-  
+
+  .widthh{
+    height: 1.5rem;
+    width: 1.5rem;
+  }

@@ -67,24 +67,25 @@ const StudentFortnightlyReports = () => {
   return (
     <>
     <Navbar
-       navItems={[
-             { name: "Profile", path: "/dashboard" },
-             { name: "Faculty Assigned", path: "/faculty-assigned" },
-             { name: "Upload Report and PPT", path: "/upload-report" },
-             { name: "STU INPUT FORM", path: "/student-input" },
-             { name: "EVALUATION SCHEDULE", path: "/evaluation-schedule" },
-             { name: "FEEDBACK", path: "/feedback" },
-             { name: "FORTNIGHTLY REFLECTION", path: "/fortnightly" },
-             { name: "FEEDBACK(ABET)", path: "/abet-feedback" },
-             { name: "FUTURE PLANS", path: "/future-plans" },
-             { name: "OVERALL PROGRESS", path: "/overall-progress" },
-             { name: "CHANGE PASSWORD", path: "/change-password" },
-           ]}
-           downloadButton={{
-             text: "Log Out",
-             onClick: () => navigate("/student/logout"),
-           }}
-         />
+        navItems={[
+          { name: "Dashboard", path: "/dashboard" },
+          {name: "Phase 2", path: "/student"},
+          {name: "Faculty Assigned", path: "faculty-assigned"},
+          { name: "Upload Report and PPT", path: "/getFileUploadInfo" },
+          { name: "Stu Input Form", path: "/student-input" },
+          { name: "Evaluation Schedule", path: "/evaluation-schedule" },
+          { name: "Feedback", path: "/feedback" },
+          { name: "Fortinightly Reflection", path: "/fortnightly" },
+          { name: "Feedback(ABET)", path: "/abet-feedback" },
+          { name: "Future Plans", path: "/future-plans" },
+          { name: "Overall progress", path: "/overall-progress" },
+          { name: "Change Password", path: "/reset-password" },
+          ]}
+          downloadButton={{
+            text: "Log Out",
+            onClick: () => navigate("/student/logout"),
+          }}
+      />
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Fortnightly Reflection Reports</h1>
