@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-// import { useNavigate } from "react-router-dom";
-// import Navbar from "../../../components/navbar/navbar";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../../../components/navbar/navbar";
 import Hero from "../../../components/hero/hero";
 import styles from "./mentorAssignedStu.module.css"; // Importing the CSS module
 
 const MentorAssignedStudents = () => {
   const [students, setStudents] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -37,19 +37,18 @@ const MentorAssignedStudents = () => {
 
   return (
     <>
-      {/* <Navbar
-              navItems={[
-                { name: "Dashboard", path: "/mentors" },
-                { name: "Profile", path: "/mentors/profile" },
-              ]}
-              downloadButton={{
-                text: "Log Out",
-                onClick: () => {
-                  localStorage.removeItem("mentor-token"); // ✅ Clears token on logout
-                  navigate("/mentors/login");
-                },
-              }}
-            /> */}
+      <Navbar
+                      navItems={[
+                          { name: "Students Doing Project Under You", path: "/mentors/getAssignedStudents" },
+                          {name: "Feedback", path: "/mentors/feedback"},
+                          { name: "Feedback (for ABET)", path: "/mentors/feedback-abet" },
+                          { name: "Change Password", path: "/reset-mentorpassword" },
+                          ]}
+                          downloadButton={{
+                          text: "Log Out",
+                          onClick: () => navigate("/mentors/logout"),
+                          }}
+                 />
       <Hero />
       <div className={styles.container}>
         <h1 className={styles.heading}>Assigned Students</h1>
@@ -82,6 +81,20 @@ const MentorAssignedStudents = () => {
                   <td>
                     <button className={styles.viewButton}>View</button>
                   </td>
+                  <td className={styles.tableCell}>
+      <button
+        onClick={() => navigate(`/seeform1/${student._id}`)}
+        className={styles.seeForm1Button}
+      >
+        See Form1
+      </button>
+      <button
+        disabled
+        className={styles.form2DisabledButton}
+      >
+        Form2 Disabled
+      </button>
+    </td>
                 </tr>
               ))
             ) : (

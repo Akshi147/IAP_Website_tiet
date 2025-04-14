@@ -37,6 +37,9 @@ import MentorAssignedStudents from './pages/mentorPanel/mentorAssignedStu/mentor
 import MentorDetailForm from './pages/mentorPanel/mentorDetailForm/mentorDetailForm';
 import MentorForgotPassword from './pages/mentorPanel/mentorForgotPassword/mentorForgot.jsx';
 import MentorResetPassword from './pages/mentorPanel/mentorResetPass/ResetMentorPassword.jsx';
+import MentorBriefProgressReport from './pages/mentorPanel/mentorStudentForm1/mentorStuForm1.jsx';
+import MentorFeedback from './pages/mentorPanel/mentorFeedback/mentorFeedback.jsx';
+import MentorFeedbackABET from './pages/mentorPanel/mentorFeedbackAbet/mentorFeedbackAbet.jsx';
 
 import AdminProtectedRoute from './pages/adminPanel/adminProtected';
 import AdminLogout from './pages/adminPanel/adminLogout/adminLogout';
@@ -156,6 +159,21 @@ const App = () => {
         <Route path="/mentors/getAssignedStudents" element={
           <MentorProtectedRoute>
             <MentorAssignedStudents />
+          </MentorProtectedRoute>
+        } />
+        <Route path="/seeform1/:id" element={
+          <MentorProtectedRoute>
+            <MentorBriefProgressReport />
+          </MentorProtectedRoute>
+        } />
+        <Route path="/mentors/feedback" element={
+          <MentorProtectedRoute>
+            <MentorFeedback />
+          </MentorProtectedRoute>
+        } />
+        <Route path="/mentors/feedback-abet" element={
+          <MentorProtectedRoute>
+            <MentorFeedbackABET />
           </MentorProtectedRoute>
         } />
         
