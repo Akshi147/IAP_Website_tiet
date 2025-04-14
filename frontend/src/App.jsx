@@ -28,6 +28,7 @@ import {MentorLogin} from './pages/Mentor/MentorLogin';
 import {MentorProtectedRoute} from './pages/Mentor/MentorProtectedRoute';
 import MentorPanel from './pages/Mentor/MentorPanel';
 import { MentorRegister } from './pages/Mentor/MentorRegister';
+import BriefProgressReport  from './pages/Mentor/SeeForm1';
 import { MentorSetPassword } from './pages/Mentor/MentorSetPassword';
 import ForgotMentorPassword from './pages/Mentor/ForgotMentorPassword.jsx';
 import ResetMentorPassword from './pages/Mentor/ResetMentorPassword.jsx';
@@ -131,6 +132,11 @@ const App = () => {
       <Route path="/mentor" element={
         <MentorProtectedRoute>
           <MentorPanel/>
+        </MentorProtectedRoute>
+      } />
+      <Route path='/seeform1/:id' element={
+        <MentorProtectedRoute>
+          <BriefProgressReport/>
         </MentorProtectedRoute>
       } />
       <Route path="/mentorregister" element={<MentorRegister />} />
