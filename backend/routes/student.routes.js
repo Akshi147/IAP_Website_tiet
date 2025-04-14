@@ -57,4 +57,6 @@ router.post("/submitFeedbackForm/:studentId", authStudent, studentController.sub
 router.get("/getFuturePlan/:studentId", authStudent, studentController.getFuturePlan);
 router.post("/submitFuturePlan/:studentId", authStudent, studentController.submitFuturePlan);
 
+router.get("/getOverallProgress/:studentId", authStudent, studentController.getOverallProgress);
+
 module.exports = router;

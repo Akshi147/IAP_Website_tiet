@@ -3,6 +3,7 @@
 A REST API for managing ABET assessment forms and student progress reports for mentors in educational institutions.
 
 ## Table of Contents
+
 - [Features](#features)
 - [Installation](#installation)
 - [API Endpoints](#api-endpoints)
@@ -53,17 +54,19 @@ npm start
 ### ABET Form Endpoints
 
 #### Get ABET Form for Mentor
+
 - **GET**: `/mentors/getAbetForm/:mentorId`
 - **Description**: Retrieves the ABET assessment form for a specific mentor
 - **Authentication**: Required (Bearer Token)
-- **Path Params**: 
+- **Path Params**:
   - `mentorId`: ID of the mentor
 
 #### Submit ABET Form for Mentor
+
 - **POST**: `/mentors/submitAbetForm/:mentorId`
 - **Description**: Submits an ABET assessment form for a specific mentor
 - **Authentication**: Required (Bearer Token)
-- **Path Params**: 
+- **Path Params**:
   - `mentorId`: ID of the mentor
 - **Request Body**:
   ```json
@@ -81,17 +84,19 @@ npm start
 ### Progress Report Endpoints
 
 #### Get Brief Progress Report
+
 - **GET**: `/mentors/breifProgressReport/:studentId`
 - **Description**: Retrieves the brief progress report for a specific student
 - **Authentication**: Required (Bearer Token)
-- **Path Params**: 
+- **Path Params**:
   - `studentId`: ID of the student
 
 #### Submit Brief Progress Report
+
 - **POST**: `/mentors/submitBriefProgressReport/:studentId`
 - **Description**: Submits a brief progress report for a specific student
 - **Authentication**: Required (Bearer Token)
-- **Path Params**: 
+- **Path Params**:
   - `studentId`: ID of the student
 - **Request Body**:
   ```json
@@ -114,11 +119,13 @@ npm start
 ### File Upload Endpoints
 
 #### Get File Upload Information
+
 - **GET**: `/students/getFileUploadInfo`
 - **Description**: Retrieves information about which files have been uploaded by a student
 - **Authentication**: Required (Student Token)
 
 #### Upload Files
+
 The API provides multiple endpoints for uploading different types of documents:
 
 - **POST**: `/students/uploadfile` - Upload training letter
@@ -130,6 +137,7 @@ The API provides multiple endpoints for uploading different types of documents:
 - **POST**: `/students/uploadfinaltraining` - Upload final training document
 
 All upload endpoints:
+
 - **Authentication**: Required (Student Token)
 - **Content-Type**: `multipart/form-data`
 - **Form Field**: Check specific field name in the endpoint path
@@ -143,6 +151,7 @@ Authorization: Bearer <your_token>
 ```
 
 There are two types of authentication:
+
 - `authStudent`: For student-specific endpoints
 - `authMentor`: For mentor-specific endpoints
 
@@ -153,16 +162,19 @@ There are two types of authentication:
 ```javascript
 const fetchAbetForm = async (mentorId, authToken) => {
   try {
-    const response = await fetch(`http://localhost:4000/mentors/getAbetForm/${mentorId}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${authToken}`
+    const response = await fetch(
+      `http://localhost:4000/mentors/getAbetForm/${mentorId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
       }
-    });
+    );
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching ABET form:', error);
+    console.error("Error fetching ABET form:", error);
   }
 };
 ```
@@ -172,18 +184,21 @@ const fetchAbetForm = async (mentorId, authToken) => {
 ```javascript
 const submitProgressReport = async (studentId, reportData, authToken) => {
   try {
-    const response = await fetch(`http://localhost:4000/mentors/submitBriefProgressReport/${studentId}`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${authToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(reportData)
-    });
+    const response = await fetch(
+      `http://localhost:4000/mentors/submitBriefProgressReport/${studentId}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reportData),
+      }
+    );
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error submitting progress report:', error);
+    console.error("Error submitting progress report:", error);
   }
 };
 ```
@@ -194,19 +209,19 @@ const submitProgressReport = async (studentId, reportData, authToken) => {
 const uploadTrainingLetter = async (fileData, authToken) => {
   try {
     const formData = new FormData();
-    formData.append('trainingLetter', fileData);
-    
-    const response = await fetch('http://localhost:4000/students/uploadfile', {
-      method: 'POST',
+    formData.append("trainingLetter", fileData);
+
+    const response = await fetch("http://localhost:4000/students/uploadfile", {
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${authToken}`
+        Authorization: `Bearer ${authToken}`,
       },
-      body: formData
+      body: formData,
     });
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error uploading training letter:', error);
+    console.error("Error uploading training letter:", error);
   }
 };
 ```
@@ -214,6 +229,7 @@ const uploadTrainingLetter = async (fileData, authToken) => {
 ## Response Structure
 
 ### ABET Form Response
+
 ```json
 {
   "mentorId": "67b85e615d284f70594721d6",
@@ -224,13 +240,14 @@ const uploadTrainingLetter = async (fileData, authToken) => {
       "_id": "67fb8c3b6b5f9d676e263e78",
       "text": "TIET CSE students have an ability to apply knowledge of mathematics, science, and engineering.",
       "selectedValue": null
-    },
+    }
     // More questions...
   ]
 }
 ```
 
 ### Brief Progress Report Response
+
 ```json
 {
   "success": true,
@@ -244,7 +261,7 @@ const uploadTrainingLetter = async (fileData, authToken) => {
       "_id": "67fbeafcdf03887ebc59ed40",
       "student": "67b8737a42fbf3b8f43c47ad",
       "topicOfProject": "ERP Development",
-      "typeOfProject": "Software Development",
+      "typeOfProject": "Software Development"
       // More fields...
     }
   }
@@ -252,6 +269,7 @@ const uploadTrainingLetter = async (fileData, authToken) => {
 ```
 
 ### File Upload Info Response
+
 ```json
 {
   "fileUploadInfo": {
@@ -266,112 +284,108 @@ const uploadTrainingLetter = async (fileData, authToken) => {
 }
 ```
 
-
 # Student Feedback Form ABET
 
 ### GET Student Feedback Form ABET
+
 - **GET**: `/students/getFeedbackFormAbet/:studentId`
 - **Response**:
   ```json
   {
     "studentId": "67b871b057e338fa24e3163e",
     "questions": [
-        {
-            "_id": "67fc9cb5cdeca397d0ad506f",  //question's id
-            "text": "An ability to apply knowledge of mathematics, science, and engineering.",  //question
-            "selectedValue": 3
-        },
-        {
-            "_id": "67fc9cb5cdeca397d0ad5070",
-            "text": "An ability to design and conduct experiments, as well as to analyze and interpret data.",
-            "selectedValue": 4
-        },
-        {
-            "_id": "67fc9cb5cdeca397d0ad5071",
-            "text": "An ability to design a system, component, or process to meet desired needs within realistic constraints such as economic, environmental, social, political, ethical, health and safety, manufacturability, and sustainability.",
-            "selectedValue": 5
-        },
-        {
-            "_id": "67fc9cb5cdeca397d0ad5072",
-            "text": "An ability to function on multidisciplinary teams.",
-            "selectedValue": 5
-        },
-        {
-            "_id": "67fc9cb5cdeca397d0ad5073",
-            "text": "An ability to identify, formulates, and solves engineering problems.",
-            "selectedValue": 5
-        },
-        {
-            "_id": "67fc9cb5cdeca397d0ad5074",
-            "text": "An understanding of professional and ethical responsibility.",
-            "selectedValue": 3
-        },
-        {
-            "_id": "67fc9cb5cdeca397d0ad5075",
-            "text": "An ability to communicate effectively.",
-            "selectedValue": 2
-        },
-        {
-            "_id": "67fc9cb5cdeca397d0ad5076",
-            "text": "The broad education necessary to understand the impact of engineering solutions in a global, economic, environmental, and societal context.",
-            "selectedValue": 1
-        },
-        {
-            "_id": "67fc9cb5cdeca397d0ad5077",
-            "text": "The recognition of the need for, and an ability to engage in life-long learning.",
-            "selectedValue": 1
-        },
-        {
-            "_id": "67fc9cb5cdeca397d0ad5078",
-            "text": "The knowledge of contemporary issues.",
-            "selectedValue": 5
-        },
-        {
-            "_id": "67fc9cb5cdeca397d0ad5079",
-            "text": "An ability to use the techniques, skills, and modern engineering tools necessary for engineering practice.",
-            "selectedValue": 5
-        }
+      {
+        "_id": "67fc9cb5cdeca397d0ad506f", //question's id
+        "text": "An ability to apply knowledge of mathematics, science, and engineering.", //question
+        "selectedValue": 3
+      },
+      {
+        "_id": "67fc9cb5cdeca397d0ad5070",
+        "text": "An ability to design and conduct experiments, as well as to analyze and interpret data.",
+        "selectedValue": 4
+      },
+      {
+        "_id": "67fc9cb5cdeca397d0ad5071",
+        "text": "An ability to design a system, component, or process to meet desired needs within realistic constraints such as economic, environmental, social, political, ethical, health and safety, manufacturability, and sustainability.",
+        "selectedValue": 5
+      },
+      {
+        "_id": "67fc9cb5cdeca397d0ad5072",
+        "text": "An ability to function on multidisciplinary teams.",
+        "selectedValue": 5
+      },
+      {
+        "_id": "67fc9cb5cdeca397d0ad5073",
+        "text": "An ability to identify, formulates, and solves engineering problems.",
+        "selectedValue": 5
+      },
+      {
+        "_id": "67fc9cb5cdeca397d0ad5074",
+        "text": "An understanding of professional and ethical responsibility.",
+        "selectedValue": 3
+      },
+      {
+        "_id": "67fc9cb5cdeca397d0ad5075",
+        "text": "An ability to communicate effectively.",
+        "selectedValue": 2
+      },
+      {
+        "_id": "67fc9cb5cdeca397d0ad5076",
+        "text": "The broad education necessary to understand the impact of engineering solutions in a global, economic, environmental, and societal context.",
+        "selectedValue": 1
+      },
+      {
+        "_id": "67fc9cb5cdeca397d0ad5077",
+        "text": "The recognition of the need for, and an ability to engage in life-long learning.",
+        "selectedValue": 1
+      },
+      {
+        "_id": "67fc9cb5cdeca397d0ad5078",
+        "text": "The knowledge of contemporary issues.",
+        "selectedValue": 5
+      },
+      {
+        "_id": "67fc9cb5cdeca397d0ad5079",
+        "text": "An ability to use the techniques, skills, and modern engineering tools necessary for engineering practice.",
+        "selectedValue": 5
+      }
     ],
     "postGraduationPlan": "Higher Education",
     "postGraduationPlanDetails": "MTech"
   }
   ```
-For the question : What do you plan to do after graduation at TU? -> postGraduationPlan
-and,
-For the input: fill detail -> postGraduationPlanDetails
-
-
-
+  For the question : What do you plan to do after graduation at TU? -> postGraduationPlan
+  and,
+  For the input: fill detail -> postGraduationPlanDetails
 
 ### POST Student Feedback Form ABET
+
 - **POST**: `/students/getFeedbackFormAbet/:studentId`
 - **Request Body**:
   ```json
   {
     "levels": {
-        "67fc9cb5cdeca397d0ad506f": "3",  //"question's id": "level value"
-        "67fc9cb5cdeca397d0ad5070": "4",
-        "67fc9cb5cdeca397d0ad5071": "5",
-        "67fc9cb5cdeca397d0ad5072": "5",
-        "67fc9cb5cdeca397d0ad5073": "5",
-        "67fc9cb5cdeca397d0ad5074": "3",
-        "67fc9cb5cdeca397d0ad5075": "2",
-        "67fc9cb5cdeca397d0ad5076": "1",
-        "67fc9cb5cdeca397d0ad5077": "1",
-        "67fc9cb5cdeca397d0ad5078": "5",
-        "67fc9cb5cdeca397d0ad5079": "5"
+      "67fc9cb5cdeca397d0ad506f": "3", //"question's id": "level value"
+      "67fc9cb5cdeca397d0ad5070": "4",
+      "67fc9cb5cdeca397d0ad5071": "5",
+      "67fc9cb5cdeca397d0ad5072": "5",
+      "67fc9cb5cdeca397d0ad5073": "5",
+      "67fc9cb5cdeca397d0ad5074": "3",
+      "67fc9cb5cdeca397d0ad5075": "2",
+      "67fc9cb5cdeca397d0ad5076": "1",
+      "67fc9cb5cdeca397d0ad5077": "1",
+      "67fc9cb5cdeca397d0ad5078": "5",
+      "67fc9cb5cdeca397d0ad5079": "5"
     },
     "postGraduationPlan": "Higher Education",
     "postGraduationPlanDetails": "MTech"
   }
   ```
 
+# Student Feedback Form
 
+### GET Student Feedback Form
 
-
-# Student Feedback Form 
-
-### GET Student Feedback Form 
 - **GET**: `/students/getFeedbackForm/:studentId`
 - **Response**:
   ```json
@@ -392,8 +406,8 @@ For the input: fill detail -> postGraduationPlanDetails
             "text": "Rate the importance of project semester in the graduate curriculum",
             "answer": "5"
         },
-        // This question's answer's type -> Object therefore while sending it's answer to the backend it has a different payload 
-        // It will be clear after refering [*1*] below 
+        // This question's answer's type -> Object therefore while sending it's answer to the backend it has a different payload
+        // It will be clear after refering [*1*] below
         {
             "_id": "67fce0049ce7cdee2d53ec29",
             "text": "If you think that CSED, TU may have some collaboration with your organization, then please suggest some personnel to whom the department may contact",
@@ -407,59 +421,55 @@ For the input: fill detail -> postGraduationPlanDetails
     ]
   ```
 
+### Post Student Feedback Form
 
-### Post Student Feedback Form 
 - **POST**: `/students/submitFeedbackForm/:studentId`
 - **Request Body**:
+
   ```json
   {
     "answers": {
-        "67fce0049ce7cdee2d53ec1b": "9",  //"question id": "answer"
-        "67fce0049ce7cdee2d53ec1c": "Yes",
-        "67fce0049ce7cdee2d53ec1d": "5",
-        "67fce0049ce7cdee2d53ec1e": "7",
-        "67fce0049ce7cdee2d53ec1f": "10",
-        "67fce0049ce7cdee2d53ec20": "9",
-        "67fce0049ce7cdee2d53ec21": "7",
-        "67fce0049ce7cdee2d53ec22": "8",
-        "67fce0049ce7cdee2d53ec23": "9",
-        "67fce0049ce7cdee2d53ec24": "Only Meals are arranged/provided by the organization",
-        "67fce0049ce7cdee2d53ec25": "5000-7000",
-        "67fce0049ce7cdee2d53ec26": "Company has arranged this for me but paid by me",
-        "67fce0049ce7cdee2d53ec27": "Yes",
-        "67fce0049ce7cdee2d53ec28": "Yes",
-        "67fce0049ce7cdee2d53ec2a": "Two times visit must be there",
-        "67fce0049ce7cdee2d53ec2b": "Data Structures and Algorithms, Much More",
-        "67fce0049ce7cdee2d53ec2c": "System Design",
-        "67fce0049ce7cdee2d53ec2d": "Excellent",
-        "67fce0049ce7cdee2d53ec2e": "Excellent",
-        "67fce0049ce7cdee2d53ec2f": "Excellent",
-        "67fce0049ce7cdee2d53ec30": "Nope"
+      "67fce0049ce7cdee2d53ec1b": "9", //"question id": "answer"
+      "67fce0049ce7cdee2d53ec1c": "Yes",
+      "67fce0049ce7cdee2d53ec1d": "5",
+      "67fce0049ce7cdee2d53ec1e": "7",
+      "67fce0049ce7cdee2d53ec1f": "10",
+      "67fce0049ce7cdee2d53ec20": "9",
+      "67fce0049ce7cdee2d53ec21": "7",
+      "67fce0049ce7cdee2d53ec22": "8",
+      "67fce0049ce7cdee2d53ec23": "9",
+      "67fce0049ce7cdee2d53ec24": "Only Meals are arranged/provided by the organization",
+      "67fce0049ce7cdee2d53ec25": "5000-7000",
+      "67fce0049ce7cdee2d53ec26": "Company has arranged this for me but paid by me",
+      "67fce0049ce7cdee2d53ec27": "Yes",
+      "67fce0049ce7cdee2d53ec28": "Yes",
+      "67fce0049ce7cdee2d53ec2a": "Two times visit must be there",
+      "67fce0049ce7cdee2d53ec2b": "Data Structures and Algorithms, Much More",
+      "67fce0049ce7cdee2d53ec2c": "System Design",
+      "67fce0049ce7cdee2d53ec2d": "Excellent",
+      "67fce0049ce7cdee2d53ec2e": "Excellent",
+      "67fce0049ce7cdee2d53ec2f": "Excellent",
+      "67fce0049ce7cdee2d53ec30": "Nope"
     },
     //[*1*] : for the mentioned question, send the questionid and the answer inside collabContact
     "collabContact": {
-        "question": "67fce0049ce7cdee2d53ec29",
-        "answer": {
-            "name": "David",
-            "designation": "Manager",
-            "email": "davidoffical@gmail.com",
-            "phone": "9708657831"
-        }
+      "question": "67fce0049ce7cdee2d53ec29",
+      "answer": {
+        "name": "David",
+        "designation": "Manager",
+        "email": "davidoffical@gmail.com",
+        "phone": "9708657831"
+      }
     }
   }
-
   ```
-
-
-
-
 
 # Student Future Plan
 
 ### Get Future Plan
 
-- *GET*: `/students/getFuturePlan/:studentId`
-- *Response*:
+- **GET**: `/students/getFuturePlan/:studentId`
+- **Response**:
   ```json
   {
     "success": true,
@@ -475,12 +485,12 @@ For the input: fill detail -> postGraduationPlanDetails
       "country": "India"
     }
   }
-  
+  ```
 
 ### Submit Future Plan
 
-- *POST*: `/students/submitFuturePlan/:studentId`
-- *Request Body*:
+- **POST**: `/students/submitFuturePlan/:studentId`
+- **Request Body**:
   ```json
   {
     "futurePlan": "on-campus placement",
@@ -494,4 +504,42 @@ For the input: fill detail -> postGraduationPlanDetails
       "country": "India"
     }
   }
-  
+  ```
+
+
+
+
+
+
+
+
+# Student Overall Progress
+
+### Get Student Overall Progress
+- **GET**: `/students/getOverallProgress/:studentId`
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "message": "Overall progress retrieved successfully",
+    "studentId": "67b871b057e338fa24e3163e",
+    "overallProgress": {
+        "goalReportUploaded": "Pending",
+        "midWayReportUploaded": "Pending",
+        "projectPresentationUploaded": "Pending",
+        "projectReportFileUploaded": "Pending",
+        "stuInputFormFilledByStudent": "Pending",
+        "fortnightlyReportByStudent": "Pending",
+        "fortnightlyReportByFacultyMentor": "Pending",
+        "commentsGivenByFacultyCoordinator": "Pending",
+        "facultyGivenMarksForGoalReport": "Pending",
+        "facultyGivenMarksForMidwayReport": "Pending",
+        "industrialMentorFilledAssignmentDetails": "Pending",
+        "industrialMentorGivenMarks": "Pending",
+        "feedbackFormByStudent": "Pending",
+        "feedbackFormAbetStudent": "Pending",
+        "feedbackFormAbetIndustrialMentor": "Pending",
+        "futurePlans": "Pending"
+    } 
+  }
+  ```
