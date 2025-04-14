@@ -49,4 +49,9 @@ router.post("/resetpassword", studentController.resetPassword);
 router.get("/getFeedbackFormAbet/:studentId", authStudent, studentController.getFeedbackFormAbet)
 router.post("/submitFeedbackFormAbet/:studentId", authStudent, studentController.submitFeedbackFormAbet)
 
+
+router.get("/getFeedbackForm/:studentId", authStudent, studentController.getFeedbackForm)
+router.post("/submitFeedbackForm/:studentId", authStudent, studentController.submitFeedbackForm)
+
+
 module.exports = router;

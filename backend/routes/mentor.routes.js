@@ -35,6 +35,17 @@ router.post("/forgotpassword", mentorController.forgotPassword);
 
 router.post("/resetpassword", mentorController.resetPassword);
 
+router.get("/breifProgressReport/:studentId", mentorController.getBriefProgressReport);
+
+router.post("/submitBriefProgressReport/:studentId", authMentor, mentorController.submitBriefProgressReport);
+
+router.get("/getAbetForm/:mentorId", authMentor, mentorController.getAbetForm);
+router.post("/submitAbetForm/:mentorId", authMentor, mentorController.submitAbetForm);
+
+router.get("/getFeedbackForm/:mentorId", authMentor, mentorController.getFeedbackForm);
+router.post("/submitFeedbackForm/:mentorId", authMentor, mentorController.submitFeedbackForm);
+
+
 // router.post('/setDetails', authMentor, mentorController.setMentorDetails);
 
 module.exports = router;

@@ -15,6 +15,7 @@ const freezeformRoutes = require('./routes/freezeform.routes');
 const seedAbetQuestions = require('./utils/seedAbetQuestions');
 const seedFeedbackQuestions = require('./utils/seedFeedbackQuestions');
 const seedAbetQuestionsStudent = require('./utils/seedAbetQuestionsStudent');
+const seedFeedbackQuestionsStudent = require('./utils/seedFeedbackQuestionsStudent');
 
 app.use((req, res, next) => {
     res.header('Access-Control-Expose-Headers', 'Content-Disposition');
@@ -34,6 +35,7 @@ seedAbetQuestions();
 seedFeedbackQuestions();
 
 seedAbetQuestionsStudent();
+seedFeedbackQuestionsStudent();
 
 app.use('/students',studentRoutes);
 app.use('/faculty',facultyRoutes);

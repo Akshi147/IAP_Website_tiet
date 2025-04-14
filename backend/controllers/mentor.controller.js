@@ -484,7 +484,7 @@ module.exports.submitAbetForm = async (req, res) => {
   }
 };
 
-module.exports.getFeedBackForm = async (req, res) => {
+module.exports.getFeedbackForm = async (req, res) => {
   try {
     const { mentorId } = req.params;
 
@@ -522,7 +522,7 @@ module.exports.getFeedBackForm = async (req, res) => {
   }
 };
 
-module.exports.submitFeedBackForm = async (req, res) => {
+module.exports.submitFeedbackForm = async (req, res) => {
   try {
     const { mentorId } = req.params;
     const { levels } = req.body;
