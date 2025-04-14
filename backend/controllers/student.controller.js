@@ -227,7 +227,7 @@ module.exports.uploadFile = async (req,res)=>{
 module.exports.downloadTrainingLetter = async (req,res)=>{
     try {
         const filename = req.params.trainingLetter
-        res.download(`../backend/public/images/uploads/${filename}`);
+        res.download(`../backend/public/images/trainingLetters/${filename}`);
     } catch (error) {
         res.status(500).json({error:error.message});
     }
@@ -248,7 +248,7 @@ module.exports.uploadFiles = async (req,res)=>{
 module.exports.downloadFeeReceipt = async (req,res)=>{
     try {
         const filename = req.params.feeReceipt
-        res.download(`../backend/public/images/uploads/${filename}`);
+        res.download(`../backend/public/images/feeReceipts/${filename}`);
     } catch (error) {
         res.status(500).json({error:error.message});
     }
@@ -644,6 +644,74 @@ module.exports.resetPassword = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+module.exports.uploadGoalReport = async (req,res)=>{
+    if (!req.file) {
+        return res.status(400).send("No files were uploaded");
+      }
+
+    const student = req.student;
+    student.goalReport=req.file.filename;
+    await student.save();
+    res.status(200).json({message:'File uploaded successfully'});
+};
+module.exports.uploadMidwayReport = async (req,res)=>{
+    if (!req.file) {
+        return res.status(400).send("No files were uploaded");
+      }
+
+    const student = req.student;
+    student.midwayReport=req.file.filename;
+    await student.save();
+    res.status(200).json({message:'File uploaded successfully'});
+};
+module.exports.uploadReportFile = async (req,res)=>{
+    if (!req.file) {
+        return res.status(400).send("No files were uploaded");
+      }
+
+    const student = req.student;
+    student.reportFile=req.file.filename;
+    await student.save();
+    res.status(200).json({message:'File uploaded successfully'});
+};
+module.exports.uploadProjectPresentation = async (req,res)=>{
+    if (!req.file) {
+        return res.status(400).send("No files were uploaded");
+      }
+
+    const student = req.student;
+    student.projectPresentation=req.file.filename;
+    await student.save();
+    res.status(200).json({message:'File uploaded successfully'});
+};
+module.exports.uploadFinalTraining = async (req,res)=>{
+    if (!req.file) {
+        return res.status(400).send("No files were uploaded");
+      }
+
+    const student = req.student;
+    student.finalTraining=req.file.filename;
+    await student.save();
+    res.status(200).json({message:'File uploaded successfully'});
+};
+
+module.exports.getFileUploadInfo = async (req,res)=>{
+    try {
+        const student = req.student;
+        const fileUploadInfo = {
+            trainingLetter: student.trainingLetter,
+            feeReceipt: student.feeReceipt,
+            goalReport: student.goalReport,
+            midwayReport: student.midwayReport,
+            reportFile: student.reportFile,
+            projectPresentation: student.projectPresentation,
+            finalTraining: student.finalTraining
+        };
+        res.status(200).json({ fileUploadInfo });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
 
 
 

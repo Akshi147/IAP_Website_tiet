@@ -28,6 +28,13 @@ router.get('/logout',authStudent,studentController.logoutStudent);
 router.get('/profile',authStudent,studentController.getStudentProfile);
 router.post('/uploadfile',authStudent,upload.single('trainingLetter'),studentController.uploadFile);
 router.post('/uploadfiles',authStudent,upload.single('feeReceipt'),studentController.uploadFiles);
+router.post('/uploadgoalreport',authStudent,upload.single('GoalReport'),studentController.uploadGoalReport);
+router.post('/uploadmidwayreport',authStudent,upload.single('MidwayReport'),studentController.uploadMidwayReport);
+router.post('/uploadreportfile',authStudent,upload.single('ReportFile'),studentController.uploadReportFile);
+router.post('/uploadprojectpresentation',authStudent,upload.single('ProjectPresentation'),studentController.uploadProjectPresentation);
+router.post('/uploadfinaltraining',authStudent,upload.single('FinalTraining'),studentController.uploadFinalTraining);
+router.get('/getFileUploadInfo',authStudent,studentController.getFileUploadInfo);
+
 
 router.get('/downloadfile/:trainingLetter',authAdmin,studentController.downloadTrainingLetter);
 router.get('/downloadfile/:feeReceipt',authAdmin,studentController.downloadFeeReceipt);
