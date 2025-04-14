@@ -850,6 +850,14 @@ module.exports.submitFeedbackFormAbet = async (req, res) => {
         {upsert: true, new: true}
     );
 
+    // update progress of submit feedback form in student model
+    await studentModel.findByIdAndUpdate(
+        {_id: studentId},
+        {"overallProgress.feedbackFormAbetStudent": "Done"},
+        {new: true}
+    )
+
+
     res.status(200).json({
         success: true,
         message: "Feedback Abet submitted successfully",
