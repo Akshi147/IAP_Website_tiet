@@ -16,78 +16,90 @@ const StudentUploadReportStatus = () => {
     });
     const [selectedFiles, setSelectedFiles] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-    const [isInitialLoad, setIsInitialLoad] = useState(true);
+    const [studentProfile, setStudentProfile] = useState(null);
+    const [error, setError] = useState('');
+    const [progress, setProgress] = useState(0);
 
     useEffect(() => {
-        const fetchUploadStatus = async () => {
+        const fetchData = async () => {
             try {
-                // First check training letter status specifically
-                const trainingLetterResponse = await axios.get('/students/verifyStudentDocument/trainingLetter', {
+                // Fetch student profile first to check for training letter
+                const profileResponse = await axios.get('http://localhost:4000/students/profile', {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('studentToken')}`
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
                 });
+                setStudentProfile(profileResponse.data);
 
-                // Then get all other document statuses
-                const uploadStatusResponse = await axios.get('/students/getFileUploadInfo', {
+                // Then fetch upload status for other documents
+                const statusResponse = await axios.get('http://localhost:4000/students/getFileUploadInfo', {
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('studentToken')}`
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
                 });
 
                 setUploadStatus({
-                    ...uploadStatusResponse.data,
-                    trainingLetter: trainingLetterResponse.data.exists || false
+                    ...statusResponse.data,
+                    trainingLetter: !!profileResponse.data.trainingLetter
                 });
             } catch (error) {
-                console.error('Error fetching upload status:', error);
-                // If verification fails, assume training letter isn't uploaded
-                setUploadStatus(prev => ({
-                    ...prev,
-                    trainingLetter: false
-                }));
-            } finally {
-                setIsInitialLoad(false);
+                console.error('Error fetching data:', error);
             }
         };
 
-        fetchUploadStatus();
+        fetchData();
     }, []);
 
     const handleFileChange = (fileType, e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Basic validation
+        if (fileType === 'ProjectPresentation' && !file.name.match(/\.(ppt|pptx)$/)) {
+            setError('Only PPT/PPTX files are allowed');
+            return;
+        }
+        if (!file.name.match(/\.pdf$/) && fileType !== 'ProjectPresentation') {
+            setError('Only PDF files are allowed');
+            return;
+        }
+
         setSelectedFiles({
             ...selectedFiles,
-            [fileType]: e.target.files[0]
+            [fileType]: file
         });
+        setError('');
     };
 
     const handleUpload = async (fileType) => {
         if (!selectedFiles[fileType]) {
-            alert('Please select a file first');
+            setError('Please select a file first');
             return;
         }
 
         setIsLoading(true);
-        try {
-            const formData = new FormData();
-            formData.append(fileType, selectedFiles[fileType]);
+        setProgress(0);
 
+        const formData = new FormData();
+        formData.append(fileType, selectedFiles[fileType]);
+
+        try {
             let endpoint;
             switch (fileType) {
                 case 'GoalReport':
-                    endpoint = '/students/uploadgoalreport';
+                    endpoint = 'http://localhost:4000/students/uploadgoalreport';
                     break;
                 case 'MidwayReport':
-                    endpoint = '/students/uploadmidwayreport';
+                    endpoint = 'http://localhost:4000/students/uploadmidwayreport';
                     break;
                 case 'ReportFile':
-                    endpoint = '/students/uploadreportfile';
+                    endpoint = 'http://localhost:4000/students/uploadreportfile';
                     break;
                 case 'ProjectPresentation':
-                    endpoint = '/students/uploadprojectpresentation';
+                    endpoint = 'http://localhost:4000/students/uploadprojectpresentation';
                     break;
                 case 'FinalTraining':
-                    endpoint = '/students/uploadfinaltraining';
+                    endpoint = 'http://localhost:4000/students/uploadfinaltraining';
                     break;
                 default:
                     throw new Error('Invalid file type');
@@ -95,40 +107,40 @@ const StudentUploadReportStatus = () => {
 
             const response = await axios.post(endpoint, formData, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('studentToken')}`,
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
                     'Content-Type': 'multipart/form-data'
+                },
+                onUploadProgress: (progressEvent) => {
+                    const percentCompleted = Math.round(
+                        (progressEvent.loaded * 100) / progressEvent.total
+                    );
+                    setProgress(percentCompleted);
                 }
             });
 
-            if (response.data.success) {
+            if (response.status === 200) {
                 setUploadStatus(prev => ({
                     ...prev,
                     [fileType]: true
                 }));
-                alert(`${fileType.replace(/([A-Z])/g, ' $1')} uploaded successfully!`);
-            } else {
-                throw new Error(response.data.message || 'Upload failed');
+                setSelectedFiles(prev => ({
+                    ...prev,
+                    [fileType]: null
+                }));
             }
         } catch (error) {
             console.error(`Error uploading ${fileType}:`, error);
-            alert(`Error uploading file: ${error.message}`);
+            setError(`Failed to upload ${fileType}: ${error.message}`);
         } finally {
             setIsLoading(false);
+            setProgress(0);
         }
     };
 
     const renderUploadSection = (title, fileType, deadline, allowedTypes, maxSizeMB) => {
         const isTrainingLetter = fileType === 'trainingLetter';
+        const file = selectedFiles[fileType];
         
-        if (isInitialLoad) {
-            return (
-                <div className={styles.uploadSection}>
-                    <h3>{title}</h3>
-                    <p>Loading status...</p>
-                </div>
-            );
-        }
-
         return (
             <div className={styles.uploadSection}>
                 <h3>{title}</h3>
@@ -136,33 +148,63 @@ const StudentUploadReportStatus = () => {
                 <p>Allowed: {allowedTypes} (Max {maxSizeMB}MB)</p>
                 <p>Status: {uploadStatus[fileType] ? '✅ Uploaded' : '❌ Not Uploaded'}</p>
                 
-                {!isTrainingLetter ? (
-                    <div className={styles.fileInputContainer}>
-                        <input
-                            type="file"
-                            id={fileType}
-                            accept={allowedTypes}
-                            onChange={(e) => handleFileChange(fileType, e)}
-                            disabled={uploadStatus[fileType] || isLoading}
-                            className={styles.fileInput}
-                        />
-                        <label htmlFor={fileType} className={styles.fileInputLabel}>
-                            {selectedFiles[fileType] ? selectedFiles[fileType].name : 'Choose File'}
-                        </label>
+                {!isTrainingLetter && !uploadStatus[fileType] && (
+                    <>
+                        <div className={styles.fileInputContainer}>
+                            <input
+                                type="file"
+                                id={fileType}
+                                accept={allowedTypes}
+                                onChange={(e) => handleFileChange(fileType, e)}
+                                disabled={isLoading}
+                                className={styles.fileInput}
+                            />
+                            <label htmlFor={fileType} className={styles.fileInputLabel}>
+                                {file ? file.name : 'Choose File'}
+                            </label>
+                        </div>
+                        
+                        {progress > 0 && progress < 100 && (
+                            <div className={styles.progressBar}>
+                                <div className={styles.progressFill} style={{ width: `${progress}%` }}></div>
+                                <span>{progress}%</span>
+                            </div>
+                        )}
+
                         <button
                             onClick={() => handleUpload(fileType)}
-                            disabled={uploadStatus[fileType] || isLoading || !selectedFiles[fileType]}
+                            disabled={!file || isLoading}
                             className={styles.uploadButton}
                         >
                             {isLoading ? 'Uploading...' : 'Upload'}
                         </button>
+                    </>
+                )}
+
+                {isTrainingLetter && (
+                    <div className={styles.trainingLetterInfo}>
+                        {uploadStatus.trainingLetter ? (
+                            <>
+                                <p className={styles.uploadedNotice}>
+                                    This document was automatically uploaded during registration
+                                </p>
+                                {studentProfile?.trainingLetter && (
+                                    <a
+                                        href={`http://localhost:4000/students/downloadfile/${studentProfile.trainingLetter}`}
+                                        className={styles.downloadLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Download Training Letter
+                                    </a>
+                                )}
+                            </>
+                        ) : (
+                            <p className={styles.notice}>
+                                Training letter not found. Please contact administration.
+                            </p>
+                        )}
                     </div>
-                ) : (
-                    <p className={styles.notice}>
-                        {uploadStatus.trainingLetter
-                            ? 'This document was automatically uploaded during registration'
-                            : 'Training letter not found. Please contact administration.'}
-                    </p>
                 )}
                 
                 <p className={styles.warning}>
@@ -197,6 +239,7 @@ const StudentUploadReportStatus = () => {
 
             <div className={styles.container}>
                 <h1>Upload Reports</h1>
+                {error && <div className={styles.errorAlert}>{error}</div>}
                 
                 {renderUploadSection(
                     "Initial Training Letter",

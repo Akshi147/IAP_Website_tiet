@@ -18,7 +18,7 @@ const Panels = () => {
         { icon: Calendar, text: "Schedule Management" },
         { icon: FileText, text: "Submit Assignments" },
       ],
-      path: "/student",
+      path: "/login",
     },
     {
       title: "Faculty Panel",

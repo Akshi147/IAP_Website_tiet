@@ -75,7 +75,7 @@ h1 {
     margin-bottom: 0;
 }
 
-.trainingLetterInfo {
+.trainingLetterSection {
     margin: 1rem 0;
 }
 
@@ -92,8 +92,47 @@ h1 {
     color: white;
     border-radius: 4px;
     text-decoration: none;
+    transition: background-color 0.2s;
 }
 
 .downloadLink:hover {
     background-color: #138496;
+    color: white;
+}
+
+.notice {
+    color: #6c757d;
+    font-style: italic;
+}
+
+.errorAlert {
+    color: #dc3545;
+    background-color: #f8d7da;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid #f5c6cb;
+    border-radius: 0.25rem;
+}
+
+.progressBar {
+    width: 100%;
+    background-color: #e9ecef;
+    border-radius: 0.25rem;
+    margin: 0.5rem 0;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.progressFill {
+    background-color: #28a745;
+    height: 100%;
+    border-radius: 0.25rem;
+    transition: width 0.3s ease;
+}
+
+.progressBar span {
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+    color: #495057;
 }
