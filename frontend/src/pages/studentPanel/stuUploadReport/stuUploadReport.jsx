@@ -8,11 +8,11 @@ const StudentUploadReportStatus = () => {
     const navigate = useNavigate();
     const [uploadStatus, setUploadStatus] = useState({
         trainingLetter: false,
-        GoalReport: false,
-        MidwayReport: false,
-        ReportFile: false,
-        ProjectPresentation: false,
-        FinalTraining: false
+        goalReport: false,
+        midwayReport: false,
+        reportFile: false,
+        projectPresentation: false,
+        finalTraining: false
     });
     const [selectedFiles, setSelectedFiles] = useState({});
     const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +23,6 @@ const StudentUploadReportStatus = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Fetch student profile first to check for training letter
                 const profileResponse = await axios.get('http://localhost:4000/students/profile', {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -31,17 +30,24 @@ const StudentUploadReportStatus = () => {
                 });
                 setStudentProfile(profileResponse.data);
 
-                // Then fetch upload status for other documents
                 const statusResponse = await axios.get('http://localhost:4000/students/getFileUploadInfo', {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
                 });
 
+                const fileInfo = statusResponse.data.fileUploadInfo;
+                console.log('File Upload Info:', fileInfo);
+
                 setUploadStatus({
-                    ...statusResponse.data,
-                    trainingLetter: !!profileResponse.data.trainingLetter
+                    trainingLetter: !!(profileResponse.data.trainingLetter || fileInfo.trainingLetter),
+                    goalReport: !!fileInfo.goalReport,
+                    midwayReport: !!fileInfo.midwayReport,
+                    reportFile: !!fileInfo.reportFile,
+                    projectPresentation: !!fileInfo.projectPresentation,
+                    finalTraining: !!fileInfo.finalTraining
                 });
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -54,12 +60,11 @@ const StudentUploadReportStatus = () => {
         const file = e.target.files[0];
         if (!file) return;
 
-        // Basic validation
-        if (fileType === 'ProjectPresentation' && !file.name.match(/\.(ppt|pptx)$/)) {
+        if (fileType === 'projectPresentation' && !file.name.match(/\.(ppt|pptx)$/)) {
             setError('Only PPT/PPTX files are allowed');
             return;
         }
-        if (!file.name.match(/\.pdf$/) && fileType !== 'ProjectPresentation') {
+        if (!file.name.match(/\.pdf$/) && fileType !== 'projectPresentation') {
             setError('Only PDF files are allowed');
             return;
         }
@@ -76,35 +81,45 @@ const StudentUploadReportStatus = () => {
             setError('Please select a file first');
             return;
         }
-
+    
         setIsLoading(true);
         setProgress(0);
-
+    
         const formData = new FormData();
-        formData.append(fileType, selectedFiles[fileType]);
-
+    
+        // Map frontend keys to backend PascalCase field names
+        const formFieldMap = {
+            goalReport: 'GoalReport',
+            midwayReport: 'MidwayReport',
+            reportFile: 'ReportFile',
+            projectPresentation: 'ProjectPresentation',
+            finalTraining: 'FinalTraining'
+        };
+    
+        formData.append(formFieldMap[fileType], selectedFiles[fileType]);
+    
         try {
             let endpoint;
             switch (fileType) {
-                case 'GoalReport':
+                case 'goalReport':
                     endpoint = 'http://localhost:4000/students/uploadgoalreport';
                     break;
-                case 'MidwayReport':
+                case 'midwayReport':
                     endpoint = 'http://localhost:4000/students/uploadmidwayreport';
                     break;
-                case 'ReportFile':
+                case 'reportFile':
                     endpoint = 'http://localhost:4000/students/uploadreportfile';
                     break;
-                case 'ProjectPresentation':
+                case 'projectPresentation':
                     endpoint = 'http://localhost:4000/students/uploadprojectpresentation';
                     break;
-                case 'FinalTraining':
+                case 'finalTraining':
                     endpoint = 'http://localhost:4000/students/uploadfinaltraining';
                     break;
                 default:
                     throw new Error('Invalid file type');
             }
-
+    
             const response = await axios.post(endpoint, formData, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -117,7 +132,7 @@ const StudentUploadReportStatus = () => {
                     setProgress(percentCompleted);
                 }
             });
-
+    
             if (response.status === 200) {
                 setUploadStatus(prev => ({
                     ...prev,
@@ -136,18 +151,19 @@ const StudentUploadReportStatus = () => {
             setProgress(0);
         }
     };
+    
 
     const renderUploadSection = (title, fileType, deadline, allowedTypes, maxSizeMB) => {
         const isTrainingLetter = fileType === 'trainingLetter';
         const file = selectedFiles[fileType];
-        
+
         return (
             <div className={styles.uploadSection}>
                 <h3>{title}</h3>
                 <p>Deadline: {deadline}</p>
                 <p>Allowed: {allowedTypes} (Max {maxSizeMB}MB)</p>
                 <p>Status: {uploadStatus[fileType] ? '✅ Uploaded' : '❌ Not Uploaded'}</p>
-                
+
                 {!isTrainingLetter && !uploadStatus[fileType] && (
                     <>
                         <div className={styles.fileInputContainer}>
@@ -163,7 +179,7 @@ const StudentUploadReportStatus = () => {
                                 {file ? file.name : 'Choose File'}
                             </label>
                         </div>
-                        
+
                         {progress > 0 && progress < 100 && (
                             <div className={styles.progressBar}>
                                 <div className={styles.progressFill} style={{ width: `${progress}%` }}></div>
@@ -206,7 +222,7 @@ const StudentUploadReportStatus = () => {
                         )}
                     </div>
                 )}
-                
+
                 <p className={styles.warning}>
                     Once saved, file cannot be changed. Verify before submission.
                 </p>
@@ -240,54 +256,13 @@ const StudentUploadReportStatus = () => {
             <div className={styles.container}>
                 <h1>Upload Reports</h1>
                 {error && <div className={styles.errorAlert}>{error}</div>}
-                
-                {renderUploadSection(
-                    "Initial Training Letter",
-                    "trainingLetter",
-                    "Before Beginning of Training",
-                    ".pdf",
-                    10
-                )}
-                
-                {renderUploadSection(
-                    "Goal Report",
-                    "GoalReport",
-                    "End of 4 weeks",
-                    ".pdf",
-                    20
-                )}
-                
-                {renderUploadSection(
-                    "Midway Report",
-                    "MidwayReport",
-                    "End of 10 Weeks",
-                    ".pdf",
-                    20
-                )}
-                
-                {renderUploadSection(
-                    "Report File",
-                    "ReportFile",
-                    "1 Week Before Final Evaluation",
-                    ".pdf",
-                    50
-                )}
-                
-                {renderUploadSection(
-                    "Project Presentation",
-                    "ProjectPresentation",
-                    "1 Week Before Final Evaluation",
-                    ".ppt,.pptx",
-                    30
-                )}
 
-                {renderUploadSection(
-                    "Final Training Document",
-                    "FinalTraining",
-                    "End of Training",
-                    ".pdf",
-                    10
-                )}
+                {renderUploadSection("Initial Training Letter", "trainingLetter", "Before Beginning of Training", ".pdf", 10)}
+                {renderUploadSection("Goal Report", "goalReport", "End of 4 weeks", ".pdf", 20)}
+                {renderUploadSection("Midway Report", "midwayReport", "End of 10 Weeks", ".pdf", 20)}
+                {renderUploadSection("Report File", "reportFile", "1 Week Before Final Evaluation", ".pdf", 50)}
+                {renderUploadSection("Project Presentation", "projectPresentation", "1 Week Before Final Evaluation", ".ppt,.pptx", 30)}
+                {renderUploadSection("Final Training Document", "finalTraining", "End of Training", ".pdf", 10)}
             </div>
         </>
     );
