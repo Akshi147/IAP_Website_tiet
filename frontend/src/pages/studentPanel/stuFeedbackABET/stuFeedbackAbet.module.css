@@ -1,0 +1,59 @@
+.container {
+    max-width: 850px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background-color: #fefefe;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+  
+  .heading {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 1.5rem;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  
+  .questionBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .questionText {
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .select,
+  .input {
+    padding: 0.6rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+  }
+  
+  .submitButton {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background-color: #2563eb;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+  
+  .submitButton:hover {
+    background-color: #1d4ed8;
+  }
+  

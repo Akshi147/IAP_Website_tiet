@@ -1,164 +1,61 @@
-/* src/components/FeedbackForm/FeedbackForm.module.css */
 .container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .title {
-    color: #2c3e50;
-    text-align: center;
-    margin-bottom: 1.5rem;
-    font-size: 2rem;
-  }
-  
-  .description {
-    color: #555;
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 1.1rem;
-  }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  
-  .questionContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 1rem;
-    border-radius: 6px;
-    background-color: #f8f9fa;
-  }
-  
-  .questionLabel {
-    font-weight: 500;
-    color: #333;
-    font-size: 1rem;
-  }
-  
-  .selectInput, .textInput {
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-    width: 100%;
-    max-width: 300px;
-  }
-  
-  .selectInput {
-    background-color: white;
-    cursor: pointer;
-  }
-  
-  .radioGroup {
-    display: flex;
-    gap: 1rem;
-    margin-top: 0.5rem;
-  }
-  
-  .radioLabel {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-  }
-  
-  .radioLabel input {
-    width: auto;
-  }
-  
-  .collabContainer {
-    margin-top: 2rem;
-    padding: 1.5rem;
-    background-color: #f0f8ff;
-    border-radius: 8px;
-    border: 1px solid #d0e3ff;
-  }
-  
-  .collabTitle {
-    color: #2c3e50;
-    margin-bottom: 1.5rem;
-    font-size: 1.2rem;
-  }
-  
-  .gridContainer {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-  }
-  
-  .inputGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .inputGroup label {
-    font-size: 0.9rem;
-    color: #555;
-  }
-  
-  .submitContainer {
-    display: flex;
-    justify-content: center;
-    margin-top: 2rem;
-  }
-  
-  .submitButton {
-    padding: 0.8rem 2rem;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .submitButton:hover {
-    background-color: #2980b9;
-  }
-  
-  .submitButton:disabled {
-    background-color: #95a5a6;
-    cursor: not-allowed;
-  }
-  
-  .loading, .error {
-    text-align: center;
-    padding: 2rem;
-    font-size: 1.2rem;
-  }
-  
-  .error {
-    color: #e74c3c;
-  }
-  
-  .successContainer {
-    text-align: center;
-    padding: 2rem;
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .successContainer h2 {
-    color: #2ecc71;
-    margin-bottom: 1rem;
-  }
-  
-  .successContainer p {
-    color: #555;
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-  }
+  padding: 2rem;
+  max-width: 800px;
+  margin: auto;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.heading {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.questionBlock {
+  display: flex;
+  flex-direction: column;
+}
+
+.questionBlock label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.input {
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.submitBtn {
+  background-color: #4caf50;
+  color: white;
+  padding: 0.8rem;
+  border: none;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.submitBtn:hover {
+  background-color: #45a049;
+}
+
+.collabSection {
+  padding: 1rem;
+  background: #fff0f0;
+  border-radius: 10px;
+  border: 1px solid #ffcccc;
+}
