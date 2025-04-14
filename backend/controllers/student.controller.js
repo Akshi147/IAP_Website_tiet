@@ -14,6 +14,8 @@ const FeedbackStudentAbet = require("../models/feedbackStudentAbet.model");
 const FeedbackQuestionStudent = require("../models/feedbackQuestionStudent.model");
 const FeedbackStudent = require("../models/feedbackStudent.model");
 
+const FuturePlanStudent = require("../models/futurePlanStudent.model");
+
 module.exports.registerStudent = async (req, res) => {
   try {
     console.log(req.body);
@@ -954,5 +956,106 @@ module.exports.submitFeedbackForm = async (req, res) => {
           success: false,
           message: "Internal server error",
       });
+  }
+}
+
+
+
+
+module.exports.getFuturePlan = async(req, res) => {
+  try{
+    const { studentId } = req.params;
+
+    const futurePlanData = await FuturePlanStudent.findOne({ student: studentId });
+
+    if (!futurePlanData) {
+      return res.status(404).json({
+        success: false,
+        message: "No future plan found for this student",
+      });
+    }
+
+    const {futurePlan} = futurePlanData;
+
+    const planToDetailsMap = {
+      "on-campus placement": "placementDetails",
+      "off-campus placement": "placementDetails",
+      "higher studies/research": "studyDetails",
+      "start-up": "startUpDetails",
+      "join family business": "joinFamilyBusinessDetails",
+    };
+
+    const details = planToDetailsMap[futurePlan];
+
+    res.status(200).json({
+      success: true,
+      message: "Future plan retrieved successfully",
+      futurePlan,
+      details: futurePlanData[details] || null,
+    });
+  }catch(err){
+    console.error("GET ERROR", err);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+}
+
+module.exports.submitFuturePlan = async(req, res) => {
+  try{
+    const {studentId} = req.params;
+    const {futurePlan, futurePlanDetails} = req.body;
+
+    console.log(futurePlan, futurePlanDetails);
+
+    const validPlans = ["on-campus placement", "off-campus placement", "higher studies/research", "start-up", "join family business", "unemployed"];
+    if (!validPlans.includes(futurePlan)) {
+      return res.status(400).json({
+        error: "Invalid future plan option"
+      });
+    }
+
+    if (!futurePlanDetails || typeof futurePlanDetails !== "object") {
+      return res.status(400).json({
+        error: "Future plan details are required"
+      });
+    }
+
+    let details = "";
+    if(futurePlan === "on-campus placement")
+      details = "placementDetails";
+    else if(futurePlan === "off-campus placement")
+      details = "placementDetails";
+    else if(futurePlan === "higher studies/research")
+      details = "studyDetails";
+    else if(futurePlan === "start-up")
+      details = startUpDetails;
+    else if(futurePlan === "join family business")
+      details = "joinFamilyBusinessDetails";
+
+    console.log(details);
+    const feedback = await FuturePlanStudent.findOneAndUpdate(
+      { student: studentId },
+      {
+        student: studentId,
+        futurePlan,
+        [details]: futurePlanDetails,
+      },
+      { upsert: true, new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Future plan submitted successfully",
+      feedback,
+    });
+    
+  }catch(err){
+    console.error("POST ERROR", err);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
   }
 }
