@@ -450,3 +450,48 @@ For the input: fill detail -> postGraduationPlanDetails
 
   ```
 
+
+
+
+
+# Student Future Plan
+
+### Get Future Plan
+
+- *GET*: `/students/getFuturePlan/:studentId`
+- *Response*:
+  ```json
+  {
+    "success": true,
+    "message": "Future plan retrieved successfully",
+    "futurePlan": "off-campus placement",
+    "details": {
+      "companyName": "Microsoft",
+      "job": "Software Engineer",
+      "profile": "cool",
+      "position": "Junior Developer",
+      "ctc": "20LPA",
+      "city": "Hydereabad",
+      "country": "India"
+    }
+  }
+  
+
+### Submit Future Plan
+
+- *POST*: `/students/submitFuturePlan/:studentId`
+- *Request Body*:
+  ```json
+  {
+    "futurePlan": "on-campus placement",
+    "futurePlanDetails": {
+      "companyName": "Google",
+      "job": "Software Engineer",
+      "profile": "cool",
+      "position": "Junior Developer",
+      "ctc": "30LPA",
+      "city": "Hydereabad",
+      "country": "India"
+    }
+  }
+  
