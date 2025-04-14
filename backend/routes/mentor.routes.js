@@ -39,6 +39,12 @@ router.get("/breifProgressReport/:studentId", mentorController.getBriefProgressR
 
 router.post("/submitBriefProgressReport/:studentId", authMentor, mentorController.submitBriefProgressReport);
 
+router.get("/getAbetForm/:mentorId", authMentor, mentorController.getAbetForm);
+router.post("/submitAbetForm/:mentorId", authMentor, mentorController.submitAbetForm);
+
+router.get("/getFeedbackForm/:mentorId", authMentor, mentorController.getFeedbackForm);
+router.post("/submitFeedbackForm/:mentorId", authMentor, mentorController.submitFeedbackForm);
+
 
 // router.post('/setDetails', authMentor, mentorController.setMentorDetails);
 
