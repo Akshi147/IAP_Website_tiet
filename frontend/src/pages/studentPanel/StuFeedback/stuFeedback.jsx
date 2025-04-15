@@ -1,5 +1,5 @@
 // StudentFeedback.jsx
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/navbar/navbar";
 import { useState, useEffect } from "react";
 import styles from "./stuFeedback.module.css";

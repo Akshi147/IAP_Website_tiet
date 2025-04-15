@@ -1,31 +1,63 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Navbar from "../../../components/navbar/navbar";
 import styles from "./stuOverallProgress.module.css";
-import axios from "axios";
 
 const StudentOverallProgress = () => {
   const navigate = useNavigate();
-  const { studentId } = useParams();
-  const [progress, setProgress] = useState({});
+  const [studentId, setStudentId] = useState(null);
+  const [overallProgress, setOverallProgress] = useState({});
   const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("token");
 
+  // First: Fetch student profile to get ID
   useEffect(() => {
-    const fetchProgress = async () => {
+    const fetchStudentProfile = async () => {
       try {
-        const res = await axios.get(`/students/getOverallProgress/${studentId}`);
-        if (res.data?.overallProgress) {
-          setProgress(res.data.overallProgress);
+        if (token) {
+          const res = await axios.get("http://localhost:4000/students/profile", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setStudentId(res.data.student._id);
         }
       } catch (err) {
-        console.error("Error fetching progress data", err);
+        console.error("Error fetching student profile:", err);
+      }
+    };
+
+    fetchStudentProfile();
+  }, [token]);
+
+  // Second: Fetch overall progress after getting studentId
+  useEffect(() => {
+    const fetchOverallProgress = async () => {
+      try {
+        if (studentId && token) {
+          const res = await axios.get(
+            `http://localhost:4000/students/getOverallProgress/${studentId}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+          setOverallProgress(res.data.overallProgress || {});
+        }
+      } catch (err) {
+        console.error("Error fetching overall progress:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProgress();
-  }, [studentId]);
+    fetchOverallProgress();
+  }, [studentId, token]);
+
+  const formatKey = (key) => {
+    // Converts camelCase to readable format
+    return key
+      .replace(/([A-Z])/g, " $1")
+      .replace(/^./, (str) => str.toUpperCase());
+  };
 
   return (
     <>
@@ -51,18 +83,20 @@ const StudentOverallProgress = () => {
       />
 
       <div className={styles.container}>
-        <h1 className={styles.heading}>Overall Progress Status</h1>
+        <h2 className={styles.heading}>Overall Progress</h2>
         {loading ? (
-          <p className={styles.loading}>Loading...</p>
+          <p>Loading...</p>
         ) : (
-          <div className={styles.progressGrid}>
-            {Object.entries(progress).map(([key, value]) => (
-              <div key={key} className={styles.progressCard}>
-                <p className={styles.label}>{formatLabel(key)}</p>
+          <div className={styles.progressList}>
+            {Object.entries(overallProgress).map(([key, value]) => (
+              <div key={key} className={styles.progressItem}>
+                <span className={styles.label}>{formatKey(key)}</span>
                 <span
-                  className={`${styles.status} ${
-                    value === "Completed" ? styles.completed : styles.pending
-                  }`}
+                  className={
+                    value === "Done"
+                      ? styles.statusDone
+                      : styles.statusPending
+                  }
                 >
                   {value}
                 </span>
@@ -74,13 +108,5 @@ const StudentOverallProgress = () => {
     </>
   );
 };
-
-// Converts camelCase or long keys to readable labels
-const formatLabel = (key) =>
-  key
-    .replace(/([A-Z])/g, " $1")
-    .replace(/^\w/, (c) => c.toUpperCase())
-    .replace(/By/g, " by")
-    .replace(/For/g, " for");
 
 export default StudentOverallProgress;

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Navbar from "../../components/navbar/navbar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import MentorAssignedStudents from "./mentorAssignedStu/mentorAssignedStu";
@@ -62,24 +61,7 @@ const MentorPanel = () => {
 
   return (
     <>
-      <Navbar
-        navItems={[
-          { name: "Dashboard", path: "/mentors" },
-          { name: "Profile", path: "/mentors/profile" },
-          { name: "Log Out", path: "/mentors/logout" },
-        ]}
-        downloadButton={{
-          text: "Log Out",
-          onClick: () => {
-            localStorage.removeItem("mentor-token"); // ✅ Clears token on logout
-            navigate("/mentors/login");
-          },
-        }}
-      />
-
       <div className={styles.panelContainer}>
-        <h1 className={styles.panelHeading}>Mentor Dashboard</h1>
-
         <MentorAssignedStudents />
       </div>
     </>

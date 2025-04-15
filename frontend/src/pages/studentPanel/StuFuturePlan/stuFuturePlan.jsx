@@ -1,74 +1,203 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../../../components/navbar/navbar";
 import styles from "./stuFuturePlan.module.css";
 
 const StudentFuturePlan = () => {
   const navigate = useNavigate();
-  const { id: studentId } = useParams();
-  const token = localStorage.getItem("student-token");
+  const [studentId, setStudentId] = useState(null);
+  const token = localStorage.getItem("token");
 
   const [futurePlan, setFuturePlan] = useState("");
-  const [details, setDetails] = useState({
-    companyName: "",
-    job: "",
-    profile: "",
-    position: "",
-    ctc: "",
-    city: "",
-    country: ""
-  });
-
+  const [details, setDetails] = useState({});
   const [loading, setLoading] = useState(true);
 
+  // Fetch student ID
+  useEffect(() => {
+    const fetchStudentProfile = async () => {
+      try {
+        if (token) {
+          const res = await axios.get("http://localhost:4000/students/profile", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setStudentId(res.data.student._id);
+        }
+      } catch (err) {
+        console.error("Error fetching student profile:", err);
+      }
+    };
+    fetchStudentProfile();
+  }, [token]);
+
+  // Fetch existing future plan
   useEffect(() => {
     const fetchFuturePlan = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/students/getFuturePlan/${studentId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-
-        if (res.data.success) {
+        if (studentId && token) {
+          const res = await axios.get(
+            `http://localhost:4000/students/getFuturePlan/${studentId}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
           setFuturePlan(res.data.futurePlan || "");
           setDetails(res.data.details || {});
         }
-        setLoading(false);
       } catch (err) {
         console.error("Error fetching future plan:", err);
+      } finally {
         setLoading(false);
       }
     };
-
-    if (studentId && token) fetchFuturePlan();
+    fetchFuturePlan();
   }, [studentId, token]);
 
-  const handleDetailChange = (field, value) => {
-    setDetails((prev) => ({
-      ...prev,
-      [field]: value
-    }));
+  const handleChange = (field, value) => {
+    setDetails((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async () => {
     try {
-      const payload = {
-        futurePlan,
-        futurePlanDetails: details
-      };
-
-      await axios.post(`http://localhost:4000/students/submitFuturePlan/${studentId}`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      await axios.post(
+        `http://localhost:4000/students/submitFuturePlan/${studentId}`,
+        {
+          futurePlan,
+          futurePlanDetails: details,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
         }
-      });
-
+      );
       alert("Future plan submitted successfully!");
     } catch (err) {
       console.error("Error submitting future plan:", err);
-      alert("Something went wrong!");
+      alert("Failed to submit future plan");
+    }
+  };
+
+  const renderFields = () => {
+    const commonFields = (
+      <>
+        <input
+          className={styles.input}
+          placeholder="City"
+          value={details.city || ""}
+          onChange={(e) => handleChange("city", e.target.value)}
+        />
+        <input
+          className={styles.input}
+          placeholder="Country"
+          value={details.country || ""}
+          onChange={(e) => handleChange("country", e.target.value)}
+        />
+      </>
+    );
+
+    switch (futurePlan) {
+      case "on-campus placement":
+      case "off-campus placement":
+        return (
+          <>
+            <input
+              className={styles.input}
+              placeholder="Company Name"
+              value={details.companyName || ""}
+              onChange={(e) => handleChange("companyName", e.target.value)}
+            />
+            <input
+              className={styles.input}
+              placeholder="Job"
+              value={details.job || ""}
+              onChange={(e) => handleChange("job", e.target.value)}
+            />
+            <input
+              className={styles.input}
+              placeholder="Profile"
+              value={details.profile || ""}
+              onChange={(e) => handleChange("profile", e.target.value)}
+            />
+            <input
+              className={styles.input}
+              placeholder="Position"
+              value={details.position || ""}
+              onChange={(e) => handleChange("position", e.target.value)}
+            />
+            <input
+              className={styles.input}
+              placeholder="CTC"
+              value={details.ctc || ""}
+              onChange={(e) => handleChange("ctc", e.target.value)}
+            />
+            {commonFields}
+          </>
+        );
+
+      case "higher studies/research":
+        return (
+          <>
+            <input
+              className={styles.input}
+              placeholder="Institution Name"
+              value={details.org || ""}
+              onChange={(e) => handleChange("org", e.target.value)}
+            />
+            {commonFields}
+            <input
+              className={styles.input}
+              placeholder="Program Details"
+              value={details.programDetails || ""}
+              onChange={(e) => handleChange("programDetails", e.target.value)}
+            />
+          </>
+        );
+
+      case "start-up":
+        return (
+          <>
+            <input
+              className={styles.input}
+              placeholder="Startup Name"
+              value={details.startUpName || ""}
+              onChange={(e) => handleChange("startUpName", e.target.value)}
+            />
+            <input
+              className={styles.input}
+              placeholder="Startup Type"
+              value={details.startUpType || ""}
+              onChange={(e) => handleChange("startUpType", e.target.value)}
+            />
+            <input
+              className={styles.input}
+              placeholder="Turnover"
+              value={details.turnover || ""}
+              onChange={(e) => handleChange("turnover", e.target.value)}
+            />
+            {commonFields}
+          </>
+        );
+
+      case "join family business":
+        return (
+          <>
+            <input
+              className={styles.input}
+              placeholder="Company Name"
+              value={details.companyName || ""}
+              onChange={(e) => handleChange("companyName", e.target.value)}
+            />
+            <input
+              className={styles.input}
+              placeholder="Position"
+              value={details.position || ""}
+              onChange={(e) => handleChange("position", e.target.value)}
+            />
+            {commonFields}
+          </>
+        );
+
+      default:
+        return null;
     }
   };
 
@@ -96,52 +225,38 @@ const StudentFuturePlan = () => {
       />
 
       <div className={styles.container}>
-        <h2 className={styles.heading}>Your Future Plan</h2>
-
+        <h2 className={styles.heading}>Student Future Plan</h2>
         {loading ? (
           <p>Loading...</p>
         ) : (
           <form className={styles.form}>
-            <div className={styles.field}>
-              <label>Future Plan:</label>
-              <select
-                className={styles.select}
-                value={futurePlan}
-                onChange={(e) => setFuturePlan(e.target.value)}
-              >
-                <option value="">Select Plan</option>
-                <option>On-campus placement</option>
-                <option>Off-campus placement</option>
-                <option>Higher studies</option>
-                <option>Entrepreneurship</option>
-                <option>Other</option>
-              </select>
-            </div>
+            <label className={styles.label}>Select Your Future Plan:</label>
+            <select
+              className={styles.select}
+              value={futurePlan}
+              onChange={(e) => {
+                setFuturePlan(e.target.value);
+                setDetails({});
+              }}
+            >
+              <option value="">Select</option>
+              <option value="on-campus placement">On-campus Placement</option>
+              <option value="off-campus placement">Off-campus Placement</option>
+              <option value="higher studies/research">Higher Studies/Research</option>
+              <option value="start-up">Start-up</option>
+              <option value="join family business">Join Family Business</option>
+              <option value="unemployed">Unemployed</option>
+            </select>
 
-            {futurePlan && (
-              <>
-                {Object.entries(details).map(([key, value]) => (
-                  <div key={key} className={styles.field}>
-                    <label>{key.charAt(0).toUpperCase() + key.slice(1)}:</label>
-                    <input
-                      type="text"
-                      className={styles.input}
-                      value={value}
-                      onChange={(e) => handleDetailChange(key, e.target.value)}
-                      placeholder={`Enter ${key}`}
-                    />
-                  </div>
-                ))}
+            {renderFields()}
 
-                <button
-                  type="button"
-                  className={styles.submitButton}
-                  onClick={handleSubmit}
-                >
-                  Submit Future Plan
-                </button>
-              </>
-            )}
+            <button
+              type="button"
+              className={styles.submitButton}
+              onClick={handleSubmit}
+            >
+              Submit Plan
+            </button>
           </form>
         )}
       </div>

@@ -86,7 +86,7 @@ const MentorLogin = () => {
         </form>
 
         <div className={styles.links}>
-          <Link to="/mentors/forgot-password">Forgot Password?</Link>
+          <Link to="/mentor/forgot-password">Forgot Password?</Link>
           <br />
           <Link to="/mentors/register">New Mentor? Register</Link>
         </div>
