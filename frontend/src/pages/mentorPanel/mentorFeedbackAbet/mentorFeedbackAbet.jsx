@@ -1,74 +1,93 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import styles from "./mentorFeedbackAbet.module.css";
 import Navbar from "../../../components/navbar/navbar";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import styles from "./mentorFeedbackAbet.module.css";
 
 const MentorFeedbackABET = () => {
   const navigate = useNavigate();
-  const { id: mentorId } = useParams();
-  const token = localStorage.getItem("mentor-token");
-
   const [questions, setQuestions] = useState([]);
   const [levels, setLevels] = useState({});
   const [suggestedCourse, setSuggestedCourse] = useState("");
   const [overallSatisfaction, setOverallSatisfaction] = useState("");
-  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("mentor-token");
 
+  // Decode the JWT token to get the mentorId (stored as _id in the token)
+  const mentorId = token ? JSON.parse(atob(token.split('.')[1]))._id : null;
+
+  // Fetch the ABET feedback form questions when the component mounts
   useEffect(() => {
     const fetchAbetForm = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/mentors/getAbetForm/${mentorId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const fetchedQuestions = res.data.questions || [];
-        setQuestions(fetchedQuestions);
+        const response = await axios.get(
+          `http://localhost:4000/mentors/getAbetForm/${mentorId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-        const preFilledLevels = {};
-        fetchedQuestions.forEach((q) => {
-          if (q.selectedValue) preFilledLevels[q._id] = q.selectedValue;
-        });
-
-        setLevels(preFilledLevels);
-        setSuggestedCourse(res.data.suggestedCourse || "");
-        setOverallSatisfaction(res.data.overallSatisfaction || "");
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching ABET form:", err);
-        setLoading(false);
+        if (response.data && response.data.questions) {
+          setQuestions(response.data.questions);
+        }
+      } catch (error) {
+        console.error("Error fetching ABET feedback form:", error);
       }
     };
 
-    if (mentorId && token) fetchAbetForm();
+    if (mentorId) {
+      fetchAbetForm();
+    } else {
+      console.error("No mentor ID found in token.");
+    }
   }, [mentorId, token]);
 
-  const handleLevelChange = (questionId, value) => {
-    setLevels((prev) => ({
-      ...prev,
-      [questionId]: parseInt(value),
+  // Handle change in feedback responses
+  const handleResponseChange = (questionId, value) => {
+    setLevels((prevLevels) => ({
+      ...prevLevels,
+      [questionId]: value,
     }));
   };
 
-  const handleSubmit = async () => {
+  // Handle change for suggested course
+  const handleCourseChange = (e) => {
+    setSuggestedCourse(e.target.value);
+  };
+
+  // Handle change for overall satisfaction
+  const handleSatisfactionChange = (e) => {
+    setOverallSatisfaction(e.target.value);
+  };
+
+  // Handle form submission
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
     try {
-      const payload = {
-        levels,
-        suggestedCourse,
-        overallSatisfaction,
-      };
-
-      await axios.post(`http://localhost:4000/mentors/submitAbetForm/${mentorId}`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.post(
+        `http://localhost:4000/mentors/submitAbetForm/${mentorId}`,
+        {
+          levels,
+          suggestedCourse,
+          overallSatisfaction,
         },
-      });
-
-      alert("ABET Feedback submitted successfully!");
-    } catch (err) {
-      console.error("Error submitting ABET feedback", err);
-      alert("Something went wrong.");
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        alert("ABET Feedback submitted successfully!");
+        navigate("/mentors/feedback"); // Navigate to the feedback page after submission
+      } else {
+        alert("Error submitting ABET feedback.");
+      }
+    } catch (error) {
+      console.error("Error submitting ABET feedback:", error);
+      alert("Error submitting ABET feedback.");
     }
   };
 
@@ -86,64 +105,63 @@ const MentorFeedbackABET = () => {
           onClick: () => navigate("/mentors/logout"),
         }}
       />
-
       <div className={styles.container}>
-        <h2 className={styles.heading}>ABET Feedback Form</h2>
-
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <form className={styles.form}>
-            {questions.map((q, index) => (
-              <div key={q._id} className={styles.questionBlock}>
-                <label className={styles.label}>
-                  {index + 1}. {q.text}
-                </label>
+        <h2 className={styles.heading}>Mentor Feedback Form (ABET)</h2>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          {questions.length > 0 ? (
+            questions.map((question) => (
+              <div key={question._id} className={styles.inputGroup}>
+                <label>{question.text}</label>
                 <select
-                  className={styles.select}
-                  value={levels[q._id] || ""}
-                  onChange={(e) => handleLevelChange(q._id, e.target.value)}
+                  value={levels[question._id] || ""}
+                  onChange={(e) => handleResponseChange(question._id, e.target.value)}
+                  className={styles.input}
                 >
-                  <option value="">Select Level</option>
-                  {[1, 2, 3, 4, 5].map((val) => (
-                    <option key={val} value={val}>
-                      {val}
+                  <option value="">Choose a level...</option>
+                  {[1, 2, 3, 4, 5].map((level) => (
+                    <option key={level} value={level}>
+                      {level}
                     </option>
                   ))}
                 </select>
               </div>
-            ))}
+            ))
+          ) : (
+            <div>Loading ABET feedback questions...</div>
+          )}
 
-            <div className={styles.extraField}>
-              <label className={styles.label}>Suggested Course:</label>
-              <input
-                type="text"
-                className={styles.input}
-                value={suggestedCourse}
-                onChange={(e) => setSuggestedCourse(e.target.value)}
-              />
-            </div>
+          <div className={styles.inputGroupFull}>
+            <label>Suggested Course</label>
+            <input
+              type="text"
+              value={suggestedCourse}
+              onChange={handleCourseChange}
+              className={styles.input}
+            />
+          </div>
 
-            <div className={styles.extraField}>
-              <label className={styles.label}>Overall Satisfaction:</label>
-              <select
-                className={styles.select}
-                value={overallSatisfaction}
-                onChange={(e) => setOverallSatisfaction(e.target.value)}
-              >
-                <option value="">Select</option>
-                <option>Excellent</option>
-                <option>Good</option>
-                <option>Average</option>
-                <option>Poor</option>
-              </select>
-            </div>
+          <div className={styles.inputGroupFull}>
+            <label>Overall Satisfaction</label>
+            <select
+              value={overallSatisfaction}
+              onChange={handleSatisfactionChange}
+              className={styles.input}
+            >
+              <option value="">Choose a level...</option>
+              {["Poor", "Fair", "Good", "Very Good", "Excellent"].map((satisfaction) => (
+                <option key={satisfaction} value={satisfaction}>
+                  {satisfaction}
+                </option>
+              ))}
+            </select>
+          </div>
 
-            <button type="button" className={styles.submitButton} onClick={handleSubmit}>
+          <div className={styles.buttonGroup}>
+            <button type="submit" className={styles.button}>
               Submit Feedback
             </button>
-          </form>
-        )}
+          </div>
+        </form>
       </div>
     </>
   );

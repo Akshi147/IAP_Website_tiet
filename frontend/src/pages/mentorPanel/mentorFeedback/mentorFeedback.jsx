@@ -1,64 +1,79 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../../../components/navbar/navbar";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./mentorFeedback.module.css";
 
-const MentorFeedback = () => {
+const MentorFeedbackForm = () => {
   const navigate = useNavigate();
-  const { id: mentorId } = useParams();
-  const token = localStorage.getItem("mentor-token");
   const [questions, setQuestions] = useState([]);
   const [levels, setLevels] = useState({});
-  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("mentor-token");
 
+  // Decode the JWT token to get the mentorId (stored as _id in the token)
+  const mentorId = token ? JSON.parse(atob(token.split('.')[1]))._id : null;
+
+  // Fetch the feedback form questions when the component mounts
   useEffect(() => {
-    const fetchForm = async () => {
+    const fetchFeedbackForm = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/mentors/getFeedbackForm/${mentorId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const q = res.data.questions || [];
-        setQuestions(q);
-        const preFilled = {};
-        q.forEach((q) => {
-          if (q.selectedValue) preFilled[q._id] = q.selectedValue;
-        });
-        setLevels(preFilled);
-        setLoading(false);
-      } catch (err) {
-        console.error("Failed to fetch feedback form", err);
-        setLoading(false);
+        const response = await axios.get(
+          `http://localhost:4000/mentors/getFeedbackForm/${mentorId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.data && response.data.questions) {
+          setQuestions(response.data.questions);
+        }
+      } catch (error) {
+        console.error("Error fetching feedback form:", error);
       }
     };
 
-    if (mentorId && token) fetchForm();
+    if (mentorId) {
+      fetchFeedbackForm();
+    } else {
+      console.error("No mentor ID found in token.");
+    }
   }, [mentorId, token]);
 
-  const handleChange = (questionId, value) => {
-    setLevels((prev) => ({
-      ...prev,
+  // Handle change in feedback responses
+  const handleResponseChange = (questionId, value) => {
+    setLevels((prevLevels) => ({
+      ...prevLevels,
       [questionId]: value,
     }));
   };
 
-  const handleSubmit = async () => {
+  // Handle form submission
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
     try {
-      await axios.post(
+      const response = await axios.post(
         `http://localhost:4000/mentors/submitFeedbackForm/${mentorId}`,
-        { levels },
+        {
+          levels,
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      alert("Feedback submitted successfully!");
-    } catch (err) {
-      console.error("Error submitting feedback", err);
-      alert("Something went wrong.");
+      if (response.data.success) {
+        alert("Feedback submitted successfully!");
+        navigate("/mentors/feedback"); // Navigate to the feedback page after submission
+      } else {
+        alert("Error submitting feedback.");
+      }
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      alert("Error submitting feedback.");
     }
   };
 
@@ -78,35 +93,38 @@ const MentorFeedback = () => {
       />
       <div className={styles.container}>
         <h2 className={styles.heading}>Mentor Feedback Form</h2>
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <form className={styles.form}>
-            {questions.map((q, index) => (
-              <div key={q._id} className={styles.questionBlock}>
-                <label className={styles.label}>
-                  {index + 1}. {q.text}
-                </label>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          {questions.length > 0 ? (
+            questions.map((question) => (
+              <div key={question._id} className={styles.inputGroup}>
+                <label>{question.text}</label>
                 <select
-                  value={levels[q._id] || ""}
-                  onChange={(e) => handleChange(q._id, e.target.value)}
-                  className={styles.select}
+                  value={levels[question._id] || ""}
+                  onChange={(e) => handleResponseChange(question._id, e.target.value)}
+                  className={styles.input}
                 >
-                  <option value="">Select Level</option>
-                  <option value="1">Low</option>
-                  <option value="2">Moderate</option>
-                  <option value="3">High</option>
+                  <option value="">Choose a level...</option>
+                  {[1, 2, 3, 4, 5].map((level) => (
+                    <option key={level} value={level}>
+                      {level}
+                    </option>
+                  ))}
                 </select>
               </div>
-            ))}
-            <button type="button" onClick={handleSubmit} className={styles.submitButton}>
+            ))
+          ) : (
+            <div>Loading feedback questions...</div>
+          )}
+
+          <div className={styles.buttonGroup}>
+            <button type="submit" className={styles.button}>
               Submit Feedback
             </button>
-          </form>
-        )}
+          </div>
+        </form>
       </div>
     </>
   );
 };
 
-export default MentorFeedback;
+export default MentorFeedbackForm;
