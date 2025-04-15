@@ -30,25 +30,7 @@ const MentorDetailForm = () => {
       setErrorMessage("Token not provided.");
       return;
     }
-
-    const checkTokenValidity = async () => {
-      try {
-        const response = await axios.get(`http://localhost:4000/mentors/checkToken/${token}`);
-        console.log("✅ Token check response:", response.data);
-        localStorage.setItem("mentor-token", response.data.token);
-        setIsTokenChecked(true); // ✅ Set token check as completed
-      } catch (error) {
-        console.error("❌ Token check failed:", error.response?.data || error);
-        setIsExpired(true);
-        setErrorMessage(error.response?.data?.message || "Failed to verify token.");
-        setIsTokenChecked(true); // ✅ Set token check as completed
-      }
-    };
-
-    if (!isTokenChecked) {
-      checkTokenValidity();
-    }
-  }, [token, isTokenChecked]);
+  }, [token]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
