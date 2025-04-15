@@ -6,36 +6,57 @@ import styles from "./stuFeedbackAbet.module.css";
 
 const StudentFeedbackABET = () => {
   const navigate = useNavigate();
-  const { id: studentId } = useParams();
-  const token = localStorage.getItem("student-token");
+  const [studentId, setStudentId] = useState(null);
+  const token = localStorage.getItem("token");
 
   const [questions, setQuestions] = useState([]);
   const [plan, setPlan] = useState("");
   const [planDetails, setPlanDetails] = useState("");
   const [loading, setLoading] = useState(true);
 
+  // First useEffect to fetch student profile and set student ID
+  useEffect(() => {
+    const fetchStudentProfile = async () => {
+      try {
+        if (token) {
+          const student = await axios.get("http://localhost:4000/students/profile", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setStudentId(student.data.student._id);
+        }
+      } catch (err) {
+        console.error("Error fetching student profile:", err);
+      }
+    };
+
+    fetchStudentProfile();
+  }, [token]);
+
+  // Second useEffect to fetch feedback form once studentId is available
   useEffect(() => {
     const fetchForm = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:4000/students/getFeedbackFormAbet/${studentId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setQuestions(res.data.questions || []);
-        setPlan(res.data.postGraduationPlan || "");
-        setPlanDetails(res.data.postGraduationPlanDetails || "");
-        setLoading(false);
+        if (studentId && token) {
+          const res = await axios.get(
+            `http://localhost:4000/students/getFeedbackFormAbet/${studentId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          setQuestions(res.data.questions || []);
+          setPlan(res.data.postGraduationPlan || "");
+          setPlanDetails(res.data.postGraduationPlanDetails || "");
+        }
       } catch (err) {
         console.error("Error fetching ABET feedback form:", err);
+      } finally {
         setLoading(false);
       }
     };
 
-    if (studentId && token) fetchForm();
+    fetchForm();
   }, [studentId, token]);
 
   const handleChange = (id, value) => {
@@ -58,7 +79,7 @@ const StudentFeedbackABET = () => {
       };
 
       await axios.post(
-        `http://localhost:4000/students/getFeedbackFormAbet/${studentId}`,
+        `http://localhost:4000/students/submitFeedbackFormAbet/${studentId}`,
         payload,
         {
           headers: {
@@ -123,18 +144,21 @@ const StudentFeedbackABET = () => {
               </div>
             ))}
 
-            <div className={styles.questionBlock}>
-              <label className={styles.questionText}>
-                What do you plan to do after graduation at TU?
-              </label>
-              <input
-                className={styles.input}
-                type="text"
-                value={plan}
-                onChange={(e) => setPlan(e.target.value)}
-                placeholder="e.g. Higher Education"
-              />
-            </div>
+<div className={styles.questionBlock}>
+  <label className={styles.questionText}>
+    What do you plan to do after graduation at TU?
+  </label>
+  <select
+    className={styles.select}
+    value={plan}
+    onChange={(e) => setPlan(e.target.value)}
+  >
+    <option value="">Select</option>
+    <option value="Employment">Employment (give details like employer name)</option>
+    <option value="Higher Education">Higher Education (give the title of degree)</option>
+    <option value="Entrepreneur">Entrepreneur (specify)</option>
+  </select>
+</div>
 
             <div className={styles.questionBlock}>
               <label className={styles.questionText}>Details</label>
