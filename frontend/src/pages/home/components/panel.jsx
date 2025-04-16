@@ -30,7 +30,7 @@ const Panels = () => {
         { icon: Clock, text: "Track Progress" },
         { icon: UserPlus, text: "Manage Students" },
       ],
-      path: "/faculty",
+      path: "/faculty/login",
     },
     {
       title: "Mentor Panel",
@@ -42,7 +42,7 @@ const Panels = () => {
         { icon: Calendar, text: "Schedule Meetings" },
         { icon: FileText, text: "Review Progress" },
       ],
-      path: "/mentor",
+      path: "/mentors/login",
     },
   ];
 
