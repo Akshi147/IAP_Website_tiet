@@ -1,8 +1,10 @@
 .container {
-  padding: 24px;
-  max-width: 800px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin: 0 auto;
-  font-size: 14px;
   color: #333;
 }
 
@@ -15,23 +17,34 @@
 }
 
 .form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  margin: 0 auto;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.form2{
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  margin: 0 auto;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .inputGroup {
   display: flex;
   flex-direction: column;
-}
-
-.inputGroupFull {
-  grid-column: span 2;
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+  margin: 0 auto;
+  justify-content: center;
 }
 
 .input {
+  width: 98%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 6px;

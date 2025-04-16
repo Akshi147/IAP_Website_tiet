@@ -197,28 +197,24 @@ const StudentFeedback = () => {
                         placeholder="Name"
                         value={collabContact.name}
                         onChange={(e) => handleCollabChange("name", e.target.value)}
-                        className={styles.input}
                       />
                       <input
                         type="text"
                         placeholder="Designation"
                         value={collabContact.designation}
                         onChange={(e) => handleCollabChange("designation", e.target.value)}
-                        className={styles.input}
                       />
                       <input
                         type="email"
                         placeholder="Email"
                         value={collabContact.email}
                         onChange={(e) => handleCollabChange("email", e.target.value)}
-                        className={styles.input}
                       />
                       <input
                         type="text"
                         placeholder="Phone"
                         value={collabContact.phone}
                         onChange={(e) => handleCollabChange("phone", e.target.value)}
-                        className={styles.input}
                       />
                     </>
                   ) : renderOptions(q).length > 0 ? (
@@ -227,6 +223,7 @@ const StudentFeedback = () => {
                         <input
                           type="radio"
                           id={`${q._id}_${idx}`}
+                          className={styles.inputdot}
                           name={q._id}
                           value={option}
                           checked={answers[q._id] === option}
@@ -237,7 +234,6 @@ const StudentFeedback = () => {
                     ))
                   ) : q.text.includes("list any subject") || q.text.includes("further thoughts") ? (
                     <textarea
-                      className={styles.textarea}
                       value={answers[q._id]}
                       onChange={(e) => handleAnswerChange(q._id, e.target.value)}
                       maxLength={500}
@@ -245,7 +241,6 @@ const StudentFeedback = () => {
                     />
                   ) : (
                     <select
-                      className={styles.input}
                       value={answers[q._id]}
                       onChange={(e) => handleAnswerChange(q._id, e.target.value)}
                     >

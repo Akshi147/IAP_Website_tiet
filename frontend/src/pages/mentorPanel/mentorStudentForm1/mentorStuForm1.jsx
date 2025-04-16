@@ -158,12 +158,12 @@ const MentorBriefProgressReport = () => {
         </div>
       </div>
 
-      <h3 className={styles.subheading}>
+      <h3 className={styles.heading}>
         Brief Progress Report{" "}
-        <span className={styles.subnote}>(To be filled by Industrial Mentor)</span>
+        <span className={styles.heading}>(To be filled by Industrial Mentor)</span>
       </h3>
 
-      <div className={styles.form}>
+      <div className={styles.form2}>
         <div className={styles.inputGroupFull}>
           <label>Topic/Title of the Project:</label>
           <input
@@ -174,13 +174,13 @@ const MentorBriefProgressReport = () => {
           />
         </div>
 
-        <div className={styles.inputGroupFull}>
+        <div>
           <label>Type of Project:</label>
           <select
             name="typeOfProject"
             value={progressReport?.typeOfProject || ""}
             onChange={handleChange}
-            className={styles.input}
+            className={styles.inputselect}
           >
             <option value="">Choose One...</option>
             <option value="Software Development">Software Development</option>
