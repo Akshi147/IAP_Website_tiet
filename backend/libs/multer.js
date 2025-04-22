@@ -2,6 +2,7 @@ const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     let dest = '../backend/public/images/uploads'; // default path

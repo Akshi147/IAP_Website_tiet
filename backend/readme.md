@@ -543,3 +543,71 @@ const uploadTrainingLetter = async (fileData, authToken) => {
     } 
   }
   ```
+
+  # 📚 Bulk Faculty Assignment via CSV Upload
+
+This feature allows administrators to **assign faculty members to students in bulk** by uploading a CSV file.
+
+---
+
+## 📄 CSV File Format
+
+Your CSV file must have the following headers:
+
+`roll_no,faculty_email`
+
+### ✅ Example
+
+```
+roll_no,faculty_email
+102317050,ppoudel_be23@thapar.edu
+102317121,prathampoudel2@gmail.com
+102317049,prathampoudel636@gmail.com
+```
+
+---
+
+## 🔁 Endpoint
+
+Send a **POST** request to the following route:
+
+```
+http://localhost:4000/admin/bulkAssignFaculty
+```
+
+### 🧾 Form Data
+
+| Key      | Type    | Description               |
+|----------|---------|---------------------------|
+| CsvFile  | file    | The CSV file to be uploaded |
+
+Make sure the file is included as **form-data**, not as raw JSON or plain text.
+
+---
+
+## ✅ Sample Response
+
+```
+{
+  "message": "Bulk faculty assignment completed",
+  "assignments": [
+    {
+      "roll_no": "102317121",
+      "faculty_email": "prathampoudel2@gmail.com",
+      "status": "Assigned successfully"
+    },
+    {
+      "roll_no": "102317049",
+      "faculty_email": "prathampoudel636@gmail.com",
+      "status": "Assigned successfully"
+    },
+    {
+      "roll_no": "102317050",
+      "faculty_email": "ppoudel_be23@thapar.edu",
+      "status": "Assigned successfully"
+    }
+  ]
+}
+```
+
+---

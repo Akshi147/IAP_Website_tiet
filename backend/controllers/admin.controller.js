@@ -6,6 +6,9 @@ const StudentModel = require("../models/student.model");
 const moment = require("moment");
 const ExcelJS = require('exceljs');
 const { query } = require('express');
+const csv = require("csv-parser"); 
+const stream = require('stream');
+
 
 module.exports.Register = async (req, res) => {
     console.log(req.body);
@@ -514,4 +517,91 @@ module.exports.generateExcelReport = async (req, res) => {
         res.status(500).json({ message: 'Failed to generate report' });
     }
 };
+
+module.exports.BulkAssignFaculty = async (req, res) => {
+    try {
+      const facultyAssignments = [];
+  
+      // Ensure that a file is uploaded
+      if (!req.file || !req.file.buffer) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+  
+      // Parse the uploaded CSV file from memory
+      const bufferStream = new stream.PassThrough();
+      bufferStream.end(req.file.buffer);
+  
+      const promises = [];
+  
+      bufferStream
+        .pipe(csv())
+        .on('data', (row) => {
+          const { roll_no, faculty_email } = row;
+  
+          // Validate data
+          if (!roll_no || !faculty_email) {
+            return; // Skip rows with missing data
+          }
+  
+          // Add the assignment logic as a promise
+          const promise = (async () => {
+            try {
+              // Search for the student by roll_no
+              const student = await StudentModel.findOne({ rollNo: roll_no.trim() });
+              console.log(roll_no.trim(), faculty_email.trim());
+  
+              if (student) {
+                // Assign the faculty email to the student
+                student.assignedFaculty = faculty_email.trim();
+                await student.save();
+  
+                // Add assignment info to the result array
+                facultyAssignments.push({
+                  roll_no: student.rollNo,
+                  faculty_email: student.assignedFaculty,
+                  status: 'Assigned successfully',
+                });
+              } else {
+                facultyAssignments.push({
+                  roll_no: roll_no.trim(),
+                  faculty_email: faculty_email.trim(),
+                  status: 'Student not found',
+                });
+              }
+            } catch (error) {
+              // Handle any errors during DB operations
+              console.error(`Error assigning faculty for roll_no ${roll_no}:`, error);
+              facultyAssignments.push({
+                roll_no: roll_no.trim(),
+                faculty_email: faculty_email.trim(),
+                status: 'Error assigning faculty',
+              });
+            }
+          })();
+  
+          promises.push(promise); // Push the promise to the promises array
+        })
+        .on('end', async () => {
+          // Wait for all promises to resolve before sending response
+          await Promise.all(promises);
+  
+          // Send the final response after processing all rows
+          return res.status(200).json({
+            message: 'Bulk faculty assignment completed',
+            assignments: facultyAssignments,
+          });
+        })
+        .on('error', (err) => {
+          // Handle CSV parsing errors
+          console.error('Error processing CSV:', err);
+          return res.status(500).json({ error: 'Error processing CSV' });
+        });
+  
+    } catch (err) {
+      // General error handling
+      console.error('Error in BulkAssignFaculty:', err);
+      return res.status(500).json({ error: 'An unexpected error occurred' });
+    }
+  };
+  
 

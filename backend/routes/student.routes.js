@@ -33,6 +33,8 @@ router.post('/uploadmidwayreport',authStudent,upload.single('MidwayReport'),stud
 router.post('/uploadreportfile',authStudent,upload.single('ReportFile'),studentController.uploadReportFile);
 router.post('/uploadprojectpresentation',authStudent,upload.single('ProjectPresentation'),studentController.uploadProjectPresentation);
 router.post('/uploadfinaltraining',authStudent,upload.single('FinalTraining'),studentController.uploadFinalTraining);
+
+
 router.get('/getFileUploadInfo',authStudent,studentController.getFileUploadInfo);
 
 
