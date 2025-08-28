@@ -55,6 +55,8 @@ import AdminGenerateExcel from './pages/adminPanel/adminExcelGenerate/adminExcel
 import AdminFreezeForm from './pages/adminPanel/adminFreezeForm/adminfreezeforms.jsx';
 
 
+import MentorStuForm2 from "./pages/mentorPanel/mentorStuForm2/mentorStuForm2.jsx"
+
 const App = () => {
   return (
     <Fragment>
@@ -164,6 +166,11 @@ const App = () => {
         <Route path="/seeform1/:id" element={
           <MentorProtectedRoute>
             <MentorBriefProgressReport />
+          </MentorProtectedRoute>
+        } />
+        <Route path="/seeform2/:id" element={
+          <MentorProtectedRoute>
+            <MentorStuForm2 />
           </MentorProtectedRoute>
         } />
         <Route path="/mentors/feedback" element={

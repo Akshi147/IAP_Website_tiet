@@ -1,0 +1,101 @@
+.formContainer {
+  margin: 18px auto;
+  max-width: 1200px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(120, 60, 180, 0.10);
+  padding: 24px 18px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.studentInfo {
+  display: flex;
+  gap: 120px;
+  margin-bottom: 18px;
+}
+.studentInfo label {
+  font-weight: 600;
+  color: #7c3aed;
+  margin-bottom: 6px;
+  display: block;
+}
+.studentInfo input {
+  font-size: 1.1rem;
+  padding: 7px 14px;
+  border-radius: 7px;
+  border: 1px solid #b39ddb;
+  background: #f3eaff;
+  margin-top: 4px;
+}
+select {
+  font-size: 1.1rem;
+  padding: 7px 14px;
+  border-radius: 7px;
+  border: 1px solid #b39ddb;
+  background: #f3eaff;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+button {
+  background: linear-gradient(90deg, #b39ddb 0%, #ce93d8 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 32px;
+  margin-top: 18px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(120, 60, 180, 0.10);
+  transition: background 0.2s;
+}
+button:hover {
+  background: linear-gradient(90deg, #ce93d8 0%, #b39ddb 100%);
+}
+h1 {
+  color: #7c3aed;
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 18px;
+  text-align: center;
+}
+p {
+  color: #444;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+.mentorTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  font-size: 1.1rem;
+}
+.mentorTable th {
+  background: #d1b3e0;
+  color: #444;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 16px 8px;
+  border: 2px solid #b39ddb;
+}
+.mentorTable td {
+  border: 2px solid #b39ddb;
+  padding: 14px 10px;
+  font-size: 1.1rem;
+  background: #faf7fc;
+}
+.mentorTable .marksSelect {
+  font-size: 1.1rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #b39ddb;
+  background: #f3eaff;
+}
+.mentorTable .marksObtainedRow td {
+  background: #e1bee7;
+  font-weight: 600;
+}

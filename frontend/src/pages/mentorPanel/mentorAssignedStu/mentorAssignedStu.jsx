@@ -18,7 +18,7 @@ const MentorAssignedStudents = () => {
         const response = await axios.get("http://localhost:4000/mentors/getAssignedStudents", {
           headers: { Authorization: `Bearer ${token}` },
         });
-  
+
         if (response.data && response.data.success) {
           setStudents(response.data.studentsAssigned);
         } else {
@@ -29,26 +29,25 @@ const MentorAssignedStudents = () => {
         setErrorMessage(error.message || "Failed to load students.");
       }
     };
-  
+
     fetchAssignedStudents();
   }, []);
-  
-  
+
 
   return (
     <>
       <Navbar
-                      navItems={[
-                          { name: "Students Doing Project Under You", path: "/mentors/getAssignedStudents" },
-                          {name: "Feedback", path: "/mentors/feedback"},
-                          { name: "Feedback (for ABET)", path: "/mentors/feedback-abet" },
-                          { name: "Change Password", path: "/reset-mentorpassword" },
-                          ]}
-                          downloadButton={{
-                          text: "Log Out",
-                          onClick: () => navigate("/mentors/logout"),
-                          }}
-                 />
+        navItems={[
+          { name: "Students Doing Project Under You", path: "/mentors/getAssignedStudents" },
+          { name: "Feedback", path: "/mentors/feedback" },
+          { name: "Feedback (for ABET)", path: "/mentors/feedback-abet" },
+          { name: "Change Password", path: "/reset-mentorpassword" },
+        ]}
+        downloadButton={{
+          text: "Log Out",
+          onClick: () => navigate("/mentors/logout"),
+        }}
+      />
       <Hero />
       <div className={styles.container}>
         <h1 className={styles.heading}>Assigned Students</h1>
@@ -62,7 +61,7 @@ const MentorAssignedStudents = () => {
               <th>Faculty Information</th>
               <th>Form 1 Status</th>
               <th>Form 2 Status</th>
-              <th>Process</th>
+              <th>Proceed</th>
             </tr>
           </thead>
           <tbody>
@@ -78,23 +77,21 @@ const MentorAssignedStudents = () => {
                   <td className={student.form2Status === "Pending" ? styles.pending : styles.completed}>
                     {student.form2Status}
                   </td>
-                  <td>
-                    <button className={styles.viewButton}>View</button>
-                  </td>
                   <td className={styles.tableCell}>
-      <button
-        onClick={() => navigate(`/seeform1/${student._id}`)}
-        className={styles.seeForm1Button}
-      >
-        See Form1
-      </button>
-      <button
-        disabled
-        className={styles.form2DisabledButton}
-      >
-        Form2 Disabled
-      </button>
-    </td>
+                    <button
+                      onClick={() => navigate(`/seeform1/${student._id}`)}
+                      className={styles.seeForm1Button}
+                    >
+                      See Form1
+                    </button>
+                    <button
+                      onClick={()=>navigate(`/seeform2/${student._id}`)}
+                      className={styles.form2DisabledButton}
+                    >
+                      {/* Form2 Disabled */}
+                      Form 2
+                    </button>
+                  </td>
                 </tr>
               ))
             ) : (
