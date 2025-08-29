@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 
-const mentorForm2Schema = new mongoose.Schema({
+
+const mentorStuForm2Schema = new mongoose.Schema({
+    mentorId: { 
+        type: mongoose.Schema.Types.ObjectId, ref: 'Mentor', required: true },
     studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Student', required: true },
     evaluationData: [{
         parameter: { type: String, required: true },
@@ -15,4 +18,4 @@ const mentorForm2Schema = new mongoose.Schema({
     moreStudentsInfo: { type: String, required: true }
 }, { timestamps: true });
 
-module.exports = mongoose.model('MentorForm2', mentorForm2Schema);
+module.exports = mongoose.model('MentorStuForm2', mentorStuForm2Schema);

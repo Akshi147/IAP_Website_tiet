@@ -1,7 +1,7 @@
 import styles from "./mentorStuForm2UI.module.css";
 
 
-const DetailsTable = ({ data, handleMarksChange }) => {
+const DetailsTable = ({ data, handleMarksChange, readOnly }) => {
     return (
         <table className={styles.mentorTable}>
             <thead>
@@ -32,6 +32,7 @@ const DetailsTable = ({ data, handleMarksChange }) => {
                     <td style={{fontWeight: 600}}>Marks obtained</td>
                     <td>
                         <select
+                            disabled={readOnly}
                             className={styles.marksSelect}
                             value={data.marksObtained}
                             onChange={(e) => handleMarksChange(data.parameter, Number(e.target.value))}

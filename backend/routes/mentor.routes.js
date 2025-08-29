@@ -47,6 +47,7 @@ router.post("/submitFeedbackForm/:mentorId", authMentor, mentorController.submit
 
 
 // router.post('/setDetails', authMentor, mentorController.setMentorDetails);
-
+router.get("/getMentorStuForm2/:studentId", authMentor, mentorController.getMentorStuForm2);
+router.post("/submitMentorStuForm2/:studentId", authMentor, mentorController.submitMentorStuForm2);
 
 module.exports = router;

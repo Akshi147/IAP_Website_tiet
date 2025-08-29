@@ -5,9 +5,7 @@ import axios from "axios";
 import Navbar from "../../../components/navbar/navbar";
 import styles from "./mentorStuForm2UI.module.css";
 
-import DetailsTable from "./DetailsTable";
-
-
+import DetailsTable from "./detailsTable";
 
 
 const mentorStuForm2 = () => {
@@ -70,6 +68,28 @@ const mentorStuForm2 = () => {
 
     const [permanentPlacementInfo, setPermanentPlacementInfo] = useState("Choose one...");
     const [moreStudentsInfo, setMoreStudentsInfo] = useState("Choose one...");
+    
+    const [isFilled, setIsFilled] = useState(false);
+
+    useEffect(() => {
+        const fetchForm = async () => {
+            const res = await axios.get(`http://localhost:4000/mentors/getMentorStuForm2/${studentId}`, {
+                headers: {Authorization: `Bearer ${token}`}
+            })
+
+            if(res.data.isFilled){
+                setEvaluationData(res.data.data.evaluationData);
+                setPermanentPlacementInfo(res.data.data.permanentPlacementInfo);
+                setMoreStudentsInfo(res.data.data.moreStudentsInfo);
+                setIsFilled(true);
+            }else{
+                setIsFilled(false);
+            }
+        }
+
+        if(studentId && token)
+            fetchForm();
+    }, []);
 
     const fetchdata = async () => {
         try {
@@ -134,7 +154,6 @@ const mentorStuForm2 = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // http://localhost:4000/mentors/submitForm2Data/${studentId}
         try {
             const payload = {
                 studentId,
@@ -144,7 +163,7 @@ const mentorStuForm2 = () => {
             }
 
             const res = await axios.post(
-                ``,
+                `http://localhost:4000/mentors/submitMentorStuForm2/${studentId}`,
                 payload,
                 {
                     headers: {
@@ -156,6 +175,7 @@ const mentorStuForm2 = () => {
 
             if (res.data.success) {
                 alert("Form submitted successfully!");
+                setIsFilled(true)
             } else {
                 alert("Submission failed. Please try again.");
             }
@@ -196,12 +216,12 @@ const mentorStuForm2 = () => {
                 </div>
                 <div>
                     {evaluationData.map((item) => (
-                        <DetailsTable key={item.parameter} data={item} handleMarksChange={handleMarksChange} />
+                        <DetailsTable key={item.parameter} data={item} handleMarksChange={handleMarksChange} readOnly={isFilled}/>
                     ))}
                 </div>
                 <div>
                     <label htmlFor="permanent-placement-info">*Are you going to consider Dummy for Permanent Placement   </label>
-                    <select id="permanent-placement-info" value={permanentPlacementInfo} onChange={(e) => setPermanentPlacementInfo(e.target.value)} required>
+                    <select disabled={isFilled} id="permanent-placement-info" value={permanentPlacementInfo} onChange={(e) => setPermanentPlacementInfo(e.target.value)} required>
                         {permanentPlacementOptions.map((val) => (
                             <option key={val} value={val}>
                                 {val}
@@ -211,7 +231,7 @@ const mentorStuForm2 = () => {
                 </div>
                 <div>
                     <label htmlFor="more-students-info">*Will you consider more number of students for next Project Semester from Thapar University?   </label>
-                    <select id="more-students-info" value={moreStudentsInfo} onChange={(e) => setMoreStudentsInfo(e.target.value)} required>
+                    <select disabled={isFilled} id="more-students-info" value={moreStudentsInfo} onChange={(e) => setMoreStudentsInfo(e.target.value)} required>
                         {moreStudentsOptions.map((val) => (
                             <option key={val} value={val}>
                                 {val}
@@ -220,8 +240,12 @@ const mentorStuForm2 = () => {
                     </select>
                 </div>
                 <div>
-                    <button onClick={handleSubmit}>Submit</button>
-                    <p>(marks once submitted cannot be changed or amended, please make sure while submission)</p>
+                    {!isFilled && (
+                        <>
+                            <button onClick={handleSubmit}>Submit</button>
+                            <p>(marks once submitted cannot be changed or amended, please make sure while submission)</p>
+                        </>
+                    )}
                 </div>
             </div>
         </>

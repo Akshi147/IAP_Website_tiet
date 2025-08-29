@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const sendEmail = require("../libs/nodemailer");
 const BriefProgressReport = require("../models/BreifProgressReport.model");
+const MentorStuForm2 = require("../models/mentorStuForm2.model");
 
 // Register Mentor (Only Email Submission)
 module.exports.registerMentor = async (req, res) => {
@@ -618,3 +619,70 @@ module.exports.submitBriefProgressReport = async (req, res) => {
 };
 
 
+
+
+
+module.exports.getMentorStuForm2 = async (req, res) => {
+  try{
+    const {studentId} = req.params;
+
+    const form = await MentorStuForm2.findOne({studentId});
+
+    if(form){
+      return res.status(200).json({
+        success: true,
+        isFilled: true,
+        data: form
+      });
+    }else{
+      return res.status(200).json({
+        success: true,
+        isFilled: false,
+      });
+    }
+  }catch(err){
+    console.log(err);
+    return res.status(500).json({
+      error: "Server error"
+    })
+  }
+}
+
+
+module.exports.submitMentorStuForm2 = async (req, res) => {
+  try{
+    const {studentId, evaluationData, permanentPlacementInfo, moreStudentsInfo} = req.body;
+    const mentorId = req.mentor._id;
+
+    // check if the form already exists
+    const exists = await MentorStuForm2.findOne({ studentId });
+
+    if(exists){
+      return res.status(400).json({
+        success: false,
+        message: "Form already filled"
+      })
+    }
+
+    // save form, since not exits
+    const form = new MentorStuForm2({
+      mentorId, 
+      studentId, 
+      evaluationData,
+      permanentPlacementInfo,
+      moreStudentsInfo
+    })
+
+    await form.save();
+
+    return res.status(201).json({
+      success: true,
+      message: "Form submitted successfully"
+    });
+  }catch(err){
+    console.log(err);
+    return res.status(500).json({
+      error: "Server error"
+    })
+  }
+}
