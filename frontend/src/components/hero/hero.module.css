@@ -3,18 +3,8 @@ body { overflow-x: hidden; }
 .container{
   background: linear-gradient(to right, #E9D5FF, #C4B5FD, #FBCFE8);
   opacity: 0.8;
-  padding-top: clamp(4rem, 17vw, 8rem);
-  padding-bottom: clamp(4rem, 17vw, 8rem);
+  padding: 8rem 1rem;
   position: relative;
-}
-
-.boxx{
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to right, white, transparent, white);
-  opacity: 0.2;
-  pointer-events: none;
-  animation: shine 2.5s infinite;
 }
 
 @keyframes shine {
@@ -26,8 +16,8 @@ body { overflow-x: hidden; }
   }
 }
 
-.inner{width: 100%;
-  max-width: 1280px;
+.inner{
+  width: 100%;
   margin: 0 auto;
   padding:0 1rem;
   flex: 1;
@@ -52,13 +42,11 @@ body { overflow-x: hidden; }
 }
 
 .title{
-  font-size: clamp(1.875rem, 4vw, 3rem); 
+  font-size: 3rem; /* 5xl = 48px */
   font-weight: bold;
-  max-width: 42rem; /* 2xl = 672px */
-  line-height: 1.25; /* tight = 125% */
   color: white;
+  width: max-content;
   text-shadow: 0 4px 6px rgba(255, 255, 255, 0.2); /* Assuming text-shadow-highlight */
-  margin-top: 1.5rem 0 3rem; /* 12 = 48px */
 }
 
 .subtitle{

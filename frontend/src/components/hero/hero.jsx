@@ -3,7 +3,6 @@ import styles from './hero.module.css';
 const Hero = () => {
   return (
     <div className={styles.container}>
-      <div className={styles.boxx}></div>
       <div className={styles.inner}>
         <div className={styles.heading}>
           IAP CELL
