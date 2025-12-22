@@ -9,7 +9,7 @@ const FacultyLogin = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); // Error message state
+  const [errorMessage, setErrorMessage] = useState(""); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +25,6 @@ const FacultyLogin = () => {
         navigate('/faculty');
       }
     } catch (error) {
-      // Set error message
       setErrorMessage(error.response.data.message);
     }
   };
