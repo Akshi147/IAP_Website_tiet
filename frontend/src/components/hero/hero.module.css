@@ -37,7 +37,7 @@ body { overflow-x: hidden; }
   font-weight: bold;
   max-width: 42rem; /* 2xl = 672px */
   line-height: 1.25; /* tight = 125% */
-  color: white;
+  color: rgb(57, 47, 245);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* shadow-2xl */
 }
 
@@ -55,7 +55,7 @@ body { overflow-x: hidden; }
   color: white;
   text-shadow: 0 4px 6px rgba(255, 255, 255, 0.2); /* Assuming text-shadow-highlight */
   margin-bottom: 2rem; /* 8 = 32px */
-  opacity: 0.6;
+  opacity: 1.2;
 }
 
 .divider{

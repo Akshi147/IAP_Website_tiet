@@ -166,6 +166,10 @@ const StudentDocUpload = ({ uploadedDocs }) => {
   return (
     <div className={styles.container}>
       <h2 className={styles.heading}>Document Upload</h2>
+      <div className={styles.notes}>
+        <p className={styles.notetext}>Note: If training stipend is below 10000, append approval from IAP coordinator along with offer letter in a single pdf file</p>
+        <p className={styles.notetext}>Note: In case, full fee is not deposited, append approval from finance officer regarding delay in fee submission and attach with fee receipt in a single pdf.</p>
+      </div>
       <div className={styles.uploadWrapper}>
         {renderUploadSection("Initial Training Letter", "trainingLetter")}
         {renderUploadSection("Fee Receipt", "feeReceipt")}

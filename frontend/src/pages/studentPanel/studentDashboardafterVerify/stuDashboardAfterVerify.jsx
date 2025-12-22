@@ -132,10 +132,6 @@ const StudentMentorDetailForm = () => {
               </h2>
               {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
               {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
-              <div className={styles.notes}>
-                <p className={styles.notetext}>Note: If training stipend is below 10000, append approval from IAP coordinator along with offer letter in a single pdf file</p>
-                <p className={styles.notetext}>Note: In case, full fee is not deposited, append approval from finance officer regarding delay in fee submission and attach with fee receipt in a single pdf.</p>
-              </div>
               <form onSubmit={handleSubmit} className={styles.formContainer}>
                 <div className={styles.inputGrid}>
                   {[

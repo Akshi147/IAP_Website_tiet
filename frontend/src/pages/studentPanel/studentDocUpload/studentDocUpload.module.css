@@ -6,6 +6,22 @@
     flex: 1;
   }
   
+ .notes{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 auto;
+    line-height: 1rem;
+  }
+
+  .notetext{
+    margin: 0.5rem 0;
+    color: red;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .title {
     font-size: 1.125rem;
     font-weight: 500;

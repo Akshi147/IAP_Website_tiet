@@ -11,7 +11,7 @@ const Hero = () => {
           THAPAR INSTITUTE OF ENGINEERING AND TECHNOLOGY
         </h1>
         <p className={styles.subtitle}>
-          DEEMED TO BE UNIVERSITY
+          (DEEMED TO BE UNIVERSITY)
         </p>
         <div className={styles.divider}>
           <div className={styles.outer}></div>
