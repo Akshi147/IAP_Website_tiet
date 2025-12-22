@@ -198,10 +198,6 @@ const mentorStuForm2 = () => {
                     onClick: () => navigate("/mentors/logout"),
                 }}
             />
-
-
-            <p>Welcome</p>
-
             <div className={styles.formContainer}>
                 <h1>IAP 2nd Visit Form</h1>
                 <div className={styles.studentInfo}>

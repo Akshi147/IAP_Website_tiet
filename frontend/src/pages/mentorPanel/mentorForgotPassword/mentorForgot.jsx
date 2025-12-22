@@ -81,7 +81,7 @@ const MentorForgotPassword = () => {
           </form>
 
           <div className={styles.backLink}>
-            <Link to="/mentor">Back to Mentor Login</Link>
+            <Link to="/mentors/login">Back to Mentor Login</Link>
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./mentorResetPass.module.css";
+import Navbar from "../../../components/navbar/navbar";
 
 const MentorResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -11,11 +12,11 @@ const MentorResetPassword = () => {
 
   const token = new URLSearchParams(window.location.search).get("token");
 
-  useEffect(() => {
-    if (!token) {
-      setError("Invalid or missing token.");
-    }
-  }, [token]);
+  // useEffect(() => {
+  //   if (!token) {
+  //     setError("Invalid or missing token.");
+  //   }
+  // }, [token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,7 +35,7 @@ const MentorResetPassword = () => {
 
       if (response.ok) {
         setMessage("Password successfully reset! Redirecting...");
-        setTimeout(() => navigate("/login"), 3000);
+        setTimeout(() => navigate("/mentors/login"), 3000);
       } else {
         setError(data.message || "Something went wrong. Try again.");
       }
@@ -46,6 +47,19 @@ const MentorResetPassword = () => {
   };
 
   return (
+    <>
+    <Navbar
+        navItems={[
+          { name: "Students Doing Project Under You", path: "/mentors/getAssignedStudents" },
+          { name: "Feedback", path: "/mentors/feedback" },
+          { name: "Feedback (for ABET)", path: "/mentors/feedback-abet" },
+          { name: "Change Password", path: "/reset-mentorpassword" },
+        ]}
+        downloadButton={{
+          text: "Log Out",
+          onClick: () => navigate("/mentors/logout"),
+        }}
+      />
     <div className={styles.container}>
       <div className={styles.card}>
         <h1 className={styles.title}>Reset Password</h1>
@@ -74,6 +88,7 @@ const MentorResetPassword = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 

@@ -107,7 +107,7 @@ const MentorBriefProgressReport = () => {
         ]}
         downloadButton={{
           text: "Log Out",
-          onClick: () => navigate("/mentors/logout"),
+          onClick: () => navigate("/mentors/login"),
         }}
       />
     <div className={styles.container}>
