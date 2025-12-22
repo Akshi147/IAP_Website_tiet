@@ -134,7 +134,7 @@ const App = () => {
             <FacultyLogout />
           </FacultyProtectedRoute>
         } />
-        <Route path="/facultylogin" element={<FacultyLogin />} />
+        <Route path="/faculty/login" element={<FacultyLogin />} />
         <Route path="/facultyregister" element={<FacultyRegister />} />
         <Route path="/faculty" element={
           <FacultyProtectedRoute>
