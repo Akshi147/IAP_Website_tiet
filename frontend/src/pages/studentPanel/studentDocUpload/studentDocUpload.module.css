@@ -10,6 +10,8 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    align-items: center;
+    justify-content: center;
     margin: 0 auto;
     line-height: 1rem;
   }
@@ -139,7 +141,6 @@
   }
   
   .container {
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;

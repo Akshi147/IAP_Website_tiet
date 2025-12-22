@@ -25,10 +25,9 @@ const Verify = () => {
                 If you haven&apos;t received the email or need help, please contact your mentor:
               </p>
               <div className={styles.contactDetails}>
-                <p className={styles.contactTitle}>Mentor Contact Details:</p>
-                <p className={styles.contactText}>Name: Dr. Jane Smith</p>
-                <p className={styles.contactText}>Email: jane.smith@university.edu</p>
-                <p className={styles.contactText}>Phone: (123) 456-7890</p>
+                <p className={styles.contactTitle}>IAP Coordinator Contact Details:</p>
+                <p className={styles.contactText}>Name: Dr. Jasmeet Singh</p>
+                <p className={styles.contactText}>Email: IAP_coordinator@thapar.edu</p>
               </div>
             </div>
           </div>
