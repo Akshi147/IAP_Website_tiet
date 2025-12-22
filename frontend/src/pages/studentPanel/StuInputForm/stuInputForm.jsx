@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/navbar/navbar";
+import styles from "./stuInputForm.module.css";
 
 const StudentInputForm = () => {
     const navigate = useNavigate();
@@ -9,7 +10,7 @@ const StudentInputForm = () => {
                     navItems={[
                       { name: "Dashboard", path: "/dashboard" },
                       {name: "Phase 2", path: "/student"},
-                      {name: "Faculty Assigned", path: "faculty-assigned"},
+                      {name: "Faculty Assigned", path: "/faculty-assigned"},
                       { name: "Upload Report and PPT", path: "/getFileUploadInfo" },
                       { name: "Stu Input Form", path: "/student-input" },
                       { name: "Evaluation Schedule", path: "/evaluation-schedule" },
@@ -25,6 +26,7 @@ const StudentInputForm = () => {
                         onClick: () => navigate("/student/logout"),
                       }}
                   />
+            <p className={styles.note}>The Student Input Form is locked for now.</p>
         </>
     )
 }

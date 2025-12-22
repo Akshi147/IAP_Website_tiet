@@ -11,6 +11,22 @@
     margin: 0 auto;
   }
   
+  .notes{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 auto;
+    line-height: 1rem;
+  }
+
+  .notetext{
+    margin: 0.5rem 0;
+    color: red;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .dashboardCard {
     background: white;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -19,7 +35,13 @@
   }
   
   .dashboardHeader {
-    padding: clamp(1rem, 5vw, 2rem);
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.5rem;
   }
   
   .dashboardTitle {
@@ -27,7 +49,7 @@
     font-size: (1.875rem, 3vw, 2rem);
     font-weight: 800;
     color: #1f2937;
-    margin-bottom: clamp(1.5rem, 5vw,2rem);
+    margin-bottom: clamp(0.5rem, 3vw,1rem);
   }
   
   .successMessage, .errorMessage, .warningMessage {
@@ -70,16 +92,30 @@
   .confirmButton{
     background-color: #9333ea;
     color: #ffffff;
+    margin: 0 auto;
+    display: flex;
+    width: 90%;
+    align-items: center;
+    justify-content: center;
   }
 
   .formContainer {
-    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
   }
   
   .inputGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
+    width: 100%;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
   }
   
   .inputField {
@@ -114,7 +150,9 @@
   .buttonContainer{
     display: flex;
     justify-content: center;
-    padding-top: 1.5rem;
+    width: 30%;
+    margin: 0.5rem auto;
+    align-items: center;
   }
 
   .button {

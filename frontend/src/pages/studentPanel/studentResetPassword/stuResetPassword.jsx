@@ -12,12 +12,6 @@ const StudentResetPassword = () => {
 
   const token = new URLSearchParams(window.location.search).get("token");
 
-  useEffect(() => {
-    if (!token) {
-      setError("Invalid or missing token.");
-    }
-  }, [token]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
@@ -52,7 +46,7 @@ const StudentResetPassword = () => {
             navItems={[
               { name: "Dashboard", path: "/dashboard" },
               {name: "Phase 2", path: "/student"},
-              {name: "Faculty Assigned", path: "faculty-assigned"},
+              {name: "Faculty Assigned", path: "/faculty-assigned"},
               { name: "Upload Report and PPT", path: "/getFileUploadInfo" },
               { name: "Stu Input Form", path: "/student-input" },
               { name: "Evaluation Schedule", path: "/evaluation-schedule" },

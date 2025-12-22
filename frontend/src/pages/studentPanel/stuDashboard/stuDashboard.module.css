@@ -13,8 +13,8 @@
     flex-direction: column;
     justify-content: center;
     gap: 1.5rem;
-    width: 80%;
-    margin: 0 auto;
+    width: 90%;
+    margin: 0.5rem auto;
   }
   
   .grid {

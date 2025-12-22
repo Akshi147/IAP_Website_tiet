@@ -174,8 +174,8 @@ const StudentRegisterForm = () => {
 
               <select name="trainingArrangedBy" value={formData.trainingArrangedBy} onChange={handleChange} className={styles.input} required>
                 <option value="">Training Arranged By</option>
-                <option value="college">College</option>
-                <option value="self">Self</option>
+                <option value="On-campus">On-campus</option>
+                <option value="Off-Campus">Off-Campus</option>
               </select>
 
               <input name="studentName" placeholder="Student Name" value={formData.studentName} onChange={handleChange} className={styles.input} required />

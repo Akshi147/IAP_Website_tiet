@@ -11,7 +11,7 @@ const StudentDocVerifyPhase = () => {
             </h2>
             <div className={styles.infoSection}>
               <p className={styles.infoText}>
-                Your documents are currently under review. We will notify you via email about the status of your
+                Your documents are currently under review. We will notify you via email in 10-15 days about the status of your
                 verification.
               </p>
               <p className={styles.infoText}>Please check your email regularly for updates.</p>
@@ -19,13 +19,12 @@ const StudentDocVerifyPhase = () => {
             <div className={styles.assistanceSection}>
               <h3 className={styles.assistanceTitle}>Need Assistance?</h3>
               <p className={styles.assistanceText}>
-                If you have any questions or need help, please contact your mentor:
+                If you have any questions or need help, please contact your IAP cell co-ordinator:
               </p>
               <div className={styles.assistanceCard}>
-                <p className={styles.assistanceLabel}>Mentor Contact Details:</p>
-                <p className={styles.assistanceDetail}>Name: Dr. Jane Smith</p>
-                <p className={styles.assistanceDetail}>Email: jane.smith@university.edu</p>
-                <p className={styles.assistanceDetail}>Phone: (123) 456-7890</p>
+                <p className={styles.assistanceLabel}>IAP Cell Co-ordinator Contact Details:</p>
+                <p className={styles.assistanceDetail}>Name: Dr. Jasmeet Singh</p>
+                <p className={styles.assistanceDetail}>Email: IAPcoordinator_csed@thapar.edu</p>
               </div>
             </div>
           </div>

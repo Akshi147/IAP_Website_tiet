@@ -207,7 +207,7 @@ const StudentFuturePlan = () => {
         navItems={[
           { name: "Dashboard", path: "/dashboard" },
           { name: "Phase 2", path: "/student" },
-          { name: "Faculty Assigned", path: "faculty-assigned" },
+          { name: "Faculty Assigned", path: "/faculty-assigned" },
           { name: "Upload Report and PPT", path: "/getFileUploadInfo" },
           { name: "Stu Input Form", path: "/student-input" },
           { name: "Evaluation Schedule", path: "/evaluation-schedule" },

@@ -6,10 +6,10 @@ import Navbar from "../../../components/navbar/navbar";
 import styles from './adminExcelGenerate.module.css';
 
 const ReportButton = ({ number, title, onClick, dropdownContent = null }) => (
-  <div className="relative h-[80px]">
+  <div className={styles.reportButtonWrapper}>
     <button 
       onClick={onClick}
-      className="absolute inset-0 p-4 bg-purple-500 hover:bg-purple-600 text-white rounded-lg shadow-sm transition-colors text-left"
+      className={styles.reportButton}
     >
       <h3 className="text-lg truncate">{number}. {title}</h3>
     </button>
@@ -197,9 +197,9 @@ const AdminGenerateExcel = () => {
               <ReportButton number="1" title="Registration Form Data" onClick={() => handleGenerateReport(1)} />
               <ReportButton number="2" title="Students Verified" onClick={() => handleGenerateReport(2)} />
               <ReportButton number="3" title="Students not Verified yet" onClick={() => handleGenerateReport(3)} />
-              <ReportButton number="4" title="Students with ALTERNATE semester at Thapar University" onClick={() => handleGenerateReport(4)} />
-              <ReportButton number="5" title="Students with PROJECT semester at software company/research institute" onClick={() => handleGenerateReport(5)} />
-              <ReportButton number="6" title="Students getting STIPEND (with amount)" onClick={() => handleGenerateReport(6)} />
+                <ReportButton number="4" title="Students getting STIPEND (with amount)" onClick={() => handleGenerateReport(4)} />
+              <ReportButton number="5" title="Students with ALTERNATE semester at Thapar University" onClick={() => handleGenerateReport(5)} />
+              <ReportButton number="6" title="Students with PROJECT semester at software company/research institute" onClick={() => handleGenerateReport(6)} />
               <ReportButton number="7" title="Students Tagged with a particular FACULTY" onClick={() => setShowFacultyDropdown(!showFacultyDropdown)} dropdownContent={<FacultyDropdown />} />
               <ReportButton number="8" title="Students with registration Phase 2 COMPLETE" onClick={() => handleGenerateReport(8)} />
               <ReportButton number="9" title="Students with registration Phase 2 PENDING" onClick={() => handleGenerateReport(9)} />
