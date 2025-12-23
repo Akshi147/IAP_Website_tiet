@@ -37,7 +37,7 @@ body { overflow-x: hidden; }
   font-weight: bold;
   max-width: 42rem; /* 2xl = 672px */
   line-height: 1.25; /* tight = 125% */
-  color: rgb(57, 47, 245);
+  color: #9333ea;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* shadow-2xl */
 }
 
